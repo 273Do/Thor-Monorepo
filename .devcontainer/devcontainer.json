@@ -1,0 +1,79 @@
+{
+  "name": "Thor Monorepo Dev Environment",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "workspace",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-microsoft.vscode-devcontainers",
+
+        // Python
+        "ms-python.python",
+        "njpwerner.autodocstring",
+        "charliermarsh.ruff",
+
+        // TypeScript/JavaScript
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+
+        // CSS
+        "bradlc.vscode-tailwindcss",
+        "vunguyenhoa.vscode-css-variables",
+
+        // Docker
+        "ms-azuretools.vscode-docker",
+
+        // Git
+        "eamodio.gitlens",
+
+        // Editor Config
+        "streetsidesoftware.code-spell-checker",
+        "Gruntfuggly.todo-tree",
+        "oderwat.indent-rainbow",
+        "intellsmi.comment-translate",
+        "usernamehw.errorlens"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.formatting.provider": "black",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "[python]": {
+          "editor.defaultFormatter": "ms-python.black-formatter"
+        }
+      }
+    }
+  },
+
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  "forwardPorts": [3000, 5173, 8000, 11434],
+  "portsAttributes": {
+    "3000": {
+      "label": "Frontend Dev Server",
+      "onAutoForward": "notify"
+    },
+    "5173": {
+      "label": "Vite Dev Server",
+      "onAutoForward": "notify"
+    },
+    "8000": {
+      "label": "Backend API",
+      "onAutoForward": "notify"
+    },
+    "11434": {
+      "label": "Ollama API",
+      "onAutoForward": "notify"
+    }
+  },
+
+  "postCreateCommand": "bash /workspace/setup.sh",
+  "remoteUser": "root"
+}

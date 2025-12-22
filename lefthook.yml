@@ -1,0 +1,67 @@
+output:
+  - execution
+  - execution_out
+  - execution_info
+  - summary
+
+pre-commit:
+  parallel: true
+  commands:
+    frontend:
+      format:
+        glob: "*.{ts,tsx,js,jsx,json,css}"
+        run: pnpm run format
+        stage_fixed: true
+
+      lint:
+        glob: "*.{ts,tsx,js,jsx}"
+        run: pnpm run lint:fix
+
+    backend:
+      format:
+      glob: "*.py"
+      run: ruff format {staged_files}
+      stage_fixed: true
+
+    lint:
+      glob: "*.py"
+      run: ruff check {staged_files}
+
+    fix:
+      glob: "*.py"
+      run: ruff check {staged_files} --fix
+      stage_fixed: true
+
+pre-push:
+  commands:
+    frontend:
+      format-check:
+        run: pnpm run format:check
+
+      lint-check:
+        run: pnpm run lint
+
+      type-check:
+        run: pnpm run check-types
+
+      test:
+        run: pnpm run test
+
+    backend:
+      format-check:
+        run: ruff format . --check
+
+    lint-check:
+      run: ruff check .
+
+    test:
+      run: pytest -v
+
+commit-msg:
+  commands:
+    message-check:
+      run: |
+        if ! grep -qE "^(feat|fix|refactor|chore):" {1}; then
+          echo "🔥 Commit message must start with: feat|fix|refactor|chore"
+          exit 1
+        fi

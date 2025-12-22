@@ -1,0 +1,94 @@
+{
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+
+  // Formatter
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "always",
+      "source.fixAll": "explicit"
+    }
+  },
+  "[css][javascript][typescript][javascriptreact][typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // Indent Rainbow
+  "indentRainbow.indicatorStyle": "light",
+  "indentRainbow.lightIndicatorStyleLineWidth": 1,
+  "editor.guides.indentation": true,
+  "indentRainbow.colors": [
+    "rgba(255,255,64, 0.2)",
+    "rgba(127,255,127, 0.2)",
+    "rgba(255,127,255, 0.2)",
+    "rgba(79,236,236, 0.2)"
+  ],
+
+  // Error Lens
+  "errorLens.gutterIconsEnabled": true,
+  "errorLens.gutterIconSet": "emoji",
+  "errorLens.gutterEmoji": {
+    "error": "🔥",
+    "warning": "🌟",
+    "info": "📘",
+    "hint": "🍏"
+  },
+
+  // Spell
+  "cSpell.enabledSchemes": {
+    "comment": true,
+    "file": true,
+    "gist": true,
+    "repo": true,
+    "sftp": true,
+    "untitled": true,
+    "vscode-notebook-cell": true,
+    "vscode-scm": true,
+    "vscode-userdata": true,
+    "vscode-vfs": true,
+    "vsls": true,
+    "overleaf-workshop": true
+  },
+
+  // Commnet Translate
+  "commentTranslate.hover.nearShow": false,
+
+  // TODO Tree
+  "todo-tree.highlights.defaultHighlight": {
+    "gutterIcon": true
+  },
+  "todo-tree.highlights.customHighlight": {
+    "TODO": {
+      "icon": "issue-closed",
+      "foreground": "#000000",
+      "iconColour": "#ffbc00",
+      "background": "#ffbc00"
+    },
+    "DEBUG": {
+      "icon": "bug",
+      "foreground": "#ffffff",
+      "iconColour": "#CC33FF",
+      "background": "#CC33FF"
+    },
+    "NOTE": {
+      "icon": "paintbrush",
+      "foreground": "#000000",
+      "iconColour": "#00f033",
+      "background": "#00f033"
+    },
+    "CHECK": {
+      "icon": "check",
+      "foreground": "#000000",
+      "iconColour": "#f08800",
+      "background": "#f08800"
+    },
+    "MEMO": {
+      "icon": "paintbrush",
+      "foreground": "#ffffff",
+      "iconColour": "#fc5115",
+      "background": "#fc5115"
+    }
+  },
+  "todo-tree.general.tags": ["TODO", "DEBUG", "NOTE", "CHECK", "MEMO"]
+}

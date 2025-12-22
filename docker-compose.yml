@@ -1,0 +1,78 @@
+version: "3.8"
+
+# Common volumes for git operations (reusable definition)
+x-git-volumes: &git-volumes
+  - ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro
+  - ~/.gitconfig:/root/.gitconfig:ro
+
+services:
+  workspace:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: thor-workspace
+    volumes:
+      - .:/workspace
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro
+      - ~/.gitconfig:/root/.gitconfig:ro
+    working_dir: /workspace
+    command: sleep infinity
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: thor-backend
+    volumes:
+      - ./backend:/workspace/backend
+      - backend-venv:/workspace/backend/.venv
+    working_dir: /workspace/backend
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - OLLAMA_HOST=http://ollama:11434
+    command: sleep infinity
+    depends_on:
+      - ollama
+    networks:
+      - thor-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: thor-frontend
+    volumes:
+      - ./frontend:/workspace/frontend
+      - frontend-node-modules:/workspace/frontend/node_modules
+    working_dir: /workspace/frontend
+    ports:
+      - "3000:3000"
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+    command: sleep infinity
+    networks:
+      - thor-network
+
+  ollama:
+    build:
+      context: ./ollama
+      dockerfile: Dockerfile
+    container_name: thor-ollama
+    volumes:
+      - ollama-data:/root/.ollama
+    ports:
+      - "11434:11434"
+    networks:
+      - thor-network
+
+volumes:
+  backend-venv:
+  frontend-node-modules:
+  ollama-data:
+
+networks:
+  thor-network:
+    driver: bridge
