@@ -1,59 +1,50 @@
-FROM ubuntu:22.04
+FROM mcr.microsoft.com/devcontainers/base:ubuntu-22.04
 
-# Prevent interactive prompts during package installation
-ENV DEBIAN_FRONTEND=noninteractive
+# ============================================================================
+# Environment Configuration
+# ============================================================================
+ENV LANG=ja_JP.UTF-8 \
+    LANGUAGE=ja_JP:ja \
+    LC_ALL=ja_JP.UTF-8
 
-# Install common system dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    wget \
-    openssh-client \
-    build-essential \
-    ca-certificates \
-    software-properties-common \
-    && rm -rf /var/lib/apt/lists/*
+# ============================================================================
+# Japanese Locale
+# ============================================================================
+RUN sudo apt-get update && \
+    sudo apt-get install -y locales && \
+    sudo locale-gen ja_JP.UTF-8 && \
+    sudo apt-get clean && \
+    sudo rm -rf /var/lib/apt/lists/*
 
-# Install Python 3.12
-RUN add-apt-repository ppa:deadsnakes/ppa && \
-    apt-get update && \
-    apt-get install -y \
-    python3.12 \
-    python3.12-venv \
-    python3.12-dev \
-    python3-pip \
-    && rm -rf /var/lib/apt/lists/*
-
-# Set Python 3.12 as default
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1 && \
-    update-alternatives --install /usr/bin/python python /usr/bin/python3.12 1
-
-# Install uv and ruff
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
-    curl -LsSf https://astral.sh/ruff/install.sh | sh
-
-# Install Node.js 22
-RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
-    apt-get install -y nodejs && \
-    rm -rf /var/lib/apt/lists/*
-
-# Enable corepack and install pnpm
-RUN corepack enable && \
+# ============================================================================
+# Node.js & Package Managers
+# ============================================================================
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | sudo bash - && \
+    sudo apt-get install -y nodejs && \
+    sudo apt-get clean && \
+    sudo rm -rf /var/lib/apt/lists/* && \
+    corepack enable && \
     corepack prepare pnpm@latest --activate
 
+# ============================================================================
+# Development Tools
+# ============================================================================
 # Install lefthook
-RUN curl -1sLf 'https://dl.cloudsmith.io/public/evilmartians/lefthook/setup.deb.sh' | bash && \
-    apt-get update && \
-    apt-get install -y lefthook && \
-    rm -rf /var/lib/apt/lists/*
+RUN curl -1sLf 'https://dl.cloudsmith.io/public/evilmartians/lefthook/setup.deb.sh' | sudo bash && \
+    sudo apt-get update && \
+    sudo apt-get install -y lefthook && \
+    sudo apt-get clean && \
+    sudo rm -rf /var/lib/apt/lists/*
 
-# Install Task (go-task)
+# Install Task
 RUN sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
 
 # Install Claude Code
 RUN curl -fsSL https://claude.ai/install.sh | bash
 
-# Set working directory
+# ============================================================================
+# Workspace Configuration
+# ============================================================================
 WORKDIR /workspace
 
 CMD ["sleep", "infinity"]

@@ -2,11 +2,14 @@ FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
 WORKDIR /workspace/backend
 
-# Install additional dependencies if needed
+# Install additional system dependencies
 RUN apt-get update && \
   apt-get install -y --no-install-recommends git openssh-client && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
+
+# Install ruff using uv
+RUN uv tool install ruff
 
 # Copy dependency files
 COPY pyproject.toml uv.lock* ./
