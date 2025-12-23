@@ -56,37 +56,37 @@ tasks:
     desc: Format backend code
     dir: backend
     cmds:
-      - ruff format .
+      - .venv/bin/ruff format .
 
   backend:lint:
     desc: Lint backend code
     dir: backend
     cmds:
-      - ruff check .
+      - .venv/bin/ruff check .
 
   backend:fix:
     desc: Fix backend code issues
     dir: backend
     cmds:
-      - ruff check . --fix
+      - .venv/bin/ruff check . --fix
 
   backend:format-check:
     desc: Check backend code formatting
     dir: backend
     cmds:
-      - ruff format . --check
+      - .venv/bin/ruff format . --check
 
   backend:lint-check:
     desc: Check backend code linting
     dir: backend
     cmds:
-      - ruff check .
+      - .venv/bin/ruff check .
 
   backend:test:
     desc: Run backend tests
     dir: backend
     cmds:
-      - pytest -v
+      - .venv/bin/pytest -v
 
   # Combined tasks
   format:
