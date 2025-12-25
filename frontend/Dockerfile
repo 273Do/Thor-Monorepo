@@ -14,7 +14,7 @@ RUN pnpm config set global-bin-dir /usr/local/bin && \
 RUN node --version && \
   pnpm --version
 
-EXPOSE 3000 6006
+EXPOSE 5173
 
 # Keep container running
 CMD ["sleep", "infinity"]
