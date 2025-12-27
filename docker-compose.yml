@@ -47,8 +47,6 @@ services:
       - ./frontend:/workspace/frontend
       - frontend-node-modules:/workspace/frontend/node_modules
     working_dir: /workspace/frontend
-    ports:
-      - "5173:5173"
     environment:
       - NODE_ENV=development
     command: sleep infinity
