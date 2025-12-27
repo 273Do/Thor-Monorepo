@@ -9,6 +9,11 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default defineConfig([
+  // 除外設定
+  {
+    ignores: [".react-router/**"],
+  },
+
   // 共通設定
   {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
