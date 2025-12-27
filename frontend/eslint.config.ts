@@ -35,7 +35,8 @@ export default defineConfig([
     plugins: {
       "@typescript-eslint": tseslint.plugin,
       react: pluginReact,
-      "react-hooks": reactHooks,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      "react-hooks": reactHooks as any,
       "react-refresh": reactRefresh,
       import: importPlugin,
       "unused-imports": unusedImports,
