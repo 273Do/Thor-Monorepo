@@ -34,7 +34,8 @@
         "Gruntfuggly.todo-tree",
         "oderwat.indent-rainbow",
         "intellsmi.comment-translate",
-        "usernamehw.errorlens"
+        "usernamehw.errorlens",
+        "rangav.vscode-thunder-client"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
