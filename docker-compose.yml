@@ -27,8 +27,6 @@ services:
       - ./backend:/workspace/backend
       - backend-venv:/workspace/backend/.venv
     working_dir: /workspace/backend
-    ports:
-      - "8000:8000"
     environment:
       - PYTHONUNBUFFERED=1
       - OLLAMA_HOST=http://ollama:11434

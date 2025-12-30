@@ -54,13 +54,8 @@
     "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
-
-  "forwardPorts": [3000, 5173, 8000, 11434],
+  "forwardPorts": [5173, 8000, 11434],
   "portsAttributes": {
-    "3000": {
-      "label": "Frontend Dev Server",
-      "onAutoForward": "notify"
-    },
     "5173": {
       "label": "Vite Dev Server",
       "onAutoForward": "notify"
