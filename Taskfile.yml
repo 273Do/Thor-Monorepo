@@ -14,6 +14,19 @@ tasks:
     cmds:
       - "{{.CLI_ARGS}}"
 
+  # Run app in development mode
+  frontend:dev:
+    desc: Run frontend in development mode
+    dir: frontend
+    cmds:
+      - pnpm run dev
+
+  backend:dev:
+    desc: Run backend in development mode
+    dir: backend
+    cmds:
+      - uv run uvicorn main:app --reload
+
   # Frontend tasks
   frontend:format:
     desc: Format frontend code
@@ -56,37 +69,37 @@ tasks:
     desc: Format backend code
     dir: backend
     cmds:
-      - .venv/bin/ruff format .
+      - uv run ruff format .
 
   backend:lint:
     desc: Lint backend code
     dir: backend
     cmds:
-      - .venv/bin/ruff check .
+      - uv run ruff check .
 
   backend:fix:
     desc: Fix backend code issues
     dir: backend
     cmds:
-      - .venv/bin/ruff check . --fix
+      - uv run ruff check . --fix
 
   backend:format-check:
     desc: Check backend code formatting
     dir: backend
     cmds:
-      - .venv/bin/ruff format . --check
+      - uv run ruff format . --check
 
   backend:lint-check:
     desc: Check backend code linting
     dir: backend
     cmds:
-      - .venv/bin/ruff check .
+      - uv run ruff check .
 
   backend:test:
     desc: Run backend tests
     dir: backend
     cmds:
-      - .venv/bin/pytest -v
+      - uv run pytest -v
 
   # Combined tasks
   format:
