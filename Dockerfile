@@ -26,6 +26,9 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | sudo bash - && \
     corepack enable && \
     corepack prepare pnpm@latest --activate
 
+# Install uv (Python package manager)
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+
 # ============================================================================
 # Development Tools
 # ============================================================================
