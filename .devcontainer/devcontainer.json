@@ -35,7 +35,7 @@
         "oderwat.indent-rainbow",
         "intellsmi.comment-translate",
         "usernamehw.errorlens",
-        "rangav.vscode-thunder-client"
+        "postman.postman-for-vscode"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
