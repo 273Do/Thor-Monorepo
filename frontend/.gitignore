@@ -1,7 +1,14 @@
-.DS_Store
+# Environment variables
 .env
-/node_modules/
+.env.*
+!.env.example
 
 # React Router
 /.react-router/
 /build/
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.*
+.pnpm-store/

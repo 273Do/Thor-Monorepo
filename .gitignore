@@ -1,40 +1,21 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Dependencies
-/node_modules
-/.pnp
-.pnp.*
-.pnpm-store
-
-# Testing
-/coverage
-/test-results
-
-# Build output
-/build
-dist/
-wheels/
-*.egg-info
-
 # Environment variables
-.env*
+.env
+.env.*
+!.env.example
 
 # Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 .pnpm-debug.log*
-*storybook.log
-
-# TypeScript
-*.tsbuildinfo
-next-env.d.ts
-
-# Python
-__pycache__/
-*.py[oc]
-.venv
+*.log
 
 # OS files
 .DS_Store
 *.pem
+Thumbs.db
+
+# Cache
+.cache/
+.ruff_cache/
+.mypy_cache/
+.turbo/
