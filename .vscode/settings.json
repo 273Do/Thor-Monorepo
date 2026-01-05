@@ -90,5 +90,6 @@
       "background": "#fc5115"
     }
   },
-  "todo-tree.general.tags": ["TODO", "DEBUG", "NOTE", "CHECK", "MEMO"]
+  "todo-tree.general.tags": ["TODO", "DEBUG", "NOTE", "CHECK", "MEMO"],
+  "remote.autoForwardPortsFallback": 0
 }
