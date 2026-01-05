@@ -1,105 +1,103 @@
 version: "3"
 
 tasks:
-  # Run arbitrary commands in frontend/backend directories
+  # Run arbitrary commands in frontend/backend container
   frontend:
-    desc: Run arbitrary command in frontend directory
-    dir: frontend
+    desc: Run arbitrary command in frontend container
     cmds:
-      - "{{.CLI_ARGS}}"
+      - "docker exec -it thor-frontend {{.CLI_ARGS}}"
 
   backend:
-    desc: Run arbitrary command in backend directory
-    dir: backend
+    desc: Run arbitrary command in backend container
     cmds:
-      - "{{.CLI_ARGS}}"
+      - "docker exec -it thor-backend {{.CLI_ARGS}}"
 
   # Run app in development mode
   frontend:dev:
     desc: Run frontend in development mode
     dir: frontend
     cmds:
-      - pnpm run dev
+      - task frontend -- pnpm run dev
 
   backend:dev:
     desc: Run backend in development mode
     dir: backend
     cmds:
-      - uv run uvicorn main:app --reload
+      - task backend -- uv run uvicorn main:app --reload
 
   # Frontend tasks
   frontend:format:
     desc: Format frontend code
     dir: frontend
     cmds:
-      - pnpm run format
+      - task frontend -- pnpm run format
 
   frontend:lint:
     desc: Lint frontend code
     dir: frontend
     cmds:
-      - pnpm run lint:fix
+      - task frontend -- pnpm run lint:fix
 
   frontend:format-check:
     desc: Check frontend code formatting
     dir: frontend
     cmds:
-      - pnpm run format:check
+      - task frontend -- pnpm run format:check
 
   frontend:lint-check:
     desc: Check frontend code linting
     dir: frontend
     cmds:
-      - pnpm run lint
+      - task frontend -- pnpm run lint
 
   frontend:type-check:
     desc: Check frontend types
     dir: frontend
     cmds:
-      - pnpm run check-types
+      - task frontend -- pnpm run check-types
 
   frontend:test:
     desc: Run frontend tests
     dir: frontend
     cmds:
-      - pnpm run test
+      - task frontend -- pnpm run test
 
   # Backend tasks
   backend:format:
     desc: Format backend code
     dir: backend
     cmds:
-      - uv run ruff format .
+      - task backend -- uv run ruff format .
 
   backend:lint:
     desc: Lint backend code
     dir: backend
     cmds:
-      - uv run ruff check .
+      - task backend -- uv run ruff check .
 
   backend:fix:
     desc: Fix backend code issues
     dir: backend
     cmds:
-      - uv run ruff check . --fix
+      - task backend -- uv run ruff check . --fix
 
   backend:format-check:
     desc: Check backend code formatting
     dir: backend
     cmds:
-      - uv run ruff format . --check
+      - task backend -- uv run ruff format . --check
 
   backend:lint-check:
     desc: Check backend code linting
     dir: backend
     cmds:
-      - uv run ruff check .
+      - task backend -- uv run ruff check .
 
   backend:test:
     desc: Run backend tests
     dir: backend
     cmds:
-      - uv run pytest -v
+      - task backend -- uv run pytest -v
 
   # Combined tasks
   format:

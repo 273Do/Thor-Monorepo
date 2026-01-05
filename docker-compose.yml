@@ -30,6 +30,8 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
       - OLLAMA_HOST=http://ollama:11434
+    ports:
+      - "8000:8000"
     command: sleep infinity
     depends_on:
       - ollama
@@ -47,6 +49,8 @@ services:
     working_dir: /workspace/frontend
     environment:
       - NODE_ENV=development
+    ports:
+      - "5173:5173"
     command: sleep infinity
     networks:
       - thor-network
