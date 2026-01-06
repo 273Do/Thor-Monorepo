@@ -23,7 +23,7 @@ tasks:
     desc: Run backend in development mode
     dir: backend
     cmds:
-      - task backend -- uv run uvicorn main:app --reload
+      - task backend -- uv run uvicorn main:app --reload --host 0.0.0.0
 
   # Frontend tasks
   frontend:format:
