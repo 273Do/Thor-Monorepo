@@ -17,6 +17,8 @@ services:
       - ~/.gitconfig:/root/.gitconfig:ro
     working_dir: /workspace
     command: sleep infinity
+    networks:
+      - thor-network
 
   backend:
     build:
