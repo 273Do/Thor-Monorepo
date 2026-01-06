@@ -35,7 +35,7 @@ commit-msg:
   commands:
     message-check:
       run: |
-        if ! grep -qE "^(feat|fix|refactor|chore):" {1}; then
+        if ! grep -qE "^(feat|fix|refactor|chore): " {1}; then
           echo "🔥 Commit message must start with: feat|fix|refactor|chore"
           exit 1
         fi
