@@ -5,9 +5,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Envs(BaseSettings):
-    """環境変数を読み込む"""
+    """環境変数の管理"""
 
-    API_V1_PREFIX: str = Field(description="APIのプレフィックス", default="/api/v1")
+    API_V1_PREFIX: str = Field(default="/api/v1")
+    """APIの接頭辞"""
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -17,5 +18,10 @@ class Envs(BaseSettings):
 
 @lru_cache
 def get_envs() -> Envs:
-    """@lru_cacheで.envの結果をキャッシュする"""
+    """@lru_cacheで.envの結果をキャッシュする
+
+    Returns:
+        Envs: 環境変数のクラス
+    """
+
     return Envs()
