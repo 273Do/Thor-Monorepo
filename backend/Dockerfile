@@ -2,6 +2,12 @@ FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
 WORKDIR /workspace/backend
 
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV UV_LINK_MODE=copy
+
+
 # Install additional system dependencies
 RUN apt-get update && \
   apt-get install -y --no-install-recommends git openssh-client && \
