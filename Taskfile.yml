@@ -93,6 +93,12 @@ tasks:
     cmds:
       - task backend -- uv run ruff check .
 
+  # backend:type-check:
+  #   desc: Check backend types
+  #   dir: backend
+  #   cmds:
+  #     - task backend -- uv run pyright .
+
   backend:test:
     desc: Run backend tests
     dir: backend
@@ -128,6 +134,7 @@ tasks:
     desc: Check all types
     cmds:
       - task: frontend:type-check
+      # - task: backend:type-check
 
   test:
     desc: Run all tests

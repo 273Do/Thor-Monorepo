@@ -14,6 +14,20 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 
+  // Python Settings
+  "python.analysis.extraPaths": [
+    "/workspace/backend/.venv/lib/python3.14/site-packages"
+  ],
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.typeCheckingMode": "strict",
+  "python.analysis.fixAll": [
+    "source.unusedImports",
+    "source.removeUnusedVariables",
+    "source.convertImportFormat"
+  ],
+  "ruff.interpreter": ["${workspaceFolder}/backend/.venv/bin/python"],
+  "ruff.path": ["${workspaceFolder}/backend/.venv/bin/ruff"],
+
   // Indent Rainbow
   "indentRainbow.indicatorStyle": "light",
   "indentRainbow.lightIndicatorStyleLineWidth": 1,
@@ -90,6 +104,5 @@
       "background": "#fc5115"
     }
   },
-  "todo-tree.general.tags": ["TODO", "DEBUG", "NOTE", "CHECK", "MEMO"],
-  "remote.autoForwardPortsFallback": 0
+  "todo-tree.general.tags": ["TODO", "DEBUG", "NOTE", "CHECK", "MEMO"]
 }
