@@ -8,7 +8,7 @@ def extract_steps_from_applehealthcare(
     start_date: datetime | None,
     end_date: datetime | None,
     months_of_extract: int | None,
-) -> dict:
+) -> None:
     """Apple HealthcareのXMLデータから歩数を抽出する
 
     Args:
@@ -22,11 +22,13 @@ def extract_steps_from_applehealthcare(
     """
 
     # xml文字列をHealthDataExtractorに直接渡す
-    extractor = HealthDataExtractor(xml_data, verbose=False)
+    extractor = HealthDataExtractor(
+        xml_data, start_date, end_date, months_of_extract, verbose=False
+    )
     extractor.extract()
     print(extractor.records["StepCount"][:1])  # デバッグ用に最初の1件を表示
 
     # TODO: start_date/end_date または months_of_extract でデータをフィルタリング
     # 現在は全データを取得
 
-    return {}
+    return
