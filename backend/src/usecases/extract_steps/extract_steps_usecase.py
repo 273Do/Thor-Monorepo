@@ -9,7 +9,7 @@ def extract_steps_from_applehealthcare(
     end_date_of_extract: datetime | None,
     months_of_extract: int | None,
 ) -> None:
-    """Apple HealthcareのXMLデータから歩数を抽出する
+    """抽出期間か範囲を指定してApple HealthcareのXMLデータから歩数を抽出する
 
     Args:
         xml_data (str): Apple HealthcareのXMLデータ
@@ -30,10 +30,16 @@ def extract_steps_from_applehealthcare(
         verbose=False,
     )
     extractor.extract()
-    print(extractor.records["StepCount"][:1])  # デバッグ用に最初の1件を表示
-    print(extractor.records["StepCount"][-1])  # デバッグ用に最後の1件を表示
 
-    # TODO: start_date/end_date または months_of_extract でデータをフィルタリング
-    # 現在は全データを取得
+    dataframes = extractor.get_dataframes()
+    step_count_df = dataframes.get("StepCount")
+
+    if step_count_df is not None and not step_count_df.empty:
+        if "startDate" in step_count_df.columns:
+            actual_start_date = step_count_df["startDate"]
+            print(actual_start_date)
+        if "endDate" in step_count_df.columns:
+            actual_end_date = step_count_df["endDate"]
+            print(actual_end_date)
 
     return
