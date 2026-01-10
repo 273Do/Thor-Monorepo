@@ -35,14 +35,14 @@ class HealthDataExtractor:
         start_date_of_extract: datetime | None,
         end_date_of_extract: datetime | None,
         months_of_extract: int | None,
-        include_recorded_sleep: bool,
+        include_recorded_sleep: bool | None,
         verbose: bool = True,
     ):
         self.verbose: bool = verbose
         self.start_date_of_extract: datetime | None = start_date_of_extract
         self.end_date_of_extract: datetime | None = end_date_of_extract
         self.months_of_extract: int | None = months_of_extract
-        self.include_recorded_sleep: bool = include_recorded_sleep
+        self.include_recorded_sleep: bool | None = include_recorded_sleep
 
         self.records: dict[str, list[dict[str, str]]] = {
             "StepCount": [],

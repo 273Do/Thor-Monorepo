@@ -8,6 +8,7 @@ def extract_steps_from_applehealthcare(
     start_date_of_extract: datetime | None,
     end_date_of_extract: datetime | None,
     months_of_extract: int | None,
+    include_recorded_sleep: bool | None,
 ) -> None:
     """抽出期間か範囲を指定してApple HealthcareのXMLデータから歩数を抽出する
 
@@ -16,6 +17,7 @@ def extract_steps_from_applehealthcare(
         start_date_of_extract (datetime | None): 解析開始日
         end_date_of_extract (datetime | None): 解析終了日
         months_of_extract (int | None): 最新の日付から遡って抽出する月数
+        include_recorded_sleep (bool | None): 記録された睡眠データを含めるかどうか
 
     Returns:
         dict: 抽出結果
@@ -27,12 +29,28 @@ def extract_steps_from_applehealthcare(
         start_date_of_extract,
         end_date_of_extract,
         months_of_extract,
+        include_recorded_sleep,
         verbose=False,
     )
     extractor.extract()
 
     dataframes = extractor.get_dataframes()
     step_count_df = dataframes.get("StepCount")
+
+    sleep_df = dataframes.get("SleepAnalysis")
+
+    # csvに保存（デバッグ用）
+    if step_count_df is not None:
+        step_count_df.to_csv(
+            "./datastore/sample_data/step_count_extracted.csv", index=False
+        )
+
+    if sleep_df is not None:
+        sleep_df.to_csv(
+            "./datastore/sample_data/sleep_analysis_extracted.csv", index=False
+        )
+
+    print("=======", len(step_count_df), " records of StepCount extracted =======")
 
     if step_count_df is not None and not step_count_df.empty:
         if "startDate" in step_count_df.columns:

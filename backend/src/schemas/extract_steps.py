@@ -24,10 +24,16 @@ class ExtractStepsQueryParams:
             description="最新の日付から遡って抽出する歩数データの月数",
             examples=[1],
         ),
+        include_recorded_sleep: Optional[bool] = Query(
+            False,
+            description="記録された睡眠データを含めるかどうか",
+            examples=[False],
+        ),
     ):
         self.start_date_of_extract = start_date_of_extract
         self.end_date_of_extract = end_date_of_extract
         self.months_of_extract = months_of_extract
+        self.include_recorded_sleep = include_recorded_sleep
 
     def __iter__(self):
         """アンパック可能にする"""
@@ -36,5 +42,6 @@ class ExtractStepsQueryParams:
                 self.start_date_of_extract,
                 self.end_date_of_extract,
                 self.months_of_extract,
+                self.include_recorded_sleep,
             ]
         )

@@ -33,6 +33,7 @@ async def extract_steps(
     start_date_of_extract = query_params.start_date_of_extract
     end_date_of_extract = query_params.end_date_of_extract
     months_of_extract = query_params.months_of_extract
+    include_recorded_sleep = query_params.include_recorded_sleep
 
     # バリデーション: start_date と end_date の両方が指定されているか、months_of_extract のみが指定されているか
     has_date_range = (
@@ -65,6 +66,7 @@ async def extract_steps(
         start_date_of_extract,
         end_date_of_extract,
         months_of_extract,
+        include_recorded_sleep,
     )
     return {
         "message": "Extracted steps from Apple Healthcare data.",
