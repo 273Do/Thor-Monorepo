@@ -15,6 +15,7 @@ Modified portions of this software are that I changed some columns to extract on
 Licence: MIT
 """
 
+import hashlib
 import re
 from collections import Counter, OrderedDict
 from collections.abc import Mapping
@@ -43,6 +44,8 @@ class HealthDataExtractor:
         self.end_date_of_extract: datetime | None = end_date_of_extract
         self.months_of_extract: int | None = months_of_extract
         self.include_recorded_sleep: bool | None = include_recorded_sleep
+
+        """入力されたデータを一意に識別するためのID"""
 
         self.records: dict[str, list[dict[str, str]]] = {
             "StepCount": [],
@@ -134,6 +137,30 @@ class HealthDataExtractor:
             if node.tag == "Record" and "type" in node.attrib:
                 node.attrib["type"] = _abbreviate(node.attrib["type"])
 
+    def get_first_record(self) -> dict[str, str] | None:
+        """絞り込み前の最初のレコードを取得する
+
+        Returns:
+            最初のレコードの属性辞書、見つからない場合はNone
+        """
+        target_kinds = ["StepCount"]
+
+        kinds = FIELDS.keys()
+
+        for node in self.nodes:
+            if node.tag in kinds:
+                attributes = node.attrib
+                kind = attributes["type"] if node.tag == "Record" else node.tag
+
+                target = _abbreviate(kind)
+                if target not in target_kinds:
+                    continue
+
+                # 最初にマッチしたレコードをそのまま返す
+                return dict(attributes)
+
+        return None
+
     def write_records(self) -> None:
         target_kinds = ["StepCount"]
 
@@ -196,6 +223,15 @@ class HealthDataExtractor:
 
     def get_dataframes(self) -> dict[str, pd.DataFrame]:
         return self.dataframes
+
+    def generate_data_id(self) -> str:
+        """データを一意に識別するためのIDを生成する"""
+
+        first_record = self.get_first_record()
+
+        data_id: str = hashlib.sha256(str(first_record).encode()).hexdigest()
+
+        return data_id
 
 
 def _abbreviate(s: str, enabled: bool = True) -> str:

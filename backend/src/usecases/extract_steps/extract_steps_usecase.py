@@ -39,6 +39,12 @@ def extract_steps_from_applehealthcare(
 
     sleep_df = dataframes.get("SleepAnalysis")
 
+    # データから識別用ののIDを生成
+    timestamp: str = datetime.now().strftime("%Y%m%d%H%M%S")
+    data_id: str = extractor.generate_data_id()
+
+    print("Data ID:", data_id + "_" + timestamp)
+
     # csvに保存（デバッグ用）
     if step_count_df is not None:
         step_count_df.to_csv(
@@ -49,8 +55,6 @@ def extract_steps_from_applehealthcare(
         sleep_df.to_csv(
             "./datastore/sample_data/sleep_analysis_extracted.csv", index=False
         )
-
-    print("=======", len(step_count_df), " records of StepCount extracted =======")
 
     if step_count_df is not None and not step_count_df.empty:
         if "startDate" in step_count_df.columns:

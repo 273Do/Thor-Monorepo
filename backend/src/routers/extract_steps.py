@@ -68,6 +68,7 @@ async def extract_steps(
         months_of_extract,
         include_recorded_sleep,
     )
+
     return {
         "message": "Extracted steps from Apple Healthcare data.",
         "start_date": start_date_of_extract.isoformat()
