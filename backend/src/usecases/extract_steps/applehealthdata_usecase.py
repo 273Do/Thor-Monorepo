@@ -25,6 +25,8 @@ from xml.etree import ElementTree
 import pandas as pd
 from dateutil.relativedelta import relativedelta
 
+from src.core.constants import DEVICE_FILTER, SLEEP_ANALYSIS_IN_BED, WATCHOS_MIN_VERSION
+
 
 class HealthDataExtractor:
     def __init__(
@@ -33,12 +35,14 @@ class HealthDataExtractor:
         start_date_of_extract: datetime | None,
         end_date_of_extract: datetime | None,
         months_of_extract: int | None,
+        include_recorded_sleep: bool,
         verbose: bool = True,
     ):
         self.verbose: bool = verbose
         self.start_date_of_extract: datetime | None = start_date_of_extract
         self.end_date_of_extract: datetime | None = end_date_of_extract
         self.months_of_extract: int | None = months_of_extract
+        self.include_recorded_sleep: bool = include_recorded_sleep
 
         self.records: dict[str, list[dict[str, str]]] = {
             "StepCount": [],
@@ -111,15 +115,18 @@ class HealthDataExtractor:
             df["endDate"] = pd.to_datetime(df["endDate"], errors="coerce")
 
             # 最後の日付を取得
-            last_date = df["endDate"].max()
+            last_date: datetime = df["endDate"].max()
 
             if pd.notna(last_date) and self.months_of_extract is not None:
                 # nヶ月前を計算
-                start_date = last_date - relativedelta(months=self.months_of_extract)
+                start_date: datetime = last_date - relativedelta(  # type: ignore
+                    months=self.months_of_extract
+                )
 
                 # フィルタリング
                 self.dataframes[kind] = df[
-                    (df["endDate"] >= start_date) & (df["endDate"] <= last_date)
+                    (pd.to_datetime(df["startDate"], errors="coerce") >= start_date)
+                    & (pd.to_datetime(df["startDate"], errors="coerce") <= last_date)
                 ]
 
     def abbreviate_types(self) -> None:
@@ -128,7 +135,11 @@ class HealthDataExtractor:
                 node.attrib["type"] = _abbreviate(node.attrib["type"])
 
     def write_records(self) -> None:
-        target_kinds = ["StepCount", "SleepAnalysis"]
+        target_kinds = ["StepCount"]
+
+        if self.include_recorded_sleep:
+            target_kinds.append("SleepAnalysis")
+
         kinds = FIELDS.keys()
 
         for node in self.nodes:
@@ -136,23 +147,44 @@ class HealthDataExtractor:
                 attributes = node.attrib
                 kind = attributes["type"] if node.tag == "Record" else node.tag
 
-                if _abbreviate(kind) not in target_kinds:
+                target = _abbreviate(kind)
+                if target not in target_kinds:
                     continue
 
                 # months_of_extractが指定されている場合は日付範囲チェックをスキップ
-                # (後でDataFrameからフィルタリングするため)
+                # 最後にDataFrameからフィルタリング
                 if self.months_of_extract is None:
                     if not self._is_in_date_range(attributes.get("startDate")):
+                        continue
+
+                # 必要な項目を絞り込み
+                if target == target_kinds[0]:
+                    # 歩数データを抽出
+                    if (
+                        "device" not in attributes
+                        or DEVICE_FILTER not in attributes["device"]
+                    ):
+                        continue
+                elif target == target_kinds[1]:
+                    # 睡眠データを抽出
+                    # 指定のWatchOS以降のデータのみを抽出
+                    if (
+                        "sourceVersion" not in attributes
+                        or str(WATCHOS_MIN_VERSION) not in attributes["sourceVersion"]
+                        or attributes["value"] != SLEEP_ANALYSIS_IN_BED
+                    ):
                         continue
 
                 values = {
                     field: _format_value(attributes.get(field), datatype)
                     for field, datatype in FIELDS[node.tag].items()
                 }
-                self.records[_abbreviate(kind)].append(values)
+
+                self.records[target].append(values)
 
     def extract(self) -> None:
         self.write_records()
+
         self.dataframes: dict[str, pd.DataFrame] = {
             "StepCount": pd.DataFrame(self.records["StepCount"]),
             "SleepAnalysis": pd.DataFrame(self.records["SleepAnalysis"]),
