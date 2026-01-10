@@ -12,10 +12,19 @@ class Envs(BaseSettings):
     API_V1_PREFIX: str = Field(default="/api/v1")
     """APIの接頭辞"""
 
+    DATA_ID_SALT: str = Field()
+    """識別id生成用のソルト"""
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
     )
+
+    def __init__(
+        self,
+    ) -> None:
+        """型エラー防止のために明示的にコンストラクタを上書き"""
+        super().__init__()
 
 
 @lru_cache
@@ -27,3 +36,6 @@ def get_envs() -> Envs:
     """
 
     return Envs()
+
+
+envs = get_envs()
