@@ -27,6 +27,7 @@ import pandas as pd
 from dateutil.relativedelta import relativedelta
 
 from src.core.constants import DEVICE_FILTER, SLEEP_ANALYSIS_IN_BED, WATCHOS_MIN_VERSION
+from src.core.load_env import envs
 
 
 class HealthDataExtractor:
@@ -229,7 +230,12 @@ class HealthDataExtractor:
 
         first_record = self.get_first_record()
 
-        data_id: str = hashlib.sha256(str(first_record).encode()).hexdigest()
+        hashed_record: str = hashlib.sha256(
+            (str(first_record) + str(envs.DATA_ID_SALT)).encode()
+        ).hexdigest()
+
+        # 先頭と末尾から8文字ずつを結合してIDとする
+        data_id: str = f"{hashed_record[:8]}{hashed_record[-8:]}"
 
         return data_id
 
