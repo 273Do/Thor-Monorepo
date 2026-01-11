@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from src.schemas.extract_steps import DataRecord, ExtractedSteps
+from src.schemas.extract_steps import ExtractedSteps, SleepRecord, StepRecord
 
 from .applehealthdata_usecase import HealthDataExtractor
 
@@ -57,9 +57,9 @@ def extract_steps_from_applehealthcare(
     timestamp: str = datetime.now().strftime("%Y%m%d%H%M%S")
     data_id: str = extractor.generate_data_id()
 
-    step_data_records: list[DataRecord] = step_count_df.to_dict(orient="records")  # type: ignore
+    step_data_records: list[StepRecord] = step_count_df.to_dict(orient="records")  # type: ignore
 
-    sleep_data_records: list[DataRecord] = sleep_df.to_dict(orient="records")  # type: ignore
+    sleep_data_records: list[SleepRecord] = sleep_df.to_dict(orient="records")  # type: ignore
 
     # csvに保存（デバッグ用）
     if step_count_df is not None:

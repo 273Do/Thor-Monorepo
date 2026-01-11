@@ -48,8 +48,8 @@ class ExtractStepsQueryParams:
         )
 
 
-class DataRecord(BaseModel):
-    """推定に使用するレコードのスキーマ"""
+class StepRecord(BaseModel):
+    """睡眠推定に使用する歩数レコードのスキーマ"""
 
     startDate: str
     """記録開始日時"""
@@ -61,16 +61,29 @@ class DataRecord(BaseModel):
     """値"""
 
 
+class SleepRecord(BaseModel):
+    """睡眠レコードのスキーマ"""
+
+    startDate: str
+    """記録開始日時"""
+
+    endDate: str
+    """記録終了日時"""
+
+    value: str
+    """値"""
+
+
 class ExtractedSteps(BaseModel):
     """解析に使用する基本となる歩数データのスキーマ"""
 
     id: str
     """データ識別用のID"""
 
-    stepData: list[DataRecord]
+    stepData: list[StepRecord]
     """抽出された歩数データのリスト"""
 
-    sleepData: Optional[list[DataRecord]] = None
+    sleepData: Optional[list[SleepRecord]] = None
     """抽出された睡眠データのリスト（存在する場合）"""
 
 
