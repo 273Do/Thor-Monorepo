@@ -9,6 +9,15 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Envs(BaseSettings):
     """環境変数の管理"""
 
+    IS_DEBUG: bool = Field(default=False)
+    """デバッグモードの有効化フラグ"""
+
+    DATASTORE_DIR: str = Field(default="./datastore")
+    """データを格納するディレクトリパス"""
+
+    SAMPLE_DATA_DIR: str = Field(default="./datastore/sample_data")
+    """サンプルデータを格納するディレクトリパス"""
+
     API_V1_PREFIX: str = Field(default="/api/v1")
     """APIの接頭辞"""
 

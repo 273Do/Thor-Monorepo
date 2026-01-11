@@ -8,3 +8,9 @@ SLEEP_ANALYSIS_IN_BED = "HKCategoryValueSleepAnalysisInBed"
 
 WATCHOS_MIN_VERSION = 10
 """WatchOSの最低バージョン"""
+
+STEP_COUNT_CSV_FILENAME = "step_count_data.csv"
+"""デバッグ用に保存する歩数データのCSVファイル名"""
+
+SLEEP_ANALYSIS_CSV_FILENAME = "sleep_analysis_data.csv"
+"""デバッグ用に保存する睡眠データのCSVファイル名"""
