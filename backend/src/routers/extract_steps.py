@@ -1,6 +1,10 @@
 from fastapi import APIRouter, Body, Depends, HTTPException
 
-from src.schemas.extract_steps import ExtractStepsQueryParams
+from src.schemas.extract_steps import (
+    ExtractedSteps,
+    ExtractedStepsResponse,
+    ExtractStepsQueryParams,
+)
 from src.usecases.extract_steps.extract_steps_usecase import (
     extract_steps_from_applehealthcare,
 )
@@ -21,13 +25,13 @@ router = APIRouter(prefix="/extract-steps", tags=["extract-steps"])
         },
     },
 )
-async def extract_steps(
+def extract_steps(
     query_params: ExtractStepsQueryParams = Depends(),
     xml_data: str = Body(
         media_type="text/xml",
         description="Apple Healthcareからエクスポートしたzipファイルを解凍した時に取得できるXMLファイル(export.xml)",
     ),
-):
+) -> ExtractedStepsResponse:
     """歩数データの抽出を受け付ける"""
 
     start_date_of_extract = query_params.start_date_of_extract
@@ -61,7 +65,7 @@ async def extract_steps(
                 detail="start_date_of_extract と end_date_of_extract は両方指定する必要があります。",
             )
 
-    extract_steps_from_applehealthcare(
+    extracted_data: ExtractedSteps = extract_steps_from_applehealthcare(
         xml_data,
         start_date_of_extract,
         end_date_of_extract,
@@ -69,12 +73,4 @@ async def extract_steps(
         include_recorded_sleep,
     )
 
-    return {
-        "message": "Extracted steps from Apple Healthcare data.",
-        "start_date": start_date_of_extract.isoformat()
-        if start_date_of_extract
-        else None,
-        "end_date": end_date_of_extract.isoformat() if end_date_of_extract else None,
-        "months_of_extract": months_of_extract,
-        "size": len(xml_data),
-    }
+    return ExtractedStepsResponse(data=extracted_data)

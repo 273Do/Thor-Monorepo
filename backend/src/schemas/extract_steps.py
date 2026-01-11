@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from fastapi import Query
+from pydantic import BaseModel
 
 
 class ExtractStepsQueryParams:
@@ -45,3 +46,36 @@ class ExtractStepsQueryParams:
                 self.include_recorded_sleep,
             ]
         )
+
+
+class DataRecord(BaseModel):
+    """推定に使用するレコードのスキーマ"""
+
+    startDate: str
+    """記録開始日時"""
+
+    endDate: str
+    """記録終了日時"""
+
+    value: int
+    """値"""
+
+
+class ExtractedSteps(BaseModel):
+    """解析に使用する基本となる歩数データのスキーマ"""
+
+    id: str
+    """データ識別用のID"""
+
+    stepData: list[DataRecord]
+    """抽出された歩数データのリスト"""
+
+    sleepData: Optional[list[DataRecord]] = None
+    """抽出された睡眠データのリスト（存在する場合）"""
+
+
+class ExtractedStepsResponse(BaseModel):
+    """歩数データ抽出APIのレスポンススキーマ"""
+
+    data: ExtractedSteps
+    """抽出された歩数データ"""

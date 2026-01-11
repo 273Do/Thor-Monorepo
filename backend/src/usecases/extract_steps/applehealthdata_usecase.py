@@ -99,9 +99,14 @@ class HealthDataExtractor:
             return False
 
         # 範囲チェック
-        if self.start_date_of_extract and record_date < self.start_date_of_extract:
+        if (
+            self.start_date_of_extract
+            and record_date < self.start_date_of_extract.replace(tzinfo=None)
+        ):
             return False
-        if self.end_date_of_extract and record_date > self.end_date_of_extract:
+        if self.end_date_of_extract and record_date > self.end_date_of_extract.replace(
+            tzinfo=None
+        ):
             return False
 
         return True
@@ -213,10 +218,18 @@ class HealthDataExtractor:
     def extract(self) -> None:
         self.write_records()
 
-        self.dataframes: dict[str, pd.DataFrame] = {
-            "StepCount": pd.DataFrame(self.records["StepCount"]),
-            "SleepAnalysis": pd.DataFrame(self.records["SleepAnalysis"]),
-        }
+        # 必要なカラムのみを抽出
+        columns_to_extract = ["startDate", "endDate", "value"]
+
+        self.dataframes: dict[str, pd.DataFrame] = {}
+        for kind in ["StepCount", "SleepAnalysis"]:
+            df = pd.DataFrame(self.records[kind])
+            # DataFrameが空でない場合のみカラムを選択
+            if not df.empty:
+                self.dataframes[kind] = df[columns_to_extract]
+            else:
+                # 空の場合は指定したカラムを持つ空のDataFrameを作成
+                self.dataframes[kind] = pd.DataFrame(columns=columns_to_extract)
 
         # months_of_extractが指定されている場合、最後の日付から範囲を計算してフィルタリング
         if self.months_of_extract is not None:

@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from src.schemas.extract_steps import DataRecord, ExtractedSteps
+
 from .applehealthdata_usecase import HealthDataExtractor
 
 
@@ -9,7 +11,7 @@ def extract_steps_from_applehealthcare(
     end_date_of_extract: datetime | None,
     months_of_extract: int | None,
     include_recorded_sleep: bool | None,
-) -> None:
+) -> ExtractedSteps:
     """抽出期間か範囲を指定してApple HealthcareのXMLデータから歩数を抽出する
 
     Args:
@@ -35,15 +37,29 @@ def extract_steps_from_applehealthcare(
     extractor.extract()
 
     dataframes = extractor.get_dataframes()
+
     step_count_df = dataframes.get("StepCount")
+
+    # startDate, endDateをstr型に変換
+    if step_count_df is not None:
+        step_count_df["startDate"] = step_count_df["startDate"].astype(str)
+        step_count_df["endDate"] = step_count_df["endDate"].astype(str)
+        step_count_df["value"] = step_count_df["value"].astype(str)
 
     sleep_df = dataframes.get("SleepAnalysis")
 
-    # データから識別用ののIDを生成
+    if sleep_df is not None:
+        sleep_df["startDate"] = sleep_df["startDate"].astype(str)
+        sleep_df["endDate"] = sleep_df["endDate"].astype(str)
+        sleep_df["value"] = sleep_df["value"].astype(str)
+
+    # データから識別用のIDを生成
     timestamp: str = datetime.now().strftime("%Y%m%d%H%M%S")
     data_id: str = extractor.generate_data_id()
 
-    print("Data ID:", data_id + "_" + timestamp)
+    step_data_records: list[DataRecord] = step_count_df.to_dict(orient="records")  # type: ignore
+
+    sleep_data_records: list[DataRecord] = sleep_df.to_dict(orient="records")  # type: ignore
 
     # csvに保存（デバッグ用）
     if step_count_df is not None:
@@ -56,12 +72,8 @@ def extract_steps_from_applehealthcare(
             "./datastore/sample_data/sleep_analysis_extracted.csv", index=False
         )
 
-    if step_count_df is not None and not step_count_df.empty:
-        if "startDate" in step_count_df.columns:
-            actual_start_date = step_count_df["startDate"]
-            print(actual_start_date)
-        if "endDate" in step_count_df.columns:
-            actual_end_date = step_count_df["endDate"]
-            print(actual_end_date)
-
-    return
+    return ExtractedSteps(
+        id=data_id + "_" + timestamp,
+        stepData=step_data_records,
+        sleepData=sleep_data_records,
+    )
