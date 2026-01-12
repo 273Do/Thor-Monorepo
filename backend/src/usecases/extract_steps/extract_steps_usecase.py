@@ -24,7 +24,7 @@ def extract_steps_from_applehealthcare(
         include_recorded_sleep (bool | None): 記録された睡眠データを含めるかどうか
 
     Returns:
-        dict: 抽出結果
+        ExtractedSteps: 抽出された歩数データと睡眠データ
     """
 
     # xml文字列をHealthDataExtractorに直接渡す

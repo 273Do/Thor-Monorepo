@@ -75,7 +75,7 @@ class SleepRecord(BaseModel):
 
 
 class ExtractedSteps(BaseModel):
-    """解析に使用する基本となる歩数データのスキーマ"""
+    """抽出された歩数データと睡眠データのスキーマ"""
 
     id: str
     """データ識別用のID"""
