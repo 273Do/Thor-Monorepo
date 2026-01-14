@@ -24,10 +24,16 @@ from typing import Literal
 from xml.etree import ElementTree
 
 import pandas as pd
+import pandera as pa
 from dateutil.relativedelta import relativedelta
+from pandera.typing import DataFrame
 
 from src.core.constants import DEVICE_FILTER, SLEEP_ANALYSIS_IN_BED, WATCHOS_MIN_VERSION
 from src.core.load_env import envs
+from src.schemas.extract_steps import (
+    SleepAnalysisDFSchema,
+    StepCountDFSchema,
+)
 
 
 class HealthDataExtractor:
@@ -133,10 +139,16 @@ class HealthDataExtractor:
                 )
 
                 # フィルタリング
-                self.dataframes[kind] = df[
+                filtered_df = df[
                     (pd.to_datetime(df["startDate"], errors="coerce") >= start_date)
                     & (pd.to_datetime(df["startDate"], errors="coerce") <= last_date)
                 ]
+
+                # フィルタリング後、startDateとendDateを文字列に戻す
+                filtered_df["startDate"] = filtered_df["startDate"].astype(str)
+                filtered_df["endDate"] = filtered_df["endDate"].astype(str)
+
+                self.dataframes[kind] = filtered_df
 
     def abbreviate_types(self) -> None:
         for node in self.nodes:
@@ -221,21 +233,37 @@ class HealthDataExtractor:
         # 必要なカラムのみを抽出
         columns_to_extract = ["startDate", "endDate", "value"]
 
-        self.dataframes: dict[str, pd.DataFrame] = {}
+        # スキーママッピング
+        schemas: dict[str, type[pa.DataFrameModel]] = {
+            "StepCount": StepCountDFSchema,
+            "SleepAnalysis": SleepAnalysisDFSchema,
+        }
+
+        self.dataframes: dict[
+            str, DataFrame[StepCountDFSchema] | DataFrame[SleepAnalysisDFSchema]
+        ] = {}
         for kind in ["StepCount", "SleepAnalysis"]:
             df = pd.DataFrame(self.records[kind])
-            # DataFrameが空でない場合のみカラムを選択
+
             if not df.empty:
-                self.dataframes[kind] = df[columns_to_extract]
+                # カラムを抽出して型検証を実行
+                extracted_df = df[columns_to_extract]
+                # startDate, endDateをstringに変換
+                extracted_df["startDate"] = extracted_df["startDate"].astype(str)
+                extracted_df["endDate"] = extracted_df["endDate"].astype(str)
+
+                self.dataframes[kind] = schemas[kind].validate(extracted_df)  # type: ignore
             else:
                 # 空の場合は指定したカラムを持つ空のDataFrameを作成
-                self.dataframes[kind] = pd.DataFrame(columns=columns_to_extract)
+                self.dataframes[kind] = pd.DataFrame(columns=columns_to_extract)  # type: ignore
 
         # months_of_extractが指定されている場合、最後の日付から範囲を計算してフィルタリング
         if self.months_of_extract is not None:
             self._filter_by_months()
 
-    def get_dataframes(self) -> dict[str, pd.DataFrame]:
+    def get_dataframes(
+        self,
+    ) -> dict[str, DataFrame[StepCountDFSchema] | DataFrame[SleepAnalysisDFSchema]]:
         return self.dataframes
 
     def generate_data_id(self) -> str:

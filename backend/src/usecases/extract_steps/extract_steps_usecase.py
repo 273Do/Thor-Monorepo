@@ -1,8 +1,16 @@
 from datetime import datetime
 
+from pandera.typing import DataFrame
+
 from src.core.constants import SLEEP_ANALYSIS_CSV_FILENAME, STEP_COUNT_CSV_FILENAME
 from src.core.load_env import envs
-from src.schemas.extract_steps import ExtractedSteps, SleepRecord, StepRecord
+from src.schemas.extract_steps import (
+    ExtractedSteps,
+    SleepAnalysisDFSchema,
+    SleepAnalysisRecord,
+    StepCountDFSchema,
+    StepCountRecord,
+)
 
 from .applehealthdata_usecase import HealthDataExtractor
 
@@ -36,32 +44,26 @@ def extract_steps_from_applehealthcare(
         include_recorded_sleep,
         verbose=False,
     )
+
     extractor.extract()
 
-    dataframes = extractor.get_dataframes()
+    dataframes: dict[
+        str, DataFrame[StepCountDFSchema] | DataFrame[SleepAnalysisRecord]
+    ] = extractor.get_dataframes()  # type: ignore
 
-    step_count_df = dataframes.get("StepCount")
+    step_count_df: DataFrame[StepCountDFSchema] | None = dataframes.get("StepCount")  # type: ignore
 
-    # startDate, endDateをstr型に変換
-    if step_count_df is not None:
-        step_count_df["startDate"] = step_count_df["startDate"].astype(str)
-        step_count_df["endDate"] = step_count_df["endDate"].astype(str)
-        step_count_df["value"] = step_count_df["value"].astype(str)
-
-    sleep_analysis_df = dataframes.get("SleepAnalysis")
-
-    if sleep_analysis_df is not None:
-        sleep_analysis_df["startDate"] = sleep_analysis_df["startDate"].astype(str)
-        sleep_analysis_df["endDate"] = sleep_analysis_df["endDate"].astype(str)
-        sleep_analysis_df["value"] = sleep_analysis_df["value"].astype(str)
+    sleep_analysis_df: DataFrame[SleepAnalysisDFSchema] | None = dataframes.get(
+        "SleepAnalysis"
+    )  # type: ignore
 
     # データから識別用のIDを生成
     timestamp: str = datetime.now().strftime("%Y%m%d%H%M%S")
     data_id: str = extractor.generate_data_id()
 
-    step_count_records: list[StepRecord] = step_count_df.to_dict(orient="records")  # type: ignore
+    step_count_records: list[StepCountRecord] = step_count_df.to_dict(orient="records")  # type: ignore
 
-    sleep_analysis_records: list[SleepRecord] = sleep_analysis_df.to_dict(  # type: ignore
+    sleep_analysis_records: list[SleepAnalysisRecord] = sleep_analysis_df.to_dict(  # type: ignore
         orient="records"
     )
 

@@ -1,7 +1,9 @@
 from datetime import datetime
 from typing import Optional
 
+import pandera as pa
 from fastapi import Query
+from pandera.typing import Series
 from pydantic import BaseModel
 
 
@@ -48,7 +50,7 @@ class ExtractStepsQueryParams:
         )
 
 
-class StepRecord(BaseModel):
+class StepCountRecord(BaseModel):
     """睡眠推定に使用する歩数レコードのスキーマ"""
 
     startDate: str
@@ -61,7 +63,7 @@ class StepRecord(BaseModel):
     """値"""
 
 
-class SleepRecord(BaseModel):
+class SleepAnalysisRecord(BaseModel):
     """睡眠レコードのスキーマ"""
 
     startDate: str
@@ -74,16 +76,40 @@ class SleepRecord(BaseModel):
     """値"""
 
 
+class BaseTimeRangeValueDFSchema(pa.DataFrameModel):
+    """StepCount / SleepAnalysis の共通 DataFrame スキーマ"""
+
+    startDate: Series[str] = pa.Field()
+    endDate: Series[str] = pa.Field()
+    value: Series[str] = pa.Field()
+
+    class Config:  # type: ignore
+        coerce = False
+        strict = True
+
+
+class StepCountDFSchema(BaseTimeRangeValueDFSchema):
+    """歩数データのDataFrameスキーマ"""
+
+    pass
+
+
+class SleepAnalysisDFSchema(BaseTimeRangeValueDFSchema):
+    """睡眠分析データのDataFrameスキーマ"""
+
+    pass
+
+
 class ExtractedSteps(BaseModel):
     """抽出された歩数データと睡眠データのスキーマ"""
 
     id: str
     """データ識別用のID"""
 
-    stepData: list[StepRecord]
+    stepData: list[StepCountRecord]
     """抽出された歩数データのリスト"""
 
-    sleepData: Optional[list[SleepRecord]] = None
+    sleepData: Optional[list[SleepAnalysisRecord]] = None
     """抽出された睡眠データのリスト（存在する場合）"""
 
 
