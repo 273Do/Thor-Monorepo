@@ -11,6 +11,15 @@ ENV PATH="$PNPM_HOME:$PATH"
 RUN pnpm config set global-bin-dir /usr/local/bin && \
   pnpm add -g @evilmartians/lefthook
 
+# Copy dependency files
+COPY package.json pnpm-lock.yaml* ./
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy application code
+COPY . .
+
 RUN node --version && \
   pnpm --version
 

@@ -18,27 +18,9 @@ else
     echo "⚠ Claude Code not found in PATH"
 fi
 
-# Install backend dependencies (if pyproject.toml exists)
-if [ -f "/workspace/backend/pyproject.toml" ]; then
-    echo "📦 Installing backend dependencies..."
-    cd /workspace/backend
-    if uv sync; then
-        echo "✓ Backend dependencies installed"
-    else
-        echo "⚠ Backend dependency installation failed"
-    fi
-fi
-
-# Install frontend dependencies (if package.json exists)
-if [ -f "/workspace/frontend/package.json" ]; then
-    echo "📦 Installing frontend dependencies..."
-    cd /workspace/frontend
-    if pnpm install; then
-        echo "✓ Frontend dependencies installed"
-    else
-        echo "⚠ Frontend dependency installation failed"
-    fi
-fi
+# Note: Backend and frontend dependencies are installed in their respective Docker containers
+# Backend: via backend/Dockerfile (uv sync)
+# Frontend: via frontend/Dockerfile (pnpm install)
 
 echo ""
 echo "✅ Dev container is ready!"

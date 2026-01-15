@@ -1,6 +1,12 @@
-FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+FROM ghcr.io/astral-sh/uv:0.9.11-python3.14-bookworm-slim
 
 WORKDIR /workspace/backend
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV UV_LINK_MODE=copy
+
 
 # Install additional system dependencies
 RUN apt-get update && \

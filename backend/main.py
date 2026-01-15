@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 
+from src.core.load_env import envs
+from src.routers import extract_steps
+
 app = FastAPI()
 
 
-@app.get("/hello")
-async def hello():
-    return {"message": "hello world!"}
+app.include_router(extract_steps.router, prefix=envs.API_V1_PREFIX)

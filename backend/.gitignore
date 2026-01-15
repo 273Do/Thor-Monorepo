@@ -1,0 +1,25 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Backend specific data files
+sample_data/
+uploads/
+data/
+
+# FastAPI specific
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+venv/
+env/
+.venv/
+ENV/
+.python-version
+.hypothesis/
+
+# Python package development
+*.egg-info/
+.eggs/
