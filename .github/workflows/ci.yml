@@ -76,7 +76,7 @@ jobs:
 
       - name: Type check
         working-directory: frontend
-        run: pnpm run check-types
+        run: pnpm run typecheck
 
       # - name: Run tests
       #   working-directory: frontend
