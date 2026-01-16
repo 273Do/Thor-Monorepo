@@ -32,23 +32,23 @@ tasks:
     cmds:
       - task frontend -- pnpm run format
 
-  frontend:lint:
-    desc: Lint frontend code
-    dir: frontend
-    cmds:
-      - task frontend -- pnpm run lint:fix
-
   frontend:format-check:
     desc: Check frontend code formatting
     dir: frontend
     cmds:
       - task frontend -- pnpm run format:check
 
-  frontend:lint-check:
+  frontend:lint:
     desc: Check frontend code linting
     dir: frontend
     cmds:
       - task frontend -- pnpm run lint
+
+  frontend:lint-fix:
+    desc: Lint frontend code
+    dir: frontend
+    cmds:
+      - task frontend -- pnpm run lint:fix
 
   frontend:type-check:
     desc: Check frontend types
@@ -75,7 +75,7 @@ tasks:
     cmds:
       - task backend -- uv run ruff check .
 
-  backend:fix:
+  backend:lint-fix:
     desc: Fix backend code issues
     dir: backend
     cmds:
@@ -86,12 +86,6 @@ tasks:
     dir: backend
     cmds:
       - task backend -- uv run ruff format . --check
-
-  backend:lint-check:
-    desc: Check backend code linting
-    dir: backend
-    cmds:
-      - task backend -- uv run ruff check .
 
   # backend:type-check:
   #   desc: Check backend types
@@ -115,8 +109,8 @@ tasks:
   lint:
     desc: Lint all code (frontend + backend)
     deps:
-      - frontend:lint
-      - backend:fix
+      - frontend:lint-fix
+      - backend:lint-fix
 
   format-check:
     desc: Check all code formatting
@@ -127,8 +121,8 @@ tasks:
   lint-check:
     desc: Check all code linting
     deps:
-      - frontend:lint-check
-      - backend:lint-check
+      - frontend:lint
+      - backend:lint
 
   type-check:
     desc: Check all types
