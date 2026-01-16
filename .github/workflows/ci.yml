@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  backend:
+    name: Backend CI
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Install dependencies
+        working-directory: backend
+        run: uv sync
+
+      - name: Check formatting
+        working-directory: backend
+        run: uv run ruff format . --check
+
+      - name: Run linter
+        working-directory: backend
+        run: uv run ruff check .
+
+      # - name: Run tests
+      #   working-directory: backend
+      #   run: uv run pytest
+
+  frontend:
+    name: Frontend CI
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: backend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile
+
+      - name: Check formatting
+        working-directory: frontend
+        run: pnpm run format:check
+
+      - name: Run linter
+        working-directory: frontend
+        run: pnpm run lint
+
+      - name: Type check
+        working-directory: frontend
+        run: pnpm run check-types
+
+      # - name: Run tests
+      #   working-directory: frontend
+      #   run: pnpm run test
