@@ -10,7 +10,6 @@ pre-commit:
     frontend-format:
       glob: "*.{ts,tsx,js,jsx,json,css}"
       run: task frontend:format
-      stage_fixed: true
 
     frontend-lint:
       glob: "*.{ts,tsx,js,jsx}"
@@ -19,12 +18,10 @@ pre-commit:
     backend-format:
       glob: "*.py"
       run: task backend:format
-      stage_fixed: true
 
-    backend-fix:
+    backend-lint:
       glob: "*.py"
-      run: task backend:fix
-      stage_fixed: true
+      run: task backend:lint
 
 pre-push:
   commands:
