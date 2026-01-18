@@ -82,6 +82,6 @@ def extract_steps_from_applehealthcare(
 
     return ExtractedSteps(
         id=data_id + "_" + timestamp,
-        stepData=step_count_records,
-        sleepData=sleep_analysis_records,
+        step_data=step_count_records,
+        sleep_data=sleep_analysis_records,
     )
