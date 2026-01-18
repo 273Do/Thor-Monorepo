@@ -126,11 +126,11 @@ class HealthDataExtractor:
             if df.empty:
                 continue
 
-            # endDateカラムをdatetimeに変換
-            df["endDate"] = pd.to_datetime(df["endDate"], errors="coerce")
+            # end_dateカラムをdatetimeに変換
+            df["end_date"] = pd.to_datetime(df["end_date"], errors="coerce")
 
             # 最後の日付を取得
-            last_date: datetime = df["endDate"].max()
+            last_date: datetime = df["end_date"].max()
 
             if pd.notna(last_date) and self.months_of_extract is not None:
                 # nヶ月前を計算
@@ -140,13 +140,13 @@ class HealthDataExtractor:
 
                 # フィルタリング
                 filtered_df = df[
-                    (pd.to_datetime(df["startDate"], errors="coerce") >= start_date)
-                    & (pd.to_datetime(df["startDate"], errors="coerce") <= last_date)
+                    (pd.to_datetime(df["start_date"], errors="coerce") >= start_date)
+                    & (pd.to_datetime(df["start_date"], errors="coerce") <= last_date)
                 ]
 
-                # フィルタリング後、startDateとendDateを文字列に戻す
-                filtered_df["startDate"] = filtered_df["startDate"].astype(str)
-                filtered_df["endDate"] = filtered_df["endDate"].astype(str)
+                # フィルタリング後、start_dateとend_dateを文字列に戻す
+                filtered_df["start_date"] = filtered_df["start_date"].astype(str)
+                filtered_df["end_date"] = filtered_df["end_date"].astype(str)
 
                 self.dataframes[kind] = filtered_df
 
@@ -251,6 +251,11 @@ class HealthDataExtractor:
                 # startDate, endDateをstringに変換
                 extracted_df["startDate"] = extracted_df["startDate"].astype(str)
                 extracted_df["endDate"] = extracted_df["endDate"].astype(str)
+
+                # カラム名をスネークケースに変換
+                extracted_df = extracted_df.rename(
+                    columns={"startDate": "start_date", "endDate": "end_date"}
+                )
 
                 self.dataframes[kind] = schemas[kind].validate(extracted_df)  # type: ignore
             else:

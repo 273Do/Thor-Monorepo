@@ -53,10 +53,10 @@ class ExtractStepsQueryParams:
 class StepCountRecord(BaseModel):
     """睡眠推定に使用する歩数レコードのスキーマ"""
 
-    startDate: str
+    start_date: str
     """記録開始日時"""
 
-    endDate: str
+    end_date: str
     """記録終了日時"""
 
     value: int
@@ -66,10 +66,10 @@ class StepCountRecord(BaseModel):
 class SleepAnalysisRecord(BaseModel):
     """睡眠レコードのスキーマ"""
 
-    startDate: str
+    start_date: str
     """記録開始日時"""
 
-    endDate: str
+    end_date: str
     """記録終了日時"""
 
     value: str
@@ -79,8 +79,8 @@ class SleepAnalysisRecord(BaseModel):
 class BaseTimeRangeValueDFSchema(pa.DataFrameModel):
     """StepCount / SleepAnalysis の共通 DataFrame スキーマ"""
 
-    startDate: Series[str] = pa.Field()
-    endDate: Series[str] = pa.Field()
+    start_date: Series[str] = pa.Field()
+    end_date: Series[str] = pa.Field()
     value: Series[str] = pa.Field()
 
     class Config:  # type: ignore
@@ -106,10 +106,10 @@ class ExtractedSteps(BaseModel):
     id: str
     """データ識別用のID"""
 
-    stepData: list[StepCountRecord]
+    step_data: list[StepCountRecord]
     """抽出された歩数データのリスト"""
 
-    sleepData: Optional[list[SleepAnalysisRecord]] = None
+    sleep_data: Optional[list[SleepAnalysisRecord]] = None
     """抽出された睡眠データのリスト（存在する場合）"""
 
 
