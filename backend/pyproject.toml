@@ -11,6 +11,7 @@ dependencies = [
     "pandas>=2.2.0",
     "python-dateutil>=2.9.0.post0",
     "pandera>=0.28.1",
+    "scikit-learn>=1.8.0",
 ]
 
 [build-system]
