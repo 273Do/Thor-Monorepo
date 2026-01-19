@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
 import pandera as pa
 from fastapi import Query
@@ -106,10 +106,10 @@ class ExtractedSteps(BaseModel):
     id: str
     """データ識別用のID"""
 
-    step_data: list[StepCountRecord]
+    step_data: List[StepCountRecord]
     """抽出された歩数データのリスト"""
 
-    sleep_data: Optional[list[SleepAnalysisRecord]] = None
+    sleep_data: Optional[List[SleepAnalysisRecord]] = None
     """抽出された睡眠データのリスト（存在する場合）"""
 
 
