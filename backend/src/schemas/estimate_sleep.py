@@ -1,8 +1,10 @@
 from typing import List, Tuple
 
+import pandera as pa
+from pandera.typing import Series
 from pydantic import BaseModel, Field
 
-from src.schemas.extract_steps import StepCountRecord
+from src.schemas.extract_steps import BaseTimeRangeValueDFSchema, StepCountRecord
 
 
 class EstimateSleepRequest(BaseModel):
@@ -91,3 +93,10 @@ class StepClusters(BaseModel):
         description="3つのクラスター情報（低歩数、中歩数、高歩数の順）"
     )
     """クラスターのタプル（常に3つ固定: 低歩数、中歩数、高歩数）"""
+
+
+class EstimateSleepDFSchema(BaseTimeRangeValueDFSchema):
+    """睡眠状態を推定するためのDataFrameスキーマ"""
+
+    cluster_label: Series[int] = pa.Field(nullable=False)
+    """クラスターラベル"""
