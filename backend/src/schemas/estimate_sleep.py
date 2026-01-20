@@ -1,3 +1,5 @@
+from typing import List, Tuple
+
 from pydantic import BaseModel, Field
 
 from src.schemas.extract_steps import StepCountRecord
@@ -21,7 +23,7 @@ class EstimateSleepRequest(BaseModel):
     )
     """睡眠状態を推定するためのアンケートの回答"""
 
-    step_data: list[StepCountRecord] = Field(
+    step_data: List[StepCountRecord] = Field(
         description="睡眠推定に使用する歩数データ",
         examples=[
             [
@@ -67,3 +69,25 @@ class Questions(BaseModel):
         le=1,
     )
     """就寝時間の回答（0 or 1）"""
+
+
+class StepClusterRecord(BaseModel):
+    """歩数データのクラスターレコードのスキーマ"""
+
+    cluster_label: int = Field(
+        description="クラスターのラベル（0: 低歩数, 1: 中歩数, 2: 高歩数）",
+        examples=[0],
+    )
+    """クラスターのラベル"""
+
+    centroid: float = Field(description="クラスターのセントロイド", examples=[50.5])
+    """クラスターのセントロイド"""
+
+
+class StepClusters(BaseModel):
+    """歩数データのクラスタリング結果"""
+
+    clusters: Tuple[StepClusterRecord, StepClusterRecord, StepClusterRecord] = Field(
+        description="3つのクラスター情報（低歩数、中歩数、高歩数の順）"
+    )
+    """クラスターのタプル（常に3つ固定: 低歩数、中歩数、高歩数）"""
