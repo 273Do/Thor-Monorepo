@@ -87,6 +87,7 @@ class SleepAnalysisRecord(BaseModel):
         description="記録終了日時",
         examples=["2026-01-01T00:00:00Z"],
     )
+    """記録終了日時"""
 
     value: str = Field(
         description="睡眠状態の値",
@@ -98,9 +99,14 @@ class SleepAnalysisRecord(BaseModel):
 class BaseTimeRangeValueDFSchema(pa.DataFrameModel):
     """StepCount / SleepAnalysis の共通 DataFrame スキーマ"""
 
-    start_date: Series[str] = pa.Field()
-    end_date: Series[str] = pa.Field()
-    value: Series[str] = pa.Field()
+    start_date: Series[str] = pa.Field(nullable=False)
+    """記録開始日時"""
+
+    end_date: Series[str] = pa.Field(nullable=False)
+    """記録終了日時"""
+
+    value: Series[str] = pa.Field(nullable=False)
+    """値"""
 
     class Config:  # type: ignore
         coerce = False
