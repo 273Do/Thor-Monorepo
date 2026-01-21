@@ -38,7 +38,7 @@ def estimate_sleep(req: EstimateSleepRequest):
         [record.model_dump() for record in step_data]
     )  # type: ignore
 
-    # 1分あたりの歩数を計算しクラスタリングを行う
+    # 外出検知のため1分あたりの歩数を計算しクラスタリングを行う
     estimate_sleep_df, cluster_stats = step_clustering(step_count_df)
 
     print(estimate_sleep_df)

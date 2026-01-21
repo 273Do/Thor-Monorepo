@@ -17,7 +17,7 @@ from src.schemas.extract_steps import StepCountDFSchema
 def step_clustering(
     step_count_df: DataFrame[StepCountDFSchema],
 ) -> Tuple[DataFrame[EstimateSleepDFSchema], StepClusters]:
-    """1分あたりの歩数を計算しクラスタリングを行う
+    """外出検知のため1分あたりの歩数を計算しクラスタリングを行う
 
     Args:
         step_count_df (DataFrame[StepCountDFSchema]): 歩数データの DataFrame
