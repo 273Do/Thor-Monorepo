@@ -17,13 +17,15 @@ from src.schemas.extract_steps import StepCountDFSchema
 def step_clustering(
     step_count_df: DataFrame[StepCountDFSchema],
 ) -> Tuple[DataFrame[EstimateSleepDFSchema], StepClusters]:
-    """歩数データのクラスタリングを行う
+    """1分あたりの歩数を計算しクラスタリングを行う
 
     Args:
-        step_count_df: 歩数データの DataFrame
+        step_count_df (DataFrame[StepCountDFSchema]): 歩数データの DataFrame
 
     Returns:
-        学習済みの KMeans モデル
+        Tuple[DataFrame[EstimateSleepDFSchema], StepClusters]:
+        クラスタリングのラベルを追加した DataFrame,
+        クラスタリング結果のラベルとセントロイド
     """
 
     # start_date と end_date を datetime に変換
@@ -75,7 +77,7 @@ def step_clustering(
     for cluster in sorted_centroids_index:
         cluster_data = StepClusterRecord(
             cluster_label=remap_clusters_dict[cluster],
-            centroid=centroids[cluster],
+            centroid=round(centroids[cluster], 2),
         )
 
         cluster_list.append(cluster_data)
