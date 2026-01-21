@@ -98,5 +98,8 @@ class StepClusters(BaseModel):
 class EstimateSleepDFSchema(BaseTimeRangeValueDFSchema):
     """睡眠状態を推定するためのDataFrameスキーマ"""
 
+    steps_per_minute: Series[int] = pa.Field(nullable=False)
+    """歩数 / 分"""
+
     cluster_label: Series[int] = pa.Field(nullable=False)
     """クラスターラベル"""
