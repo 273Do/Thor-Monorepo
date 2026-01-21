@@ -26,11 +26,11 @@ def estimate_sleep(req: EstimateSleepRequest):
     """睡眠推定を受け付ける"""
 
     id = req.id
-    questions = req.questions
+    answers = req.answers
     step_data = req.step_data
 
     print(id)
-    print(questions)
+    print(answers)
 
     # TODO: NAS に入力データを保存
 

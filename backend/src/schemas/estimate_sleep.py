@@ -13,7 +13,7 @@ class EstimateSleepRequest(BaseModel):
     id: str = Field(examples=["0123456789abcdef_20260101000000"], min_length=1)
     """データ識別用のID"""
 
-    questions: "Questions" = Field(
+    answers: "Answers" = Field(
         description="睡眠状態を推定するためのアンケートの回答",
         examples=[
             {
@@ -45,7 +45,7 @@ class EstimateSleepRequest(BaseModel):
     """睡眠推定に使用する歩数データ"""
 
 
-class Questions(BaseModel):
+class Answers(BaseModel):
     """睡眠状態を推定するためのアンケートの回答"""
 
     charging_before_bed_answer: int = Field(
