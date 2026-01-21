@@ -1,6 +1,10 @@
+import pandas as pd
 from fastapi import APIRouter
+from pandera.typing import DataFrame
 
 from src.schemas.estimate_sleep import EstimateSleepRequest
+from src.schemas.extract_steps import StepCountDFSchema
+from src.usecases.estimate_sleep.step_clustering import step_clustering
 
 router = APIRouter(prefix="/estimate-sleep", tags=["estimate-sleep"])
 
@@ -27,5 +31,18 @@ def estimate_sleep(req: EstimateSleepRequest):
 
     print(id)
     print(questions)
-    print(step_data)
+
+    # TODO: NAS に入力データを保存
+
+    step_count_df: DataFrame[StepCountDFSchema] = pd.DataFrame(
+        [record.model_dump() for record in step_data]
+    )  # type: ignore
+
+    # 1分あたりの歩数を計算しクラスタリングを行う
+    estimate_sleep_df, cluster_stats = step_clustering(step_count_df)
+
+    print(estimate_sleep_df)
+
+    print(cluster_stats)
+
     return
