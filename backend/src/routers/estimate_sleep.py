@@ -4,7 +4,7 @@ from pandera.typing import DataFrame
 
 from src.schemas.estimate_sleep import EstimateSleepRequest
 from src.schemas.extract_steps import StepCountDFSchema
-from src.usecases.estimate_sleep.step_clustering import step_clustering
+from src.usecases.estimate_sleep.step_clustering_usecase import step_clustering
 
 router = APIRouter(prefix="/estimate-sleep", tags=["estimate-sleep"])
 
