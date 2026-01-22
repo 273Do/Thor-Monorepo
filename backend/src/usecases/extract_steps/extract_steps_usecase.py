@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import List
 
 from pandera.typing import DataFrame
 
@@ -61,9 +62,9 @@ def extract_steps_from_applehealthcare(
     timestamp: str = datetime.now().strftime("%Y%m%d%H%M%S")
     data_id: str = extractor.generate_data_id()
 
-    step_count_records: list[StepCountRecord] = step_count_df.to_dict(orient="records")  # type: ignore
+    step_count_records: List[StepCountRecord] = step_count_df.to_dict(orient="records")  # type: ignore
 
-    sleep_analysis_records: list[SleepAnalysisRecord] = sleep_analysis_df.to_dict(  # type: ignore
+    sleep_analysis_records: List[SleepAnalysisRecord] = sleep_analysis_df.to_dict(  # type: ignore
         orient="records"
     )
 

@@ -20,7 +20,7 @@ import re
 from collections import Counter, OrderedDict
 from collections.abc import Mapping
 from datetime import datetime
-from typing import Literal
+from typing import List, Literal
 from xml.etree import ElementTree
 
 import pandas as pd
@@ -54,7 +54,7 @@ class HealthDataExtractor:
 
         """入力されたデータを一意に識別するためのID"""
 
-        self.records: dict[str, list[dict[str, str]]] = {
+        self.records: dict[str, List[dict[str, str]]] = {
             "StepCount": [],
             "SleepAnalysis": [],
         }
