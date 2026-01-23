@@ -4,6 +4,7 @@ from pandera.typing import DataFrame
 
 from src.schemas.estimate_sleep import EstimateSleepRequest
 from src.schemas.extract_steps import StepCountDFSchema
+from src.usecases.estimate_sleep.feature_of_late_night import create_feature_value
 from src.usecases.estimate_sleep.step_clustering_usecase import step_clustering
 
 router = APIRouter(prefix="/estimate-sleep", tags=["estimate-sleep"])
@@ -40,6 +41,9 @@ def estimate_sleep(req: EstimateSleepRequest):
 
     # 外出検知のため1分あたりの歩数を計算しクラスタリングを行う
     estimate_sleep_df, cluster_stats = step_clustering(step_count_df)
+
+    # 歩数データから夜更かしを推定するための特徴量を抽出
+    create_feature_value(step_count_df, answers.bedtime_answer)
 
     print(estimate_sleep_df)
 
