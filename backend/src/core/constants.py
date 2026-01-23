@@ -14,3 +14,6 @@ STEP_COUNT_CSV_FILENAME = "step_count_data.csv"
 
 SLEEP_ANALYSIS_CSV_FILENAME = "sleep_analysis_data.csv"
 """デバッグ用に保存する睡眠データのCSVファイル名"""
+
+FEATURE_TIME_RANGE = 0, 12
+"""特徴量となるデータの時間範囲(0時~12時)"""

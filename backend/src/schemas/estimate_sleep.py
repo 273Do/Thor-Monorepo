@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List, Tuple
 
 import pandera as pa
@@ -103,3 +104,50 @@ class EstimateSleepDFSchema(BaseTimeRangeValueDFSchema):
 
     cluster_label: Series[int] = pa.Field(nullable=False)
     """クラスターラベル"""
+
+
+class HourlyStats(BaseModel):
+    """時間帯ごとの歩数の統計"""
+
+    hour_range: str = Field(description="時間帯", examples=["0to1"])
+    """時間帯"""
+
+    total_steps: int = Field(description="合計歩数", examples=[22])
+    """合計歩数"""
+
+    records: int = Field(description="レコード数", examples=[3])
+    """レコード数"""
+
+
+class DailyStats(BaseModel):
+    """日付ごとの歩数の統計"""
+
+    date: datetime = Field(
+        description="日付",
+        examples=["2025-11-01"],
+    )
+    """日付"""
+
+    hourly_statistics: List[HourlyStats] = Field(
+        description="時間帯ごとの統計",
+        examples=[
+            HourlyStats(hour_range="0to1", total_steps=22, records=3),
+            HourlyStats(hour_range="1to2", total_steps=45, records=5),
+        ],
+    )
+    """時間帯ごとの統計"""
+
+    bedtime_answer: int = Field(
+        description="就寝時間の回答（0 or 1）",
+        examples=[1],
+        ge=0,
+        le=1,
+    )
+    """就寝時間の回答（0 or 1）"""
+
+
+class LateNightFeature(BaseModel):
+    """歩数データから夜更かしを推定するための特徴量"""
+
+    feature: List[DailyStats] = Field(description="特徴量")
+    """特徴量"""
