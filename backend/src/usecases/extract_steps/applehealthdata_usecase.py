@@ -287,7 +287,7 @@ class HealthDataExtractor:
 
 
 def _abbreviate(s: str, enabled: bool = True) -> str:
-    PREFIX_RE = re.compile(r"^HK.*TypeIdentifier(.+)$")
+    PREFIX_RE = re.compile(r"^HK.*TypeIdentifier(.+)$")  # noqa: N806
     m = re.match(PREFIX_RE, s)
     return m.group(1) if enabled and m else s
 

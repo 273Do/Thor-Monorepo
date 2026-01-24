@@ -94,7 +94,7 @@ def step_clustering(
 
 
 # デモ実行
-# task backend -- uv run python -m src.usecases.estimate_sleep.step_clustering
+# task backend -- uv run python -m src.usecases.estimate_sleep.step_clustering_usecase
 if __name__ == "__main__":
     demo_df: DataFrame[StepCountDFSchema] = pd.read_csv(  # type: ignore
         f"/workspace/backend/{envs.SAMPLE_DATA_DIR}/{STEP_COUNT_CSV_FILENAME}"
