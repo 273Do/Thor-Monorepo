@@ -18,6 +18,9 @@ class Envs(BaseSettings):
     SAMPLE_DATA_DIR: str = Field(default="./datastore/sample_data")
     """サンプルデータを格納するディレクトリパス"""
 
+    MODELS_DIR: str = Field(default="./datastore/models")
+    """modelを格納しているディレクトリパス"""
+
     API_V1_PREFIX: str = Field(default="/api/v1")
     """APIの接頭辞"""
 
