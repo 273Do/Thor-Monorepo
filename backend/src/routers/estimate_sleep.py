@@ -49,7 +49,9 @@ def estimate_sleep(req: EstimateSleepRequest):
     feature = create_feature_value(step_count_df, answers.bedtime_answer)
 
     # 特徴量から夜更かし検知を行う
-    detect_late_night(feature)
+    late_night_list = detect_late_night(feature)
+
+    print(late_night_list)
 
     print(estimate_sleep_df)
 
