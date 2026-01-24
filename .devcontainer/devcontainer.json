@@ -35,7 +35,8 @@
         "oderwat.indent-rainbow",
         "intellsmi.comment-translate",
         "usernamehw.errorlens",
-        "postman.postman-for-vscode"
+        "postman.postman-for-vscode",
+        "github.vscode-github-actions"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
