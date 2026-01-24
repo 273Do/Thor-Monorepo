@@ -19,7 +19,7 @@ https://github.com/273Do/Thor-Web-App-Backend
 
 - VSCode
 - Docker
-- 事前に GitHub で ssh 接続ができるよう準備してください。
+- 事前に GitHub で ssh key を発行して ssh 接続ができるよう準備してください。
 
 ## セットアップ
 
@@ -35,7 +35,7 @@ VSCode で Dev Container でプロジェクトを開きます。
 
 ### 3. 初期設定
 
-1. 'backend'ディレクトリにデータを格納するディレクトリを作成します。
+1. `backend`ディレクトリに事前のデータを格納するディレクトリを作成します。
 2. 環境変数を作成します。
 3. 以下のコマンドでパッケージをインストールします。
 
@@ -52,12 +52,16 @@ task frontend -- pnpm react-router typegen
 
 ### 4. Claude Code
 
-Claude Code を契約している場合はターミナルから`claude`でセットアップが可能です。
+Claude Code を契約している場合はターミナルから以下のコマンドでセットアップが可能です。
+
+```bash
+claude
+```
 
 ## 開発コマンド
 
 - 各種コマンドは`task -l`で確認できます。
-- `http://localhost:8000/docs` で Swagger を使用できます。
+- [http://localhost:8000/docs](http://localhost:8000/docs) で Swagger を使用できます。
 
 # クレジット
 
