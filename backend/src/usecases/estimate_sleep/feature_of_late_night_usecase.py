@@ -82,15 +82,11 @@ def create_feature_value(
 
         feature.append(daily_stats)
 
-    print(feature)
-
     return LateNightFeature(feature=feature)
 
 
-# TODO: 特徴量を DataFrame に変換する処理を記述する
-
 # デモ実行
-# task backend -- uv run python -m src.usecases.estimate_sleep.feature_of_late_night
+# task backend -- uv run python -m src.usecases.estimate_sleep.feature_of_late_night_usecase
 if __name__ == "__main__":
     demo_df: DataFrame[StepCountDFSchema] = pd.read_csv(  # type: ignore
         f"/workspace/backend/{envs.SAMPLE_DATA_DIR}/{STEP_COUNT_CSV_FILENAME}"
