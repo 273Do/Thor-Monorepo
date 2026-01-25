@@ -7,7 +7,7 @@ from sklearn.cluster import KMeans
 from src.core.constants import STEP_COUNT_CSV_FILENAME
 from src.core.load_env import envs
 from src.schemas.estimate_sleep import (
-    EstimateSleepDFSchema,
+    EstimateGoingOutDFSchema,
     StepClusterRecord,
     StepClusters,
 )
@@ -16,14 +16,14 @@ from src.schemas.extract_steps import StepCountDFSchema
 
 def step_clustering(
     step_count_df: DataFrame[StepCountDFSchema],
-) -> Tuple[DataFrame[EstimateSleepDFSchema], StepClusters]:
+) -> Tuple[DataFrame[EstimateGoingOutDFSchema], StepClusters]:
     """外出検知のため1分あたりの歩数を計算しクラスタリングを行う
 
     Args:
         step_count_df (DataFrame[StepCountDFSchema]): 歩数データの DataFrame
 
     Returns:
-        Tuple[DataFrame[EstimateSleepDFSchema], StepClusters]:
+        Tuple[DataFrame[EstimateGoingOutDFSchema], StepClusters]:
         クラスタリングのラベルを追加した DataFrame,
         クラスタリング結果のラベルとセントロイド
     """
@@ -87,10 +87,10 @@ def step_clustering(
     )  # type: ignore
 
     # 睡眠状態を推定するためのDataFrameを作成
-    estimate_sleep_df: DataFrame[EstimateSleepDFSchema] = step_count_df.copy()  # type: ignore
-    estimate_sleep_df["cluster_label"] = remapped_labels
+    estimate_going_out_df: DataFrame[EstimateGoingOutDFSchema] = step_count_df.copy()  # type: ignore
+    estimate_going_out_df["cluster_label"] = remapped_labels
 
-    return (estimate_sleep_df, StepClusters(clusters=cluster_stats))
+    return (estimate_going_out_df, StepClusters(clusters=cluster_stats))
 
 
 # デモ実行

@@ -96,7 +96,7 @@ class StepClusters(BaseModel):
     """クラスターのタプル（常に3つ固定: 低歩数、中歩数、高歩数）"""
 
 
-class EstimateSleepDFSchema(BaseTimeRangeValueDFSchema):
+class EstimateGoingOutDFSchema(BaseTimeRangeValueDFSchema):
     """睡眠状態を推定するためのDataFrameスキーマ"""
 
     steps_per_minute: Series[int] = pa.Field(nullable=False)
