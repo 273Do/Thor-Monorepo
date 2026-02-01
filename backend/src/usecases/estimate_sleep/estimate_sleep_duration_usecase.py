@@ -90,7 +90,14 @@ def _late_night_estimate(
     day_df: DataFrame[EstimateGoingOutDFSchema], time_range: list[str]
 ) -> List[Any]:
     """夜更かししている場合の推定処理\n
-    0000->0300にレコードがあればそこを、なければ0300を精査開始時間とし、そこから2100までの歩数レコード間隔が最も長い時間を就寝/起床時刻とする。"""
+    0000->0300にレコードがあればそこを、なければ0300を精査開始時間とし、そこから2100までの歩数レコード間隔が最も長い時間を就寝/起床時刻とする。
+
+    Args:
+        day_df (DataFrame[EstimateGoingOutDFSchema]): 日々の歩数 DataFrame
+        time_range (list[str]): 精査範囲
+    Returns:
+        List[Any]: 日々の推定睡眠時間範囲 [就寝時刻, 起床時刻]
+    """
 
     # 精査するデータの時間範囲の指定
     initial_time = pd.to_datetime("00:00:00").time()
@@ -161,5 +168,4 @@ def _normal_estimate(
     2500->2100、0415->1200を遡って最初に観測された歩数レコードを就寝・起床時刻とする。"""
 
     print(f"time_range:{time_range}")
-    # print(day_df)
     return
