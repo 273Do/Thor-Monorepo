@@ -155,6 +155,9 @@ def _late_night_estimate(
         # 終了時刻を更新
         prev_start_time = current_start_time
 
+        # TODO: 外出検知の場合はスキップ(1,2クラスタ)
+
+    # 睡眠時間が見つからなかった場合は空リストを返す
     if not sleep_time_range:
         return []
 
@@ -162,10 +165,55 @@ def _late_night_estimate(
 
 
 def _normal_estimate(
-    day_df: DataFrame[EstimateGoingOutDFSchema], time_range: list[str]
-):
+    day_df: DataFrame[EstimateGoingOutDFSchema], time_range: List[str]
+) -> List[Any]:
     """夜更かししていない場合の推定処理\n
-    2500->2100、0415->1200を遡って最初に観測された歩数レコードを就寝・起床時刻とする。"""
+    2500->2100、0415->1200を遡って最初に観測された歩数レコードを就寝・起床時刻とする。
 
-    print(f"time_range:{time_range}")
-    return
+
+    Args:
+        day_df (DataFrame[EstimateGoingOutDFSchema]): 日々の歩数 DataFrame
+        time_range (list[str]): 精査範囲
+
+    Returns:
+        List[Any]: 日々の推定睡眠時間範囲 [就寝時刻, 起床時刻]
+    """
+
+    # 前日，当日の取得
+    unique_dates = day_df["start_date"].dt.date.unique()
+
+    # データが無い場合は空の配列を返す
+    if len(unique_dates) < 2:
+        return []
+
+    # 精査するデータの時間範囲の指定
+    bed_end = pd.to_datetime(f"{time_range[0]}:00").time()
+    wake_start = pd.to_datetime(f"{time_range[1]}:00").time()
+    wake_end = pd.to_datetime(f"{time_range[2]}:00").time()
+    bed_start = pd.to_datetime(f"{time_range[3]}:00").time()
+
+    # 就寝時刻は前日から当日のデータを精査する
+    bed_start_time = pd.Timestamp(f"{unique_dates[0].isoformat()} {bed_start}+09:00")
+    bed_end_time = pd.Timestamp(f"{unique_dates[1].isoformat()} {bed_end}+09:00")
+    bed_df = day_df[day_df["start_date"].between(bed_start_time, bed_end_time)]
+
+    # 起床時刻は当日のデータから精査する
+    wake_start_time = pd.Timestamp(f"{unique_dates[1].isoformat()} {wake_start}+09:00")
+    wake_end_time = pd.Timestamp(f"{unique_dates[1].isoformat()} {wake_end}+09:00")
+    wake_df = day_df[day_df["start_date"].between(wake_start_time, wake_end_time)]
+
+    # 就寝時刻の推定
+    if bed_df.empty:
+        bed_time = bed_end
+    else:
+        bed_time = bed_df["end_date"].max().time()
+
+    # 起床時刻の推定
+    if wake_df.empty:
+        wake_time = wake_start
+    else:
+        wake_time = wake_df["start_date"].min().time()
+
+    print([bed_time, wake_time])
+
+    return [bed_time, wake_time]
