@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import Any, List
+from typing import Any, List, Tuple
 
 import pandas as pd
 from pandera.typing import DataFrame
@@ -22,6 +22,8 @@ def estimate_sleep_duration_from_step(
         charging_before_bed_answer (int): 就寝何時間前にスマホを充電するかの回答（0 ~ 4）
         carrying_a_smartphone_answer (int): の中でスマホを持ち歩くかの回答（0 ~ 2）
     """
+
+    print(late_night_list)
 
     # estimate_going_out_df の start_date とend_date カラムを文字列から日付型に変更
     estimate_going_out_df["start_date"] = pd.to_datetime(
@@ -65,9 +67,9 @@ def estimate_sleep_duration_from_step(
             ].sort_values("start_date")
 
             # 推定処理を実行
-            sleep_time_range = _late_night_estimate(day_df, time_range)
-
-            print(f"sleep_time_range:{sleep_time_range}")
+            sleep_time_range, is_default_time_list = _late_night_estimate(
+                day_df, time_range
+            )
 
         else:
             # 夜更かししていない場合の推定処理
@@ -79,24 +81,31 @@ def estimate_sleep_duration_from_step(
             ].sort_values("start_date")
 
             # 推定処理を実行
-            _normal_estimate(day_df, time_range)
+            sleep_time_range, is_default_time_list = _normal_estimate(
+                day_df, time_range
+            )
 
         # break
+
+        print(sleep_time_range, is_default_time_list)
 
     return
 
 
 def _late_night_estimate(
     day_df: DataFrame[EstimateGoingOutDFSchema], time_range: list[str]
-) -> List[Any]:
+) -> Tuple[List[Any], List[bool]]:
     """夜更かししている場合の推定処理\n
     0000->0300にレコードがあればそこを、なければ0300を精査開始時間とし、そこから2100までの歩数レコード間隔が最も長い時間を就寝/起床時刻とする。
 
     Args:
         day_df (DataFrame[EstimateGoingOutDFSchema]): 日々の歩数 DataFrame
         time_range (list[str]): 精査範囲
+
     Returns:
-        List[Any]: 日々の推定睡眠時間範囲 [就寝時刻, 起床時刻]
+        Tuple[List[Any], List[bool]]:
+        日々の推定睡眠時間範囲 [就寝時刻, 起床時刻]
+        デフォルトの時間を使ったかどうか [就寝時刻, 起床時刻]
     """
 
     # 精査するデータの時間範囲の指定
@@ -121,7 +130,10 @@ def _late_night_estimate(
 
     # データが無い場合は終了
     if filtered_df.empty:
-        return []
+        return [], []
+
+    # デフォルトの時間を使った場合に格納するリスト
+    is_default_time_list: List[bool] = []
 
     # 最大の睡眠時間と、その時の就寝・起床時刻を記録する変数
     max_sleep_duration = timedelta()
@@ -131,7 +143,7 @@ def _late_night_estimate(
     prev_start_time = start_time
 
     # その日の歩数データごとに処理を繰り返す
-    for row in filtered_df.itertuples():
+    for i, row in enumerate(filtered_df.itertuples()):
         # 現在のレコードの終了・開始時刻をそれぞれ間隔の開始・終了時刻とする取得
         current_start_time = row.end_date.time()
         current_end_time = row.start_date.time()
@@ -152,6 +164,11 @@ def _late_night_estimate(
             # 開始時刻と終了時刻を記録
             sleep_time_range = [prev_start_datetime.time(), current_end_datetime.time()]
 
+            if i == 0:
+                is_default_time_list = [True, False]
+            else:
+                is_default_time_list = [False, False]
+
         # 終了時刻を更新
         prev_start_time = current_start_time
 
@@ -159,14 +176,14 @@ def _late_night_estimate(
 
     # 睡眠時間が見つからなかった場合は空リストを返す
     if not sleep_time_range:
-        return []
+        return [], []
 
-    return sleep_time_range
+    return sleep_time_range, is_default_time_list
 
 
 def _normal_estimate(
     day_df: DataFrame[EstimateGoingOutDFSchema], time_range: List[str]
-) -> List[Any]:
+) -> Tuple[List[Any], List[bool]]:
     """夜更かししていない場合の推定処理\n
     2500->2100、0415->1200を遡って最初に観測された歩数レコードを就寝・起床時刻とする。
 
@@ -176,7 +193,9 @@ def _normal_estimate(
         time_range (list[str]): 精査範囲
 
     Returns:
-        List[Any]: 日々の推定睡眠時間範囲 [就寝時刻, 起床時刻]
+        Tuple[List[Any], List[bool]]:
+        日々の推定睡眠時間範囲 [就寝時刻, 起床時刻]
+        デフォルトの時間を使ったかどうか [就寝時刻, 起床時刻]
     """
 
     # 前日，当日の取得
@@ -184,7 +203,7 @@ def _normal_estimate(
 
     # データが無い場合は空の配列を返す
     if len(unique_dates) < 2:
-        return []
+        return [], []
 
     # 精査するデータの時間範囲の指定
     bed_end = pd.to_datetime(f"{time_range[0]}:00").time()
@@ -202,18 +221,25 @@ def _normal_estimate(
     wake_end_time = pd.Timestamp(f"{unique_dates[1].isoformat()} {wake_end}+09:00")
     wake_df = day_df[day_df["start_date"].between(wake_start_time, wake_end_time)]
 
+    # デフォルトの時間を使った場合に格納するリスト
+    is_default_time_list: List[bool] = []
+
+    print("normal sleep estimate")
+
     # 就寝時刻の推定
     if bed_df.empty:
         bed_time = bed_end
+        is_default_time_list.append(True)
     else:
         bed_time = bed_df["end_date"].max().time()
+        is_default_time_list.append(False)
 
     # 起床時刻の推定
     if wake_df.empty:
         wake_time = wake_start
+        is_default_time_list.append(True)
     else:
         wake_time = wake_df["start_date"].min().time()
+        is_default_time_list.append(False)
 
-    print([bed_time, wake_time])
-
-    return [bed_time, wake_time]
+    return [bed_time, wake_time], is_default_time_list
