@@ -172,7 +172,9 @@ def _late_night_estimate(
         # 終了時刻を更新
         prev_start_time = current_start_time
 
-        # TODO: 外出検知の場合はスキップ(1,2クラスタ)
+        # 外出検知の場合はスキップ(1,2クラスタ)
+        if row.cluster_label in [1, 2]:
+            break
 
     # 睡眠時間が見つからなかった場合は空リストを返す
     if not sleep_time_range:
