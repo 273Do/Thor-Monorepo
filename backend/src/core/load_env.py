@@ -21,6 +21,9 @@ class Envs(BaseSettings):
     MODELS_DIR: str = Field(default="./datastore/models")
     """modelを格納しているディレクトリパス"""
 
+    STATISTICAL_DATA_DIR: str = Field(default="./datastore/statistical_data")
+    """統計データを格納しているディレクトリパス"""
+
     API_V1_PREFIX: str = Field(default="/api/v1")
     """APIの接頭辞"""
 
