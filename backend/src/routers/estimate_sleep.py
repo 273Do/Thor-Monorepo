@@ -29,7 +29,7 @@ router = APIRouter(prefix="/estimate-sleep", tags=["estimate-sleep"])
         },
     },
 )
-def estimate_sleep(req: EstimateSleepRequest):
+def estimate_sleep(req: EstimateSleepRequest) -> EstimateSleepResponse:
     """睡眠推定を受け付ける"""
 
     id = req.id

@@ -168,7 +168,7 @@ class DailyEstimateSleep(BaseModel):
 
     is_default_time: List[bool] = Field(
         description="デフォルトの時間を使ったかどうか [就寝時刻, 起床時刻]",
-        examples=[True, False],
+        examples=[[True, False]],
     )
     """デフォルトの時間を使ったかどうか"""
 
