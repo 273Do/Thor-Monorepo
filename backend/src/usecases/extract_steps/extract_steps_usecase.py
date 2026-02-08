@@ -68,7 +68,7 @@ def extract_steps_from_applehealthcare(
         orient="records"
     )
 
-    # デバッグ用時は抽出したデータをCSVとして保存
+    # デバッグ時は抽出したデータをCSVとして保存
     if envs.IS_DEBUG:
         if step_count_df is not None:
             step_count_df.to_csv(
