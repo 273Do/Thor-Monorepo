@@ -15,5 +15,14 @@ STEP_COUNT_CSV_FILENAME = "step_count_data.csv"
 SLEEP_ANALYSIS_CSV_FILENAME = "sleep_analysis_data.csv"
 """デバッグ用に保存する睡眠データのCSVファイル名"""
 
-FEATURE_TIME_RANGE = 0, 12
-"""特徴量となるデータの時間範囲(0時~12時)"""
+CORRECTION_VALUE_JSON_FILENAME = "correction_value.json"
+"""アンケートごとの時間補正値のJSONファイル名"""
+
+FEATURE_TIME_RANGE = 0, 12  # (0時~12時)
+"""特徴量となるデータの時間範囲(1時間ごと)"""
+
+WEEKDAY_TIME_RANGE = ["3:00", "4:15", "12:00", "21:00"]
+"""平日の精査範囲"""
+
+HOLIDAY_TIME_RANGE = ["3:00", "4:45", "12:45", "20:45"]
+"""休日の精査範囲"""

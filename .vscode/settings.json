@@ -25,6 +25,12 @@
     "source.removeUnusedVariables",
     "source.convertImportFormat"
   ],
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportUnknownArgumentType": "none",
+    "reportUnknownVariableType": "none",
+    "reportUnknownMemberType": "none",
+    "reportAttributeAccessIssue": "none"
+  },
   "ruff.interpreter": ["${workspaceFolder}/backend/.venv/bin/python"],
   "ruff.path": ["${workspaceFolder}/backend/.venv/bin/ruff"],
 

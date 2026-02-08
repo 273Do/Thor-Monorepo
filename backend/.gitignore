@@ -5,6 +5,7 @@
 
 # Backend specific data files
 sample_data/
+statistical_data/
 models/
 uploads/
 data/

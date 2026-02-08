@@ -96,7 +96,7 @@ class StepClusters(BaseModel):
     """クラスターのタプル（常に3つ固定: 低歩数、中歩数、高歩数）"""
 
 
-class EstimateSleepDFSchema(BaseTimeRangeValueDFSchema):
+class EstimateGoingOutDFSchema(BaseTimeRangeValueDFSchema):
     """睡眠状態を推定するためのDataFrameスキーマ"""
 
     steps_per_minute: Series[int] = pa.Field(nullable=False)
@@ -151,3 +151,30 @@ class LateNightFeature(BaseModel):
 
     feature: List[DailyStats] = Field(description="特徴量")
     """特徴量"""
+
+
+class DailyEstimateSleep(BaseModel):
+    date: datetime = Field(
+        description="日付",
+        examples=["2025-11-01"],
+    )
+    """日付"""
+
+    bed_time: str = Field(description="推定した就寝時刻", examples=["03:00"])
+    """推定した就寝時刻"""
+
+    wake_time: str = Field(description="推定した起床時刻", examples=["09:28"])
+    """推定した起床時刻"""
+
+    is_default_time: List[bool] = Field(
+        description="デフォルトの時間を使ったかどうか [就寝時刻, 起床時刻]",
+        examples=[[True, False]],
+    )
+    """デフォルトの時間を使ったかどうか"""
+
+
+class EstimateSleepResponse(BaseModel):
+    data: List[DailyEstimateSleep] = Field(
+        description="推定された日々の就寝時刻と起床時刻"
+    )
+    """推定された日々の就寝時刻と起床時刻"""
