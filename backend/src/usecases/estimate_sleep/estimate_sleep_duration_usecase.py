@@ -101,7 +101,14 @@ def estimate_sleep_duration_from_step(
 
         # 推定睡眠時間が空の場合
         if not sleep_time_range:
-            # 一旦 continue
+            results.append(
+                DailyEstimateSleep(
+                    date=date,
+                    bed_time="",
+                    wake_time="",
+                    is_default_time=is_default_time_list,
+                )
+            )
             continue
 
         # アンケート回答から補正値を取得
@@ -122,7 +129,7 @@ def estimate_sleep_duration_from_step(
         # 結果リストに追加
         results.append(
             DailyEstimateSleep(
-                date=datetime.combine(date, datetime.min.time()),
+                date=date,
                 bed_time=corrected_bed_time.strftime("%H:%M"),
                 wake_time=corrected_wake_time.strftime("%H:%M"),
                 is_default_time=is_default_time_list,
