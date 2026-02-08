@@ -1,10 +1,16 @@
+import json
 from datetime import datetime, timedelta
 from typing import Any, List, Tuple
 
 import pandas as pd
 from pandera.typing import DataFrame
 
-from src.core.constants import HOLIDAY_TIME_RANGE, WEEKDAY_TIME_RANGE
+from src.core.constants import (
+    CORRECTION_VALUE_JSON_FILENAME,
+    HOLIDAY_TIME_RANGE,
+    WEEKDAY_TIME_RANGE,
+)
+from src.core.load_env import envs
 from src.schemas.estimate_sleep import EstimateGoingOutDFSchema
 
 
@@ -88,6 +94,28 @@ def estimate_sleep_duration_from_step(
         # break
 
         print(sleep_time_range, is_default_time_list)
+
+        # 推定睡眠時間が空の場合
+        if not sleep_time_range:
+            # 一旦 continue
+            continue
+
+        # アンケート回答から補正値を取得
+        bed_time_cor, wake_time_cor = _get_correction_value(
+            charging_before_bed_answer, carrying_a_smartphone_answer
+        )
+
+        print(bed_time_cor, wake_time_cor)
+
+        # 補正処理
+        corrected_bed_time = (
+            datetime.combine(datetime.today(), sleep_time_range[0]) + bed_time_cor
+        )
+        corrected_wake_time = (
+            datetime.combine(datetime.today(), sleep_time_range[1]) - wake_time_cor
+        )
+
+        print(f"最終時間：{corrected_bed_time.time(), corrected_wake_time.time()}")
 
     return
 
@@ -245,3 +273,43 @@ def _normal_estimate(
         is_default_time_list.append(False)
 
     return [bed_time, wake_time], is_default_time_list
+
+
+def _get_correction_value(
+    charging_before_bed_answer: int, carrying_a_smartphone_answer: int
+) -> Tuple[pd.Timedelta, pd.Timedelta]:
+    """回答から補正値を取得する
+
+    Args:
+        charging_before_bed_answer (int): 就寝何時間前にスマホを充電するかの回答（0 ~ 4）
+        carrying_a_smartphone_answer (int): の中でスマホを持ち歩くかの回答（0 ~ 2）
+
+    Returns:
+        Tuple[pd.Timedelta, pd.Timedelta]:
+        就寝時刻の補正値
+        起床時刻の補正値
+
+    """
+
+    # 補正値データのパス
+    path = f"/workspace/backend/{envs.STATISTICAL_DATA_DIR}/{CORRECTION_VALUE_JSON_FILENAME}"
+
+    # 補正値データの読み込み
+    with open(path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    # 就寝時の補正値をリストに変換
+    bed_cor_list: List[int] = [int(value) for value in data["bed_cor"].values()]
+
+    # 起床時の補正値をリストに変換
+    wake_cor_list: List[int] = [int(value) for value in data["wake_cor"].values()]
+
+    # 選択した補正値を取得
+    bed_minutes: int = bed_cor_list[charging_before_bed_answer]
+    wake_minutes: int = wake_cor_list[carrying_a_smartphone_answer]
+
+    # 補正値を取得
+    bed_time_cor: pd.Timedelta = pd.to_timedelta(bed_minutes, unit="m")
+    wake_time_cor: pd.Timedelta = pd.to_timedelta(wake_minutes, unit="m")
+
+    return bed_time_cor, wake_time_cor
