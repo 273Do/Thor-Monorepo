@@ -2,7 +2,7 @@ import pandas as pd
 from fastapi import APIRouter
 from pandera.typing import DataFrame
 
-from src.schemas.estimate_sleep import EstimateSleepRequest
+from src.schemas.estimate_sleep import EstimateSleepRequest, EstimateSleepResponse
 from src.schemas.extract_steps import StepCountDFSchema
 from src.usecases.estimate_sleep.detection_late_night_usecase import detect_late_night
 from src.usecases.estimate_sleep.estimate_sleep_duration_usecase import (
@@ -60,11 +60,11 @@ def estimate_sleep(req: EstimateSleepRequest):
 
     # print(cluster_stats)
 
-    estimate_sleep_duration_from_step(
+    estimated_data = estimate_sleep_duration_from_step(
         estimate_going_out_df,
         late_night_list,
         answers.charging_before_bed_answer,
         answers.carrying_a_smartphone_answer,
     )
 
-    return
+    return EstimateSleepResponse(data=estimated_data)

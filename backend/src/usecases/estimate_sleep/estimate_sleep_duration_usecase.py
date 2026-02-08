@@ -11,7 +11,7 @@ from src.core.constants import (
     WEEKDAY_TIME_RANGE,
 )
 from src.core.load_env import envs
-from src.schemas.estimate_sleep import EstimateGoingOutDFSchema
+from src.schemas.estimate_sleep import DailyEstimateSleep, EstimateGoingOutDFSchema
 
 
 def estimate_sleep_duration_from_step(
@@ -19,7 +19,7 @@ def estimate_sleep_duration_from_step(
     late_night_list: List[int],
     charging_before_bed_answer: int,
     carrying_a_smartphone_answer: int,
-):
+) -> List[DailyEstimateSleep]:
     """歩数から睡眠を推定する
 
     Args:
@@ -27,7 +27,13 @@ def estimate_sleep_duration_from_step(
         late_night_list (List[int]): 夜ふかし検知結果の配列
         charging_before_bed_answer (int): 就寝何時間前にスマホを充電するかの回答（0 ~ 4）
         carrying_a_smartphone_answer (int): の中でスマホを持ち歩くかの回答（0 ~ 2）
+
+    Returns:
+        List[DailyEstimateSleep]: 日々の推定睡眠データのリスト
     """
+
+    # 結果を格納するリスト
+    results: List[DailyEstimateSleep] = []
 
     print(late_night_list)
 
@@ -91,8 +97,6 @@ def estimate_sleep_duration_from_step(
                 day_df, time_range
             )
 
-        # break
-
         print(sleep_time_range, is_default_time_list)
 
         # 推定睡眠時間が空の場合
@@ -115,9 +119,17 @@ def estimate_sleep_duration_from_step(
             datetime.combine(datetime.today(), sleep_time_range[1]) - wake_time_cor
         )
 
-        print(f"最終時間：{corrected_bed_time.time(), corrected_wake_time.time()}")
+        # 結果リストに追加
+        results.append(
+            DailyEstimateSleep(
+                date=datetime.combine(date, datetime.min.time()),
+                bed_time=corrected_bed_time.strftime("%H:%M"),
+                wake_time=corrected_wake_time.strftime("%H:%M"),
+                is_default_time=is_default_time_list,
+            )
+        )
 
-    return
+    return results
 
 
 def _late_night_estimate(
@@ -288,7 +300,6 @@ def _get_correction_value(
         Tuple[pd.Timedelta, pd.Timedelta]:
         就寝時刻の補正値
         起床時刻の補正値
-
     """
 
     # 補正値データのパス
