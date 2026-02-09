@@ -32,7 +32,7 @@ def detect_late_night(feature: LateNightFeature) -> List[int]:
     predictions: List[List[int]] = []
     for path in models_path:
         # モデルをロード
-        model = joblib.load(path)  # type: ignore
+        model = joblib.load(path)
 
         # ロードしたモデルで予測
         pred: List[int] = model.predict(feature_df.drop("date", axis=1))
@@ -55,7 +55,7 @@ def detect_late_night(feature: LateNightFeature) -> List[int]:
     return late_night_list
 
 
-def _daily_stats_to_flat_dict(daily_stats: DailyStats) -> dict:  # type: ignore
+def _daily_stats_to_flat_dict(daily_stats: DailyStats) -> dict:
     """DailyStats を1行のレコード用にフラット化し、モデルに合わせてカラム名を変更
 
     Args:
@@ -74,9 +74,9 @@ def _daily_stats_to_flat_dict(daily_stats: DailyStats) -> dict:  # type: ignore
         # model に合わせてカラム名を変更する
         suffix = stat.hour_range.replace("to", "_")
 
-        row[f"sumValue_{suffix}"] = stat.total_steps  # type: ignore
-        row[f"valueCount_{suffix}"] = stat.records  # type: ignore
+        row[f"sumValue_{suffix}"] = stat.total_steps
+        row[f"valueCount_{suffix}"] = stat.records
 
-    row["habit"] = daily_stats.bedtime_answer  # type: ignore
+    row["habit"] = daily_stats.bedtime_answer
 
     return row

@@ -134,7 +134,7 @@ class HealthDataExtractor:
 
             if pd.notna(last_date) and self.months_of_extract is not None:
                 # nヶ月前を計算
-                start_date: datetime = last_date - relativedelta(  # type: ignore
+                start_date: datetime = last_date - relativedelta(
                     months=self.months_of_extract
                 )
 
