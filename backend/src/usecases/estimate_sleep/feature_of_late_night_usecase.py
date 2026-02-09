@@ -41,7 +41,7 @@ def create_feature_value(
     # 1日毎に抽出処理を繰り返す
     for date in unique_dates:
         # 指定の日付でデータを絞る
-        date_df = step_count_df[step_count_df["start_date"].dt.date == date]  # type: ignore
+        date_df = step_count_df[step_count_df["start_date"].dt.date == date]
 
         # その日の1時間ごとの歩数データの統計を格納する配列
         hourly_statistics: List[HourlyStats] = []
@@ -55,20 +55,20 @@ def create_feature_value(
             hour_range: str = f"{hour}to{hour + 1}"
 
             # 指定の時間範囲でデータを絞る
-            hour_df = date_df[  # type: ignore
-                (date_df["start_date"].dt.time >= start_time.time())  # type: ignore
-                & (date_df["start_date"].dt.time <= end_time.time())  # type: ignore
+            hour_df = date_df[
+                (date_df["start_date"].dt.time >= start_time.time())
+                & (date_df["start_date"].dt.time <= end_time.time())
             ]
 
             # 1時間毎の歩数の合計とデータ数を取得
-            total_steps: int = hour_df["value"].sum()  # type: ignore
-            records: int = hour_df.shape[0]  # type: ignore
+            total_steps: int = hour_df["value"].sum()
+            records: int = hour_df.shape[0]
 
             # 1時間毎の歩数データの統計を作成
             hourly_stats = HourlyStats(
                 hour_range=hour_range,
-                total_steps=total_steps,  # type: ignore
-                records=records,  # type: ignore
+                total_steps=total_steps,
+                records=records,
             )
 
             hourly_statistics.append(hourly_stats)

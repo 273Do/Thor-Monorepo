@@ -74,8 +74,8 @@ def estimate_sleep_duration_from_step(
             # 夜更かししている場合の推定処理
 
             # その日の歩数データを start_date で整列して取得
-            day_df: DataFrame[EstimateGoingOutDFSchema] = estimate_going_out_df[  # type: ignore
-                (estimate_going_out_df["start_date"].dt.date == date)  # type: ignore
+            day_df: DataFrame[EstimateGoingOutDFSchema] = estimate_going_out_df[
+                (estimate_going_out_df["start_date"].dt.date == date)
             ].sort_values("start_date")
 
             # 推定処理を実行
@@ -88,8 +88,8 @@ def estimate_sleep_duration_from_step(
 
             # その日と前日の歩数データを start_date で整列して取得
             target_dates: List[datetime] = [date - timedelta(days=1), date]
-            day_df: DataFrame[EstimateGoingOutDFSchema] = estimate_going_out_df[  # type: ignore
-                estimate_going_out_df["start_date"].dt.date.isin(target_dates)  # type: ignore
+            day_df: DataFrame[EstimateGoingOutDFSchema] = estimate_going_out_df[
+                estimate_going_out_df["start_date"].dt.date.isin(target_dates)
             ].sort_values("start_date")
 
             # 推定処理を実行
