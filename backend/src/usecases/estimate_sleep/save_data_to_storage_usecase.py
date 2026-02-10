@@ -30,7 +30,10 @@ def save_data_to_storage(
     # データを保存する
     with open(file_path, "w", encoding="utf-8") as f:
         json.dump(
-            [record.model_dump() for record in data], f, ensure_ascii=False, indent=4
+            [record.model_dump(mode="json") for record in data],
+            f,
+            ensure_ascii=False,
+            indent=4,
         )
 
     return
