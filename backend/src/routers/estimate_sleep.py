@@ -11,6 +11,9 @@ from src.usecases.estimate_sleep.estimate_sleep_duration_usecase import (
 from src.usecases.estimate_sleep.feature_of_late_night_usecase import (
     create_feature_value,
 )
+from src.usecases.estimate_sleep.save_data_to_storage_usecase import (
+    save_data_to_storage,
+)
 from src.usecases.estimate_sleep.step_clustering_usecase import step_clustering
 
 router = APIRouter(prefix="/estimate-sleep", tags=["estimate-sleep"])
@@ -41,6 +44,8 @@ def estimate_sleep(req: EstimateSleepRequest) -> EstimateSleepResponse:
 
     # TODO: NAS に入力データを保存
 
+    save_data_to_storage(id, step_data)
+
     step_count_df: DataFrame[StepCountDFSchema] = pd.DataFrame(
         [record.model_dump() for record in step_data]
     )  # type: ignore
@@ -66,5 +71,7 @@ def estimate_sleep(req: EstimateSleepRequest) -> EstimateSleepResponse:
         answers.charging_before_bed_answer,
         answers.carrying_a_smartphone_answer,
     )
+
+    save_data_to_storage(id, estimated_data)
 
     return EstimateSleepResponse(data=estimated_data)
