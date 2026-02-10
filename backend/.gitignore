@@ -4,9 +4,11 @@
 !.env.example
 
 # Backend specific data files
+models/
 sample_data/
 statistical_data/
-models/
+vault/
+
 uploads/
 data/
 
