@@ -5,6 +5,7 @@ from src.schemas.llm_feedback import LLMFeedbackRequest
 from src.usecases.estimate_sleep.save_data_to_storage_usecase import (
     get_data_from_storage,
 )
+from src.usecases.llm_feedback.get_feedback_usecase import get_feedback
 
 router = APIRouter(prefix="/feedback", tags=["feedback"])
 
@@ -22,13 +23,23 @@ router = APIRouter(prefix="/feedback", tags=["feedback"])
         },
     },
 )
-def llm_feedback(req: LLMFeedbackRequest):
-    """フィードバックを受け付ける"""
+def llm_feedback(req: LLMFeedbackRequest) -> str:
+    """LLM による睡眠フィードバックを取得する\n
+    睡眠推定の結果は NAS に保存済みのため、このエンドポイントでは推定処理を再実行せず、
+    保存されたデータを読み込んで LLM にフィードバックを依頼する。
+    推定処理とフィードバック処理を分離することで、推定済みのデータに対して
+    繰り返しフィードバックを取得できるようにしている。
+    新たな睡眠期間のフィードバックがほしい場合は、再度推定処理をするリクエストを投げる。
+    """
 
     id = req.id
     lang = req.lang
     print(id, lang)
 
-    get_data_from_storage(id, ESTIMATE_SLEEP_JSON_FILENAME)
+    # NAS から推推定睡眠データを取得する
+    estimate_sleep_json = get_data_from_storage(id, ESTIMATE_SLEEP_JSON_FILENAME)
 
-    return
+    # LLM からフィードバックを取得する
+    feedback = get_feedback(estimate_sleep_json)
+
+    return feedback
