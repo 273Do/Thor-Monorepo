@@ -1,5 +1,6 @@
 import json
-from typing import List
+from pathlib import Path
+from typing import List, Literal
 
 from openai import OpenAI
 
@@ -13,14 +14,28 @@ client = OpenAI(
 )
 
 
-def get_feedback(data: List[StepCountRecord] | List[DailyEstimateSleepRecord]) -> str:
+def get_feedback(
+    data: List[StepCountRecord] | List[DailyEstimateSleepRecord],
+    lang: Literal["ja", "en"],
+) -> str:
+    """推定睡眠データを使用して LLM からフィードバックを取得する
+
+    Args:
+        data (List[StepCountRecord] | List[DailyEstimateSleepRecord]): 推定睡眠データ
+        lang (Literal[ja", "en"]): 言語
+
+    Returns:
+        str: LLM から得たフィードバック
+    """
+    system_prompt = _load_system_prompt(lang)
+
     completion = client.chat.completions.create(
-        # TODO: モデルやsystem promptは別で設定するようにする
+        # TODO: モデルは別で設定するようにする
         model="llama3.1:8b",
         messages=[
             {
                 "role": "system",
-                "content": "You are an expert on the health, lifestyle, and sleep habits of university students, and also have knowledge of mental health. The data you will be providing is data on daily sleep duration estimated from step count data. Please provide detailed feedback and advice on what you can learn from this information, areas for improvement, and lifestyle habits.",
+                "content": system_prompt,
             },
             {
                 "role": "user",
@@ -32,3 +47,17 @@ def get_feedback(data: List[StepCountRecord] | List[DailyEstimateSleepRecord]) -
     feedback: str = completion.choices[0].message.content
 
     return feedback
+
+
+def _load_system_prompt(lang: Literal["ja", "en"]) -> str:
+    """言語に応じたシステムプロンプトをファイルから読み込む
+
+    Args:
+        lang (Literal[ja", "en"]): 言語
+
+    Returns:
+        str: prompt テキスト
+    """
+
+    prompt_path = Path(envs.SAMPLE_DATA_DIR) / f"prompt-{lang}.md"
+    return prompt_path.read_text(encoding="utf-8")
