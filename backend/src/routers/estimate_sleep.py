@@ -42,8 +42,7 @@ def estimate_sleep(req: EstimateSleepRequest) -> EstimateSleepResponse:
     print(id)
     print(answers)
 
-    # TODO: NAS に入力データを保存
-
+    # NAS に入力データを保存
     save_data_to_storage(id, step_data)
 
     step_count_df: DataFrame[StepCountDFSchema] = pd.DataFrame(
@@ -65,6 +64,7 @@ def estimate_sleep(req: EstimateSleepRequest) -> EstimateSleepResponse:
 
     # print(cluster_stats)
 
+    # 歩数データから睡眠時刻を推定する
     estimated_data = estimate_sleep_duration_from_step(
         estimate_going_out_df,
         late_night_list,
@@ -72,6 +72,7 @@ def estimate_sleep(req: EstimateSleepRequest) -> EstimateSleepResponse:
         answers.carrying_a_smartphone_answer,
     )
 
+    # NAS に推定結果を保存
     save_data_to_storage(id, estimated_data)
 
     return EstimateSleepResponse(data=estimated_data)
