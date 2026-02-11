@@ -12,6 +12,7 @@ dependencies = [
     "python-dateutil>=2.9.0.post0",
     "pandera>=0.28.1",
     "scikit-learn>=1.8.0",
+    "openai>=2.20.0",
 ]
 
 [build-system]
