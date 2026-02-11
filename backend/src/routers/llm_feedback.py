@@ -26,8 +26,8 @@ def llm_feedback(req: LLMFeedbackRequest):
     """フィードバックを受け付ける"""
 
     id = req.id
-    id = req.lang
-    print(id)
+    lang = req.lang
+    print(id, lang)
 
     get_data_from_storage(id, ESTIMATE_SLEEP_JSON_FILENAME)
 
