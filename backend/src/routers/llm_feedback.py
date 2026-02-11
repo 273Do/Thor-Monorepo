@@ -1,6 +1,10 @@
 from fastapi import APIRouter
 
+from src.core.constants import ESTIMATE_SLEEP_JSON_FILENAME
 from src.schemas.llm_feedback import LLMFeedbackRequest
+from src.usecases.estimate_sleep.save_data_to_storage_usecase import (
+    get_data_from_storage,
+)
 
 router = APIRouter(prefix="/feedback", tags=["feedback"])
 
@@ -22,6 +26,9 @@ def llm_feedback(req: LLMFeedbackRequest):
     """フィードバックを受け付ける"""
 
     id = req.id
+    id = req.lang
     print(id)
+
+    get_data_from_storage(id, ESTIMATE_SLEEP_JSON_FILENAME)
 
     return
