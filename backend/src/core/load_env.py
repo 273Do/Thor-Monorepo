@@ -33,6 +33,9 @@ class Envs(BaseSettings):
     DATA_ID_SALT: str = Field()
     """識別id生成用のソルト"""
 
+    OLLAMA_ENDPOINT: str = Field(default="http://host.docker.internal:11434/v1/")
+    """ollamaのエンドポイント"""
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
