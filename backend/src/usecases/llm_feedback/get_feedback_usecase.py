@@ -1,12 +1,11 @@
 import json
 from pathlib import Path
-from typing import List, Literal
+from typing import List, Literal, Tuple
 
 from openai import OpenAI
 
 from src.core.load_env import envs
-from src.schemas.estimate_sleep import DailyEstimateSleepRecord
-from src.schemas.extract_steps import StepCountRecord
+from src.schemas.estimate_sleep import DailyEstimateSleepRecord, StepClusterRecord
 
 client = OpenAI(
     base_url=str(envs.OLLAMA_ENDPOINT),
@@ -15,18 +14,21 @@ client = OpenAI(
 
 
 def get_feedback(
-    data: List[StepCountRecord] | List[DailyEstimateSleepRecord],
+    estimate_sleep_json: List[DailyEstimateSleepRecord],
+    clusters: Tuple[StepClusterRecord, StepClusterRecord, StepClusterRecord],
     lang: Literal["ja", "en"],
 ) -> str:
     """推定睡眠データを使用して LLM からフィードバックを取得する
 
     Args:
         data (List[StepCountRecord] | List[DailyEstimateSleepRecord]): 推定睡眠データ
+        clusters (Tuple[StepClusterRecord, StepClusterRecord, StepClusterRecord]): 歩数クラスターデータ
         lang (Literal[ja", "en"]): 言語
 
     Returns:
         str: LLM から得たフィードバック
     """
+
     system_prompt = _load_system_prompt(lang)
 
     completion = client.chat.completions.create(
@@ -39,7 +41,11 @@ def get_feedback(
             },
             {
                 "role": "user",
-                "content": json.dumps(data, ensure_ascii=False),
+                "content": json.dumps(clusters, ensure_ascii=False),
+            },
+            {
+                "role": "user",
+                "content": json.dumps(estimate_sleep_json, ensure_ascii=False),
             },
         ],
     )

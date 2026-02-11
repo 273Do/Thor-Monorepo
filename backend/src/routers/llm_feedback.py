@@ -1,6 +1,9 @@
+from typing import List, Tuple, cast
+
 from fastapi import APIRouter
 
-from src.core.constants import ESTIMATE_SLEEP_JSON_FILENAME
+from src.core.constants import ESTIMATE_SLEEP_JSON_FILENAME, STEP_CLUSTER_JSON_FILENAME
+from src.schemas.estimate_sleep import DailyEstimateSleepRecord, StepClusterRecord
 from src.schemas.llm_feedback import LLMFeedbackRequest
 from src.usecases.estimate_sleep.save_data_to_storage_usecase import (
     get_data_from_storage,
@@ -35,10 +38,17 @@ def llm_feedback(req: LLMFeedbackRequest) -> str:
     id = req.id
     lang = req.lang
 
-    # NAS から推推定睡眠データを取得する
-    estimate_sleep_json = get_data_from_storage(id, ESTIMATE_SLEEP_JSON_FILENAME)
+    # NAS から推定睡眠データを取得する
+    estimate_sleep_json = cast(
+        List[DailyEstimateSleepRecord],
+        get_data_from_storage(id, ESTIMATE_SLEEP_JSON_FILENAME),
+    )
+    clusters_json = cast(
+        Tuple[StepClusterRecord, StepClusterRecord, StepClusterRecord],
+        get_data_from_storage(id, STEP_CLUSTER_JSON_FILENAME),
+    )
 
     # LLM からフィードバックを取得する
-    feedback = get_feedback(estimate_sleep_json, lang)
+    feedback = get_feedback(estimate_sleep_json, clusters_json, lang)
 
     return feedback

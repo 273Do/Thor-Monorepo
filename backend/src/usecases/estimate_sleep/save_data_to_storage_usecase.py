@@ -1,22 +1,29 @@
 import json
 from pathlib import Path
-from typing import List
+from typing import List, Tuple
 
-from src.core.constants import ESTIMATE_SLEEP_JSON_FILENAME, STEP_COUNT_JSON_FILENAME
+from src.core.constants import (
+    ESTIMATE_SLEEP_JSON_FILENAME,
+    STEP_CLUSTER_JSON_FILENAME,
+    STEP_COUNT_JSON_FILENAME,
+)
 from src.core.load_env import envs
-from src.schemas.estimate_sleep import DailyEstimateSleepRecord
+from src.schemas.estimate_sleep import DailyEstimateSleepRecord, StepClusterRecord
 from src.schemas.extract_steps import StepCountRecord
 
 
 def save_data_to_storage(
-    id: str, data: List[StepCountRecord] | List[DailyEstimateSleepRecord]
+    id: str,
+    data: List[StepCountRecord]
+    | List[DailyEstimateSleepRecord]
+    | Tuple[StepClusterRecord, StepClusterRecord, StepClusterRecord],
 ) -> None:
     """NAS にデータを保存する
 
     Args:
         id (str): 識別用id
-        data (List[StepCountRecord] | List[DailyEstimateSleepRecord]):
-        歩数データ | 推定睡眠データ
+        data (List[StepCountRecord] | List[DailyEstimateSleepRecord]) | Tuple[StepClusterRecord, StepClusterRecord, StepClusterRecord]:
+        歩数データ | 推定睡眠データ | 歩数クラスターデータ
     """
 
     # 渡された ID から entity id と version id を抽出する
@@ -26,8 +33,10 @@ def save_data_to_storage(
     # data の型 から filename を指定する
     if isinstance(data[0], StepCountRecord):
         filename = STEP_COUNT_JSON_FILENAME
-    else:
+    elif isinstance(data[0], DailyEstimateSleepRecord):
         filename = ESTIMATE_SLEEP_JSON_FILENAME
+    else:
+        filename = STEP_CLUSTER_JSON_FILENAME
 
     # TODO: NASに保存するようにする
     # 保存先のファイルパス
@@ -50,7 +59,11 @@ def save_data_to_storage(
 
 def get_data_from_storage(
     id: str, filename: str
-) -> List[StepCountRecord] | List[DailyEstimateSleepRecord]:
+) -> (
+    List[StepCountRecord]
+    | List[DailyEstimateSleepRecord]
+    | Tuple[StepClusterRecord, StepClusterRecord, StepClusterRecord]
+):
     """NAS からデータを取得する
 
     Args:
@@ -58,7 +71,8 @@ def get_data_from_storage(
         filename (str): ファイル名
 
     Returns:
-        List[StepCountRecord] | List[DailyEstimateSleepRecord]: 保存されたJSONデータ
+        List[StepCountRecord] | List[DailyEstimateSleepRecord] | Tuple[StepClusterRecord, StepClusterRecord, StepClusterRecord]:
+        保存されたJSONデータ
     """
 
     # 渡された ID から entity id と version id を抽出する
