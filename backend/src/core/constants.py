@@ -21,6 +21,9 @@ STEP_COUNT_JSON_FILENAME = "step_count_data.json"
 ESTIMATE_SLEEP_JSON_FILENAME = "estimate_sleep_data.json"
 """保存する推定睡眠データのJSONファイル名"""
 
+STEP_CLUSTER_JSON_FILENAME = "step_cluster.json"
+"""歩数データクラスタのJSONファイル名"""
+
 CORRECTION_VALUE_JSON_FILENAME = "correction_value.json"
 """アンケートごとの時間補正値のJSONファイル名"""
 

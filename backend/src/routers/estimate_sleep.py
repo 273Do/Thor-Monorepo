@@ -47,7 +47,7 @@ def estimate_sleep(req: EstimateSleepRequest) -> EstimateSleepResponse:
     )  # type: ignore
 
     # 外出検知のため1分あたりの歩数を計算しクラスタリングを行う
-    estimate_going_out_df, _cluster_stats = step_clustering(step_count_df)
+    estimate_going_out_df, cluster_stats = step_clustering(step_count_df)
 
     # 歩数データから夜更かしを推定するための特徴量を抽出
     feature = create_feature_value(step_count_df, answers.bedtime_answer)
@@ -70,6 +70,7 @@ def estimate_sleep(req: EstimateSleepRequest) -> EstimateSleepResponse:
     )
 
     # NAS に推定結果を保存
+    save_data_to_storage(id, cluster_stats.clusters)
     save_data_to_storage(id, estimated_data)
 
     return EstimateSleepResponse(data=estimated_data)
