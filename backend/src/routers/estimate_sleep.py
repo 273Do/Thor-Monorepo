@@ -39,9 +39,6 @@ def estimate_sleep(req: EstimateSleepRequest) -> EstimateSleepResponse:
     answers = req.answers
     step_data = req.step_data
 
-    print(id)
-    print(answers)
-
     # NAS に入力データを保存
     save_data_to_storage(id, step_data)
 
