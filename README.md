@@ -33,11 +33,20 @@ https://github.com/273Do/Thor-Web-App-Backend
 git clone git@github.com:273Do/Thor-Monorepo.git
 ```
 
-### 3. 起動方法
+### 3. LLM の用意
+
+以下のコマンドを実行して`ollama/` 内に用意された LLM を読み込みます。
+
+```bash
+chmod +x ollama/setup.sh
+./ollama/setup.sh
+```
+
+### 4. 起動方法
 
 VSCode で Dev Container でプロジェクトを開きます。
 
-### 4. 初期設定
+### 5. 初期設定
 
 1. `backend`ディレクトリに事前のデータを格納するディレクトリを作成します。
 2. 環境変数を作成します。
@@ -54,7 +63,7 @@ task backend -- uv sync
 task frontend -- pnpm react-router typegen
 ```
 
-### 5. Claude Code
+### 6. Claude Code
 
 Claude Code を契約している場合はターミナルから以下のコマンドでセットアップが可能です。
 
