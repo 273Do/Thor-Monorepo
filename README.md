@@ -42,6 +42,17 @@ chmod +x ollama/setup.sh
 ./ollama/setup.sh
 ```
 
+うまく読み込めると以下のように表示されるが、自作モデル（thor-\*）はベースモデルの重みを共有して参照しているだけなので、ディスク容量が2倍になるわけではありません。Modelfile
+で設定したパラメータの差分だけが追加で保持されています。
+
+```
+NAME                  ID              SIZE      MODIFIED
+gemma3:12b            hogehogehoge    o GB    x seconds ago
+thor-gemma3:latest    fugafugafuga    o GB    x seconds ago
+thor-llama3:latest    piyopiyopiyo    o GB    x seconds ago
+llama3.1:8b           fofoofoofoof    o GB    x seconds ago
+```
+
 ### 4. 起動方法
 
 VSCode で Dev Container でプロジェクトを開きます。
