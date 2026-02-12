@@ -1,0 +1,19 @@
+# base model
+FROM gemma3:12b
+
+# パラメータの設定
+
+# 生成の多様性（0.0〜1.0）。フィードバック生成のため適度な柔軟性を持たせる
+PARAMETER temperature 0.5
+
+# コンテキストウィンドウサイズ。システムプロンプト + 睡眠データを十分に収める
+PARAMETER num_ctx 8192
+
+# 最大生成トークン数。マークダウン形式のレポートを完全に出力するため余裕を持たせる
+PARAMETER num_predict 2048
+
+# 繰り返しペナルティ。同じ表現の繰り返しを抑制する
+PARAMETER repeat_penalty 1.1
+
+# Top-p（核サンプリング）。temperatureと組み合わせて生成品質を安定させる
+PARAMETER top_p 0.9
