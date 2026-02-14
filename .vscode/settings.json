@@ -13,6 +13,9 @@
   "[css][javascript][typescript][javascriptreact][typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
 
   // Python Settings
   "python.analysis.extraPaths": [
