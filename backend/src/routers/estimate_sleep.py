@@ -12,6 +12,7 @@ from src.usecases.estimate_sleep.feature_of_late_night_usecase import (
     create_feature_value,
 )
 from src.usecases.estimate_sleep.save_data_to_storage_usecase import (
+    get_llms,
     save_data_to_storage,
 )
 from src.usecases.estimate_sleep.step_clustering_usecase import step_clustering
@@ -73,4 +74,7 @@ def estimate_sleep(req: EstimateSleepRequest) -> EstimateSleepResponse:
     save_data_to_storage(id, cluster_stats.clusters)
     save_data_to_storage(id, estimated_data)
 
-    return EstimateSleepResponse(data=estimated_data)
+    # フィードバックに使用可能なLLMを取得
+    models = get_llms()
+
+    return EstimateSleepResponse(data=estimated_data, models=models)

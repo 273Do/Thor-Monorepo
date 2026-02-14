@@ -88,3 +88,16 @@ def get_data_from_storage(
 
     with open(file_path, encoding="utf-8") as f:
         return json.load(f)
+
+
+def get_llms() -> List[str]:
+    """フィードバックに使用可能なLLMを取得する
+
+    Returns:
+        List[str]: フィードバックに使用可能なLLMの一覧
+    """
+
+    file_path = f"/workspace/backend/{envs.DATASTORE_DIR}/models.json"
+
+    with open(file_path, encoding="utf-8") as f:
+        return json.load(f)

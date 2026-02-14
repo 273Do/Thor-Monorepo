@@ -178,3 +178,6 @@ class EstimateSleepResponse(BaseModel):
         description="推定された日々の就寝時刻と起床時刻"
     )
     """推定された日々の就寝時刻と起床時刻"""
+
+    models: List[str] = Field(description="フィードバックに使用できるLLMの一覧")
+    """フィードバックに使用できるLLMの一覧"""
