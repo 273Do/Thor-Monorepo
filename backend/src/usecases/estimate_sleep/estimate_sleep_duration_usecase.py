@@ -11,7 +11,10 @@ from src.core.constants import (
     WEEKDAY_TIME_RANGE,
 )
 from src.core.load_env import envs
-from src.schemas.estimate_sleep import DailyEstimateSleep, EstimateGoingOutDFSchema
+from src.schemas.estimate_sleep import (
+    DailyEstimateSleepRecord,
+    EstimateGoingOutDFSchema,
+)
 
 
 def estimate_sleep_duration_from_step(
@@ -19,7 +22,7 @@ def estimate_sleep_duration_from_step(
     late_night_list: List[int],
     charging_before_bed_answer: int,
     carrying_a_smartphone_answer: int,
-) -> List[DailyEstimateSleep]:
+) -> List[DailyEstimateSleepRecord]:
     """歩数から睡眠を推定する
 
     Args:
@@ -29,11 +32,11 @@ def estimate_sleep_duration_from_step(
         carrying_a_smartphone_answer (int): の中でスマホを持ち歩くかの回答（0 ~ 2）
 
     Returns:
-        List[DailyEstimateSleep]: 日々の推定睡眠データのリスト
+        List[DailyEstimateSleepRecord]: 日々の推定睡眠データのリスト
     """
 
     # 結果を格納するリスト
-    results: List[DailyEstimateSleep] = []
+    results: List[DailyEstimateSleepRecord] = []
 
     print(late_night_list)
 
@@ -102,7 +105,7 @@ def estimate_sleep_duration_from_step(
         # 推定睡眠時間が空の場合
         if not sleep_time_range:
             results.append(
-                DailyEstimateSleep(
+                DailyEstimateSleepRecord(
                     date=date,
                     bed_time="",
                     wake_time="",
@@ -128,7 +131,7 @@ def estimate_sleep_duration_from_step(
 
         # 結果リストに追加
         results.append(
-            DailyEstimateSleep(
+            DailyEstimateSleepRecord(
                 date=date,
                 bed_time=corrected_bed_time.strftime("%H:%M"),
                 wake_time=corrected_wake_time.strftime("%H:%M"),

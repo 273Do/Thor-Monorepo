@@ -56,7 +56,7 @@
     "ghcr.io/devcontainers/features/github-cli:1": {},
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
   },
-  "forwardPorts": [5173, 8000, 11434],
+  "forwardPorts": [5173, 8000],
   "portsAttributes": {
     "5173": {
       "label": "Vite Dev Server",
@@ -64,10 +64,6 @@
     },
     "8000": {
       "label": "Backend API",
-      "onAutoForward": "notify"
-    },
-    "11434": {
-      "label": "Ollama API",
       "onAutoForward": "notify"
     }
   },

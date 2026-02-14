@@ -24,11 +24,17 @@ class Envs(BaseSettings):
     STATISTICAL_DATA_DIR: str = Field(default="./datastore/statistical_data")
     """統計データを格納しているディレクトリパス"""
 
+    VAULT_DIR: str = Field(default="./datastore/vault")
+    """歩数データや推定結果を格納しているディレクトリパス"""
+
     API_V1_PREFIX: str = Field(default="/api/v1")
     """APIの接頭辞"""
 
     DATA_ID_SALT: str = Field()
     """識別id生成用のソルト"""
+
+    OLLAMA_ENDPOINT: str = Field(default="http://host.docker.internal:11434/v1/")
+    """ollamaのエンドポイント"""
 
     model_config = SettingsConfigDict(
         env_file=".env",

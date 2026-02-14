@@ -14,7 +14,6 @@ Thor is an AI-driven full-stack monorepo project that extracts and analyzes step
 Thor-Monorepo/
 ├── frontend/          # React Router v7 + TypeScript + Tailwind CSS
 ├── backend/           # FastAPI (Python 3.12+)
-├── ollama/            # AI/LLM service
 ├── Taskfile.yml       # Task runner configuration
 └── docker-compose.yml # Infrastructure configuration
 ```
@@ -30,6 +29,7 @@ backend/src/
 ```
 
 **Important design principles:**
+
 - `routers/` should only contain endpoint definitions
 - Business logic must be placed in `usecases/`
 - Request/response type definitions go in `schemas/`
@@ -42,26 +42,31 @@ Built with React Router v7, a full-stack framework with server-side rendering su
 ## Development Environment
 
 ### Prerequisites
+
 - VSCode with Dev Container extension
 - Docker running
 - GitHub SSH connection configured
 
 ### Container Services
+
 - `thor-workspace`: Development workspace
 - `thor-backend`: FastAPI server (port 8000)
 - `thor-frontend`: React Router dev server (port 5173)
 - `thor-ollama`: AI/LLM service (port 11434)
 
 ### Environment Variables
+
 - Backend environment variables are managed in `backend/.env`
 - Defined and accessed via the `Envs` class in `src/core/load_env.py`
 
 ## Development Commands
 
 ### Task Runner
+
 This project uses Go-Task. View available commands with `task -l`.
 
 ### Start Development Servers
+
 ```bash
 # Start backend
 task backend:dev
@@ -73,6 +78,7 @@ task frontend:dev
 Backend runs at `http://localhost:8000`, Frontend at `http://localhost:5173`.
 
 ### Format & Lint
+
 ```bash
 # Format everything
 task format
@@ -90,6 +96,7 @@ task frontend:lint
 ```
 
 ### Tests
+
 ```bash
 # Run all tests
 task test
@@ -102,6 +109,7 @@ task frontend:test
 ```
 
 ### Type Checking
+
 ```bash
 # Type check everything
 task type-check
@@ -111,6 +119,7 @@ task frontend:type-check
 ```
 
 ### CI-equivalent Checks
+
 ```bash
 # Run pre-push checks (format-check + lint-check + type-check)
 task check
@@ -121,17 +130,20 @@ task check
 Git hooks are managed by Lefthook.
 
 ### Commit Message Format
+
 ```
 <type>: <description>
 ```
 
 Allowed `<type>` values:
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `refactor`: Code refactoring
 - `chore`: Other changes
 
 ### Automatic Hooks
+
 - **pre-commit**: Auto-formats and lints code, staging fixes automatically
 - **pre-push**: Runs all checks (format-check + lint-check + type-check)
 
@@ -157,6 +169,7 @@ async def extract_steps(
 ```
 
 Client-side usage:
+
 ```bash
 # Using curl
 curl -X POST -H 'Content-Type: text/xml' \
@@ -180,6 +193,7 @@ await fetch('http://localhost:8000/api/v1/extract-steps', {
 - **Frontend**: Uses `pnpm` (dependencies managed in `package.json`)
 
 Execute commands inside containers:
+
 ```bash
 # Run arbitrary command in backend container
 task backend -- <command>

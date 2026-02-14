@@ -31,12 +31,10 @@ services:
     working_dir: /workspace/backend
     environment:
       - PYTHONUNBUFFERED=1
-      - OLLAMA_HOST=http://ollama:11434
+      - OLLAMA_HOST=http://host.docker.internal:11434
     ports:
       - "8000:8000"
     command: sleep infinity
-    depends_on:
-      - ollama
     networks:
       - thor-network
 
@@ -57,22 +55,9 @@ services:
     networks:
       - thor-network
 
-  ollama:
-    build:
-      context: ./ollama
-      dockerfile: Dockerfile
-    container_name: thor-ollama
-    volumes:
-      - ollama-data:/root/.ollama
-    ports:
-      - "11434:11434"
-    networks:
-      - thor-network
-
 volumes:
   backend-venv:
   frontend-node-modules:
-  ollama-data:
 
 networks:
   thor-network:

@@ -153,7 +153,7 @@ class LateNightFeature(BaseModel):
     """特徴量"""
 
 
-class DailyEstimateSleep(BaseModel):
+class DailyEstimateSleepRecord(BaseModel):
     date: datetime = Field(
         description="日付",
         examples=["2025-11-01"],
@@ -174,7 +174,10 @@ class DailyEstimateSleep(BaseModel):
 
 
 class EstimateSleepResponse(BaseModel):
-    data: List[DailyEstimateSleep] = Field(
+    data: List[DailyEstimateSleepRecord] = Field(
         description="推定された日々の就寝時刻と起床時刻"
     )
     """推定された日々の就寝時刻と起床時刻"""
+
+    models: List[str] = Field(description="フィードバックに使用できるLLMの一覧")
+    """フィードバックに使用できるLLMの一覧"""
