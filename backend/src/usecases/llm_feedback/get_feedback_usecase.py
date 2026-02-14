@@ -16,6 +16,7 @@ client = OpenAI(
 def get_feedback(
     estimate_sleep_json: List[DailyEstimateSleepRecord],
     clusters: Tuple[StepClusterRecord, StepClusterRecord, StepClusterRecord],
+    llm: str,
     lang: Literal["ja", "en"],
 ) -> str:
     """推定睡眠データを使用して LLM からフィードバックを取得する
@@ -32,8 +33,7 @@ def get_feedback(
     system_prompt = _load_system_prompt(lang)
 
     completion = client.chat.completions.create(
-        # TODO: モデルは別で設定するようにする
-        model="llama3.1:8b",
+        model=llm,
         messages=[
             {
                 "role": "system",
