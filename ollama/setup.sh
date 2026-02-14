@@ -17,9 +17,10 @@ for modelfile in "$SCRIPT_DIR"/Modelfile.*; do
 done
 
 # ollama に登録されたモデル一覧をJSONで出力
-OUTPUT_FILE="$SCRIPT_DIR/models.json"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+OUTPUT_FILE="$REPO_ROOT/backend/datastore/models.json"
 echo "[" > "$OUTPUT_FILE" # [をファイルに出力
-first = true
+first=true
 ollama list | tail -n +2 | while read -r line; do
   model_name=$(echo "$line" | awk '{print $1}')
   if [ "$first" = true ]; then
