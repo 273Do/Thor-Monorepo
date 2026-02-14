@@ -36,6 +36,7 @@ def llm_feedback(req: LLMFeedbackRequest) -> str:
     """
 
     id = req.id
+    llm = req.llm
     lang = req.lang
 
     # NAS から推定睡眠データを取得する
@@ -49,6 +50,6 @@ def llm_feedback(req: LLMFeedbackRequest) -> str:
     )
 
     # LLM からフィードバックを取得する
-    feedback = get_feedback(estimate_sleep_json, clusters_json, lang)
+    feedback = get_feedback(estimate_sleep_json, clusters_json, llm, lang)
 
     return feedback
