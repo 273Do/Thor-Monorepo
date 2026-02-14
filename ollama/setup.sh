@@ -4,12 +4,8 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-first=true
-OUTPUT_FILE="$SCRIPT_DIR/models.json"
-
 echo "=== Ollama Model Setup ==="
 
-echo "[" > "$OUTPUT_FILE"
 for modelfile in "$SCRIPT_DIR"/Modelfile.*; do
   [ -f "$modelfile" ] || continue
 
@@ -18,18 +14,23 @@ for modelfile in "$SCRIPT_DIR"/Modelfile.*; do
 
   echo "Creating model: $name from $(basename "$modelfile")"
   ollama create "$name" -f "$modelfile"
+done
 
-  # 作成したモデル一覧をJSONで出力
+# ollama に登録されたモデル一覧をJSONで出力
+OUTPUT_FILE="$SCRIPT_DIR/models.json"
+echo "[" > "$OUTPUT_FILE" # [をファイルに出力
+first = true
+ollama list | tail -n +2 | while read -r line; do
+  model_name=$(echo "$line" | awk '{print $1}')
   if [ "$first" = true ]; then
     first=false
   else
-    echo "," >> "$OUTPUT_FILE"
+    echo "," >> "$OUTPUT_FILE" # ,をファイルに書き込み
   fi
-  echo "  \"$name\"" >> "$OUTPUT_FILE"
+  echo "  \"$model_name\"" >> "$OUTPUT_FILE" # モデル名をファイルに書き込み
 done
-echo "]" >> "$OUTPUT_FILE"
+echo "]" >> "$OUTPUT_FILE" # ]をファイルに書き込み
 
 echo ""
 echo "=== Setup Complete ==="
 ollama list
-
