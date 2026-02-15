@@ -47,13 +47,7 @@ export function FileUpload({ file, onFileChange }: FileUploadProps) {
 
   return (
     <div className="flex flex-col gap-3">
-      <label className="text-sm font-semibold text-foreground">
-        ヘルスデータファイル
-      </label>
-      <p className="text-xs text-muted-foreground">
-        iPhoneの「ヘルスケア」アプリからエクスポートした XML
-        ファイルをアップロードしてください。
-      </p>
+      <p className="text-xs text-muted-foreground">Android 端末の方について</p>
 
       {!file ? (
         <div
@@ -82,7 +76,7 @@ export function FileUpload({ file, onFileChange }: FileUploadProps) {
               ファイルを選択
             </label>
           </div>
-          <p className="text-xs text-muted-foreground">XML（最大 50MB）</p>
+          <p className="text-xs text-muted-foreground">XML ファイル</p>
           <input
             id="file-input"
             type="file"

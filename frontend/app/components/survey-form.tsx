@@ -1,5 +1,6 @@
 "use client";
 
+import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import {
   Select,
@@ -9,10 +10,15 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 
+import {
+  carryingASmartphoneAnswer,
+  chargingBeforeBedAnswer,
+} from "~/core/constants";
+
 export type SurveyAnswers = {
-  sleepQuality: string;
-  caffeineIntake: string;
-  screenTime: string;
+  chargingBeforeBedAnswer: string;
+  carryingASmartphoneAnswer: string;
+  bedtime: string;
 };
 
 type SurveyFormProps = {
@@ -26,27 +32,43 @@ export function SurveyForm({ answers, onChange }: SurveyFormProps) {
       {/* Question 1 */}
       <fieldset className="flex flex-col gap-3">
         <Label className="text-sm font-semibold text-foreground">
-          Q1. 最近の睡眠の質をどう感じていますか？
-        </Label>
-      </fieldset>
-
-      {/* Question 2 */}
-      <fieldset className="flex flex-col gap-3">
-        <Label className="text-sm font-semibold text-foreground">
-          Q2. 1日のカフェイン摂取量はどのくらいですか？
+          Q1. 就寝何時間前にスマートフォンの充電を始めますか？
         </Label>
         <Select
-          value={answers.caffeineIntake}
-          onValueChange={(v) => onChange({ ...answers, caffeineIntake: v })}
+          value={answers.chargingBeforeBedAnswer}
+          onValueChange={(v) =>
+            onChange({ ...answers, chargingBeforeBedAnswer: v })
+          }
         >
           <SelectTrigger className="w-full bg-card text-foreground">
             <SelectValue placeholder="選択してください" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="none">飲まない</SelectItem>
-            <SelectItem value="1-2">1〜2杯</SelectItem>
-            <SelectItem value="3-4">3〜4杯</SelectItem>
-            <SelectItem value="5+">5杯以上</SelectItem>
+            {chargingBeforeBedAnswer.map((value, i) => (
+              <SelectItem value={String(i)}>{value}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </fieldset>
+
+      {/* Question 2 */}
+      <fieldset className="flex flex-col gap-3">
+        <Label className="text-sm font-semibold text-foreground">
+          Q2. 家の中でスマートフォンを持ち歩きますか？
+        </Label>
+        <Select
+          value={answers.carryingASmartphoneAnswer}
+          onValueChange={(v) =>
+            onChange({ ...answers, carryingASmartphoneAnswer: v })
+          }
+        >
+          <SelectTrigger className="w-full bg-card text-foreground">
+            <SelectValue placeholder="選択してください" />
+          </SelectTrigger>
+          <SelectContent>
+            {carryingASmartphoneAnswer.map((value, i) => (
+              <SelectItem value={String(i)}>{value}</SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </fieldset>
@@ -54,22 +76,9 @@ export function SurveyForm({ answers, onChange }: SurveyFormProps) {
       {/* Question 3 */}
       <fieldset className="flex flex-col gap-3">
         <Label className="text-sm font-semibold text-foreground">
-          Q3. 就寝前のスクリーンタイムはどのくらいですか？
+          Q3. 普段は何時ごろに就寝しますか？
         </Label>
-        <Select
-          value={answers.screenTime}
-          onValueChange={(v) => onChange({ ...answers, screenTime: v })}
-        >
-          <SelectTrigger className="w-full bg-card text-foreground">
-            <SelectValue placeholder="選択してください" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="none">ほぼなし</SelectItem>
-            <SelectItem value="30min">30分未満</SelectItem>
-            <SelectItem value="1hour">30分〜1時間</SelectItem>
-            <SelectItem value="2hour+">1時間以上</SelectItem>
-          </SelectContent>
-        </Select>
+        <Input type="time" className="w-1/3 cursor-pointer" />
       </fieldset>
     </div>
   );

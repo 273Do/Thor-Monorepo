@@ -23,20 +23,25 @@ type AppState = "input" | "loading" | "results";
 
 export default function Home() {
   const [state, setState] = useState<AppState>("input");
+
   const [answers, setAnswers] = useState<SurveyAnswers>({
-    sleepQuality: "",
-    caffeineIntake: "",
-    screenTime: "",
+    chargingBeforeBedAnswer: "",
+    carryingASmartphoneAnswer: "",
+    bedtime: "",
   });
   const [file, setFile] = useState<File | null>(null);
 
   const isFormComplete =
-    // answers.sleepQuality &&
-    answers.caffeineIntake && answers.screenTime && file;
+    answers.chargingBeforeBedAnswer &&
+    answers.carryingASmartphoneAnswer &&
+    answers.bedtime &&
+    file;
 
   const handleSubmit = () => {
     if (!isFormComplete) return;
+
     setState("loading");
+
     // Simulate analysis processing
     setTimeout(() => {
       setState("results");
@@ -45,7 +50,11 @@ export default function Home() {
 
   const handleReset = () => {
     setState("input");
-    setAnswers({ sleepQuality: "", caffeineIntake: "", screenTime: "" });
+    setAnswers({
+      chargingBeforeBedAnswer: "",
+      carryingASmartphoneAnswer: "",
+      bedtime: "",
+    });
     setFile(null);
   };
 
@@ -72,9 +81,12 @@ export default function Home() {
 
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">データアップロード</CardTitle>
+                <CardTitle className="text-base">
+                  ヘルスデータアップロード
+                </CardTitle>
                 <CardDescription>
-                  iPhoneからエクスポートしたヘルスデータを添付してください。
+                  iPhoneの「ヘルスケア」アプリからエクスポートした XML
+                  ファイルをアップロードしてください。
                 </CardDescription>
               </CardHeader>
               <CardContent>
