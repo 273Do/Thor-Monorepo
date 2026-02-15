@@ -51,9 +51,8 @@ export function FileUpload({ file, onFileChange }: FileUploadProps) {
         ヘルスデータファイル
       </label>
       <p className="text-xs text-muted-foreground">
-        {
-          "iPhoneの「ヘルスケア」アプリからエクスポートした XML / CSV ファイルをアップロードしてください。"
-        }
+        iPhoneの「ヘルスケア」アプリからエクスポートした XML
+        ファイルをアップロードしてください。
       </p>
 
       {!file ? (
@@ -83,7 +82,7 @@ export function FileUpload({ file, onFileChange }: FileUploadProps) {
               ファイルを選択
             </label>
           </div>
-          <p className="text-xs text-muted-foreground">XML, CSV（最大 50MB）</p>
+          <p className="text-xs text-muted-foreground">XML（最大 50MB）</p>
           <input
             id="file-input"
             type="file"
