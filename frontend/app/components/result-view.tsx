@@ -34,25 +34,25 @@ function generateSleepData(answers: SurveyAnswers) {
   const days = ["月", "火", "水", "木", "金", "土", "日"];
 
   const qualityOffset =
-    answers.sleepQuality === "good"
+    answers.chargingBeforeBedAnswer === "good"
       ? 0.5
-      : answers.sleepQuality === "bad"
+      : answers.chargingBeforeBedAnswer === "bad"
         ? -0.8
         : 0;
   const caffeineOffset =
-    answers.caffeineIntake === "none"
+    answers.carryingASmartphoneAnswer === "none"
       ? 0.3
-      : answers.caffeineIntake === "5+"
+      : answers.carryingASmartphoneAnswer === "5+"
         ? -0.6
-        : answers.caffeineIntake === "3-4"
+        : answers.carryingASmartphoneAnswer === "3-4"
           ? -0.3
           : 0;
   const screenOffset =
-    answers.screenTime === "none"
+    answers.bedtime === "none"
       ? 0.2
-      : answers.screenTime === "2hour+"
+      : answers.bedtime === "2hour+"
         ? -0.5
-        : answers.screenTime === "1hour"
+        : answers.bedtime === "1hour"
           ? -0.2
           : 0;
 
@@ -85,11 +85,11 @@ function formatBedtime(hours: number): string {
 function generateFeedback(answers: SurveyAnswers): string {
   const feedbacks: string[] = [];
 
-  if (answers.sleepQuality === "bad") {
+  if (answers.chargingBeforeBedAnswer === "bad") {
     feedbacks.push(
       "睡眠の質が低下している可能性があります。就寝・起床時刻を一定に保つことを心がけましょう。"
     );
-  } else if (answers.sleepQuality === "good") {
+  } else if (answers.chargingBeforeBedAnswer === "good") {
     feedbacks.push(
       "睡眠の質は良好な状態です。この調子を維持していきましょう。"
     );
@@ -99,13 +99,16 @@ function generateFeedback(answers: SurveyAnswers): string {
     );
   }
 
-  if (answers.caffeineIntake === "3-4" || answers.caffeineIntake === "5+") {
+  if (
+    answers.carryingASmartphoneAnswer === "3-4" ||
+    answers.carryingASmartphoneAnswer === "5+"
+  ) {
     feedbacks.push(
       "カフェイン摂取量が多いため、午後3時以降のカフェインを控えることで、入眠がスムーズになる可能性があります。"
     );
   }
 
-  if (answers.screenTime === "1hour" || answers.screenTime === "2hour+") {
+  if (answers.bedtime === "1hour" || answers.bedtime === "2hour+") {
     feedbacks.push(
       "就寝前のスクリーンタイムが長い傾向にあります。ブルーライトは睡眠ホルモン（メラトニン）の分泌を抑制するため、就寝30分前にはデバイスを手放すことをおすすめします。"
     );

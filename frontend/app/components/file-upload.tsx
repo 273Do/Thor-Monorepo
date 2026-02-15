@@ -47,7 +47,9 @@ export function FileUpload({ file, onFileChange }: FileUploadProps) {
 
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-xs text-muted-foreground">Android 端末の方について</p>
+      <p className="cursor-pointer text-xs text-muted-foreground duration-100 hover:underline">
+        iPhone 端末以外の方について
+      </p>
 
       {!file ? (
         <div
@@ -80,7 +82,7 @@ export function FileUpload({ file, onFileChange }: FileUploadProps) {
           <input
             id="file-input"
             type="file"
-            accept=".xml,.csv,.zip"
+            accept=".xml"
             onChange={handleFileSelect}
             className="sr-only"
           />
