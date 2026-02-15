@@ -9,7 +9,12 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 5173,
     watch: {
-      ignored: ["**/node_modules/**", "**/dist/**"],
+      usePolling: true,
+      interval: 1000,
+      ignored: ["**/node_modules/**", "**/dist/**", "**/.react-router/**"],
+    },
+    hmr: {
+      overlay: false,
     },
   },
 });
