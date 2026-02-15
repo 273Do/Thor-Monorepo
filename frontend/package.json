@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "dev": "vite",
+    "dev": "NODE_OPTIONS=--max-old-space-size=8192 vite",
     "start": "vite preview",
     "typecheck": "tsc",
     "lint": "eslint",
