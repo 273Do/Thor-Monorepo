@@ -2,10 +2,7 @@
 
 import { useState } from "react";
 
-import { FileUpload } from "components/file-upload";
-import { ResultsView } from "components/result-view";
-import { SurveyForm, type SurveyAnswers } from "components/survey-form";
-import { Moon, ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -15,6 +12,12 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
+
+import { FileUpload } from "~/components/file-upload";
+import { Header } from "~/components/header";
+import { Loading } from "~/components/loading";
+import { ResultsView } from "~/components/result-view";
+import { SurveyForm, type SurveyAnswers } from "~/components/survey-form";
 
 type AppState = "input" | "loading" | "results";
 
@@ -50,19 +53,7 @@ export default function Home() {
     <main className="min-h-screen">
       <div className="mx-auto max-w-lg px-4 py-8 md:py-12">
         {/* Header */}
-        <header className="mb-8 flex flex-col items-center gap-3 text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
-            <Moon className="h-6 w-6" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold tracking-tight text-foreground">
-              Sleep Insight
-            </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              iPhoneヘルスデータから睡眠を分析
-            </p>
-          </div>
-        </header>
+        <Header />
 
         {/* Input State */}
         {state === "input" && (
@@ -83,7 +74,7 @@ export default function Home() {
               <CardHeader>
                 <CardTitle className="text-base">データアップロード</CardTitle>
                 <CardDescription>
-                  iPhoneからエクスポートしたヘルスデータを添付してください
+                  iPhoneからエクスポートしたヘルスデータを添付してください。
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -104,21 +95,7 @@ export default function Home() {
         )}
 
         {/* Loading State */}
-        {state === "loading" && (
-          <Card>
-            <CardContent className="flex flex-col items-center gap-4 py-16">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              <div className="text-center">
-                <p className="font-medium text-foreground">データを分析中...</p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  ヘルスデータとアンケート結果をもとに
-                  <br />
-                  睡眠パターンを推定しています
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+        {state === "loading" && <Loading />}
 
         {/* Results State */}
         {state === "results" && (
