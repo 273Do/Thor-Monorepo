@@ -111,7 +111,7 @@ export default defineConfig([
               position: "before",
             },
             {
-              pattern: "@/components/ui/**",
+              pattern: "~/components/ui/**",
               group: "external",
               position: "after",
             },
@@ -153,7 +153,7 @@ export default defineConfig([
     },
     settings: {
       "better-tailwindcss": {
-        entryPoint: "src/index.css", // Reactプロジェクトに合わせて調整
+        entryPoint: "app/app.css", // Reactプロジェクトに合わせて調整
       },
     },
   },
