@@ -2,6 +2,28 @@ import useSWRMutation from "swr/mutation";
 
 import { apiEndpoint } from "~/core/constants";
 
+export type StepCountRecord = {
+  start_date: string;
+  end_date: string;
+  value: number;
+};
+
+export type SleepAnalysisRecord = {
+  start_date: string;
+  end_date: string;
+  value: string;
+};
+
+export type ExtractedSteps = {
+  id: string;
+  step_data: StepCountRecord[];
+  sleep_data: SleepAnalysisRecord[] | null;
+};
+
+export type ExtractedStepsResponse = {
+  data: ExtractedSteps;
+};
+
 /**
  * 歩数抽出のリクエストを送信する
  * @param url url
