@@ -10,8 +10,15 @@ export default defineConfig({
     port: 5173,
     watch: {
       usePolling: true,
-      interval: 1000,
-      ignored: ["**/node_modules/**", "**/dist/**", "**/.react-router/**"],
+      interval: 5000,
+      binaryInterval: 10000,
+      ignored: [
+        "**/node_modules/**",
+        "**/.pnpm-store/**",
+        "**/dist/**",
+        "**/.react-router/**",
+        "**/.git/**",
+      ],
     },
     hmr: {
       overlay: false,
