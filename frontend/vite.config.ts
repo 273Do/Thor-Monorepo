@@ -1,15 +1,27 @@
-import { reactRouter } from "@react-router/dev/vite";
 import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
+  plugins: [tailwindcss(), react(), tsconfigPaths()],
   server: {
     host: "0.0.0.0",
     port: 5173,
     watch: {
-      ignored: ["**/node_modules/**", "**/dist/**"],
+      usePolling: true,
+      interval: 5000,
+      binaryInterval: 10000,
+      ignored: [
+        "**/node_modules/**",
+        "**/.pnpm-store/**",
+        "**/dist/**",
+        "**/.react-router/**",
+        "**/.git/**",
+      ],
+    },
+    hmr: {
+      overlay: false,
     },
   },
 });

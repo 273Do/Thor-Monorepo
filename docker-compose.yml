@@ -49,6 +49,7 @@ services:
     working_dir: /workspace/frontend
     environment:
       - NODE_ENV=development
+      - NODE_OPTIONS=--max-old-space-size=2048
     ports:
       - "5173:5173"
     command: sleep infinity
