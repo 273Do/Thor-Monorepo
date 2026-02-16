@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
@@ -17,25 +19,32 @@ import { FileUpload } from "~/components/file-upload";
 import { Header } from "~/components/header";
 import { Loading } from "~/components/loading";
 import { ResultsView } from "~/components/result-view";
-import { SurveyForm, type SurveyAnswers } from "~/components/survey-form";
+import { SurveyForm } from "~/components/survey-form";
+import {
+  defaultSurveyValues,
+  surveySchema,
+  type SurveyAnswers,
+} from "~/core/survey-schema";
 
 type AppState = "input" | "loading" | "results";
 
 export default function Home() {
   const [state, setState] = useState<AppState>("input");
-
-  const [answers, setAnswers] = useState<SurveyAnswers>({
-    chargingBeforeBedAnswer: "",
-    carryingASmartphoneAnswer: "",
-    bedtime: "",
-  });
   const [file, setFile] = useState<File | null>(null);
 
-  const isFormComplete =
-    answers.chargingBeforeBedAnswer &&
-    answers.carryingASmartphoneAnswer &&
-    answers.bedtime &&
-    file;
+  const {
+    control,
+    register,
+    reset,
+    getValues,
+    formState: { isValid },
+  } = useForm<SurveyAnswers>({
+    resolver: zodResolver(surveySchema),
+    defaultValues: defaultSurveyValues,
+    mode: "onChange",
+  });
+
+  const isFormComplete = isValid && file;
 
   const handleSubmit = () => {
     if (!isFormComplete) return;
@@ -50,12 +59,8 @@ export default function Home() {
 
   const handleReset = () => {
     setState("input");
-    setAnswers({
-      chargingBeforeBedAnswer: "",
-      carryingASmartphoneAnswer: "",
-      bedtime: "",
-    });
     setFile(null);
+    reset(defaultSurveyValues);
   };
 
   return (
@@ -75,7 +80,7 @@ export default function Home() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <SurveyForm answers={answers} onChange={setAnswers} />
+                <SurveyForm control={control} register={register} />
               </CardContent>
             </Card>
 
@@ -111,7 +116,7 @@ export default function Home() {
 
         {/* Results State */}
         {state === "results" && (
-          <ResultsView answers={answers} onReset={handleReset} />
+          <ResultsView answers={getValues()} onReset={handleReset} />
         )}
       </div>
     </main>

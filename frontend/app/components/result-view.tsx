@@ -27,7 +27,7 @@ import {
 } from "~/components/ui/chart";
 import { Separator } from "~/components/ui/separator";
 
-import type { SurveyAnswers } from "./survey-form";
+import type { SurveyAnswers } from "~/core/survey-schema";
 
 // Generate mock sleep data for 7 days
 function generateSleepData(answers: SurveyAnswers) {
