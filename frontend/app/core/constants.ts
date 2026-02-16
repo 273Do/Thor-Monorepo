@@ -11,3 +11,5 @@ export const carryingASmartphoneAnswer = [
   "持ち歩く",
   "あまり持ち歩かない",
 ] as const;
+
+export const apiEndpoint: string = import.meta.env.VITE_BACKEND_ENDPOINT;

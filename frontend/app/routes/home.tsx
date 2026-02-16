@@ -25,11 +25,9 @@ import {
   surveySchema,
   type SurveyAnswers,
 } from "~/core/survey-schema";
-
-type AppState = "input" | "loading" | "results";
+import { useExtractSteps } from "~/utils/use-extract-steps";
 
 export default function Home() {
-  const [state, setState] = useState<AppState>("input");
   const [file, setFile] = useState<File | null>(null);
 
   const {
@@ -44,21 +42,16 @@ export default function Home() {
     mode: "onChange",
   });
 
+  const { trigger, isMutating, data } = useExtractSteps("");
+
   const isFormComplete = isValid && file;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!isFormComplete) return;
-
-    setState("loading");
-
-    // Simulate analysis processing
-    setTimeout(() => {
-      setState("results");
-    }, 2000);
+    await trigger(file);
   };
 
   const handleReset = () => {
-    setState("input");
     setFile(null);
     reset(defaultSurveyValues);
   };
@@ -70,7 +63,7 @@ export default function Home() {
         <Header />
 
         {/* Input State */}
-        {state === "input" && (
+        {!data && !isMutating && (
           <div className="flex flex-col gap-6">
             <Card>
               <CardHeader>
@@ -112,10 +105,10 @@ export default function Home() {
         )}
 
         {/* Loading State */}
-        {state === "loading" && <Loading />}
+        {isMutating && <Loading />}
 
         {/* Results State */}
-        {state === "results" && (
+        {data && !isMutating && (
           <ResultsView answers={getValues()} onReset={handleReset} />
         )}
       </div>
