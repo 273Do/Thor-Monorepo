@@ -43,11 +43,9 @@ export default function Home() {
     mode: "onChange",
   });
 
-  const {
-    trigger: extractStepTrigger,
-    isMutating,
-    data,
-  } = useExtractSteps(DEFAULT_EXTRACT_STEP_QUERY);
+  const { extractStepTrigger, isExtractStepMutating, data } = useExtractSteps(
+    DEFAULT_EXTRACT_STEP_QUERY
+  );
 
   const isFormComplete = isValid && file;
 
@@ -75,7 +73,7 @@ export default function Home() {
         <Header />
 
         {/* Input State */}
-        {!data && !isMutating && (
+        {!data && !isExtractStepMutating && (
           <div className="flex flex-col gap-6">
             <Card>
               <CardHeader>
@@ -117,10 +115,10 @@ export default function Home() {
         )}
 
         {/* Loading State */}
-        {isMutating && <Loading status="estimate" />}
+        {isExtractStepMutating && <Loading status="estimate" />}
 
         {/* Results State */}
-        {data && !isMutating && (
+        {data && !isExtractStepMutating && (
           <ResultsView answers={getValues()} onReset={handleReset} />
         )}
       </div>

@@ -40,5 +40,9 @@ export const useExtractSteps = (params: ExtractStepsParams) => {
 
   // TODO: id をlocalstorageに保存
 
-  return { trigger, isMutating, data };
+  return {
+    extractStepTrigger: trigger,
+    isExtractStepMutating: isMutating,
+    data,
+  };
 };
