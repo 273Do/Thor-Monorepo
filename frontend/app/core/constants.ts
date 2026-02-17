@@ -1,3 +1,5 @@
+import type { MonthsParams } from "~/utils/use-extract-steps";
+
 export const chargingBeforeBedAnswer = [
   "就寝直前",
   "15分前程度",
@@ -13,3 +15,8 @@ export const carryingASmartphoneAnswer = [
 ] as const;
 
 export const apiEndpoint: string = import.meta.env.VITE_BACKEND_ENDPOINT;
+
+export const defaultExtractStepsQuery: MonthsParams = {
+  includeRecordedSleep: false,
+  monthsOfExtract: 1,
+};
