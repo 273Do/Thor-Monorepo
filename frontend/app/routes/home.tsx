@@ -51,7 +51,14 @@ export default function Home() {
 
   const handleSubmit = async () => {
     if (!isFormComplete) return;
-    await trigger(file);
+
+    try {
+      const result = await trigger(file);
+
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleReset = () => {
@@ -108,7 +115,7 @@ export default function Home() {
         )}
 
         {/* Loading State */}
-        {isMutating && <Loading />}
+        {isMutating && <Loading status="estimate" />}
 
         {/* Results State */}
         {data && !isMutating && (
