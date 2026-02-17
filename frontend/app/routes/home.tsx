@@ -20,7 +20,7 @@ import { Header } from "~/components/header";
 import { Loading } from "~/components/loading";
 import { ResultsView } from "~/components/result-view";
 import { SurveyForm } from "~/components/survey-form";
-import { defaultExtractStepsQuery } from "~/core/constants";
+import { DEFAULT_EXTRACT_STEP_QUERY } from "~/core/constants";
 import {
   defaultSurveyValues,
   surveySchema,
@@ -44,7 +44,7 @@ export default function Home() {
   });
 
   const { trigger, isMutating, data } = useExtractSteps(
-    defaultExtractStepsQuery
+    DEFAULT_EXTRACT_STEP_QUERY
   );
 
   const isFormComplete = isValid && file;

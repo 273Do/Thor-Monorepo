@@ -1,6 +1,6 @@
 import type { ExtractedSteps, ExtractedStepsResponse } from "./types";
 
-import { apiEndpoint } from "~/core/constants";
+import { API_ENDPOINT } from "~/core/constants";
 
 /**
  * 歩数抽出のリクエストを送信する
@@ -11,7 +11,7 @@ export const postExtractStepsRequest = async (
   url: string,
   { arg }: { arg: File }
 ): Promise<ExtractedSteps> => {
-  const response = await fetch(`${apiEndpoint}${url}`, {
+  const response = await fetch(`${API_ENDPOINT}${url}`, {
     method: "POST",
     headers: {
       "Content-Type": "text/xml",
