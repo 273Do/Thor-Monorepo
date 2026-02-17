@@ -43,9 +43,11 @@ export default function Home() {
     mode: "onChange",
   });
 
-  const { trigger, isMutating, data } = useExtractSteps(
-    DEFAULT_EXTRACT_STEP_QUERY
-  );
+  const {
+    trigger: extractStepTrigger,
+    isMutating,
+    data,
+  } = useExtractSteps(DEFAULT_EXTRACT_STEP_QUERY);
 
   const isFormComplete = isValid && file;
 
@@ -53,7 +55,7 @@ export default function Home() {
     if (!isFormComplete) return;
 
     try {
-      const result = await trigger(file);
+      const result = await extractStepTrigger(file);
 
       console.log(result);
     } catch (error) {
