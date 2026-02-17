@@ -32,7 +32,7 @@ export type ExtractedStepsResponse = {
 export const postExtractStepsRequest = async (
   url: string,
   { arg }: { arg: File }
-): Promise<Response> => {
+): Promise<ExtractedSteps> => {
   const response = await fetch(`${apiEndpoint}${url}`, {
     method: "POST",
     headers: {
@@ -45,7 +45,9 @@ export const postExtractStepsRequest = async (
     throw new Error(`Request failed: ${response.status}`);
   }
 
-  return response;
+  const steps: ExtractedStepsResponse = await response.json();
+
+  return steps.data;
 };
 
 /**
@@ -54,10 +56,13 @@ export const postExtractStepsRequest = async (
  */
 export const useExtractSteps = (q: string) => {
   // TODO: 各パラメータを引数に取るようにして内部でクエリを組み立てる
+  // 抽出処理を手動でトリガーするための設定
   const { trigger, isMutating, data } = useSWRMutation(
     `/extract-steps?${q}`,
     postExtractStepsRequest
   );
+
+  // TODO: id をlocalstorageに保存
 
   return { trigger, isMutating, data };
 };
