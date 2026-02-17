@@ -1,17 +1,22 @@
-import type { ExtractedSteps, ExtractedStepsResponse } from "./types";
+import type {
+  EstimateSleepRequest,
+  EstimateSleepResponse,
+  ExtractedSteps,
+  ExtractedStepsResponse,
+} from "./types";
 
 import { API_ENDPOINT } from "~/core/constants";
 
 /**
  * 歩数抽出のリクエストを送信する
- * @param url url
+ * @param path path
  * @param { arg } xmlファイル
  */
 export const postExtractStepsRequest = async (
-  url: string,
+  path: string,
   { arg }: { arg: File }
 ): Promise<ExtractedSteps> => {
-  const response = await fetch(`${API_ENDPOINT}${url}`, {
+  const response = await fetch(`${API_ENDPOINT}${path}`, {
     method: "POST",
     headers: {
       "Content-Type": "text/xml",
@@ -26,4 +31,30 @@ export const postExtractStepsRequest = async (
   const steps: ExtractedStepsResponse = await response.json();
 
   return steps.data;
+};
+
+/**
+ * 睡眠推定のリクエストを送信する
+ * @param path path
+ * @param { arg } bodyリクエスト
+ */
+export const postEstimateSleepRequest = async (
+  path: string,
+  { arg }: { arg: EstimateSleepRequest }
+): Promise<EstimateSleepResponse> => {
+  const response = await fetch(`${API_ENDPOINT}${path}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(arg),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+
+  const { data, models }: EstimateSleepResponse = await response.json();
+
+  return { data, models };
 };

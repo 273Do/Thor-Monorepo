@@ -22,4 +22,28 @@ export type ExtractedStepsResponse = {
 };
 
 // 睡眠推定関連のスキーマ
+export type Answers = {
+  charging_before_bed_answer: number;
+  carrying_a_smartphone_answer: number;
+  bedtime_answer: number;
+};
+
+export type EstimateSleepRequest = {
+  id: string;
+  answers: Answers;
+  step_data: StepCountRecord[];
+};
+
+export type DailyEstimateSleepRecord = {
+  date: string;
+  bed_time: string;
+  wake_time: string;
+  is_default_time: [boolean, boolean];
+};
+
+export type EstimateSleepResponse = {
+  data: DailyEstimateSleepRecord[];
+  models: string[];
+};
+
 // フィードバック関連のスキーマ
