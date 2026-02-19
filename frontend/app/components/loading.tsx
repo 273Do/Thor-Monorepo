@@ -28,6 +28,8 @@ export const Loading = ({ status }: props) => {
               睡眠推定結果をもとに
               <br />
               フィードバックを生成しています
+              <br />
+              (少し時間がかかります)
             </p>
           ) : (
             <p className="mt-1 text-sm text-muted-foreground">

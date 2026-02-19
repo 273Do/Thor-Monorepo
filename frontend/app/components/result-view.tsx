@@ -1,6 +1,6 @@
 "use client";
 
-import { Moon, Clock, Bot } from "lucide-react";
+import { Moon, Clock } from "lucide-react";
 import {
   BarChart,
   Bar,
@@ -26,6 +26,8 @@ import {
   type ChartConfig,
 } from "~/components/ui/chart";
 import { Separator } from "~/components/ui/separator";
+
+import { AIFeedback } from "./ai-feedback";
 
 import {
   calcAverageTime,
@@ -54,6 +56,10 @@ const bedtimeWaketimeChartConfig: ChartConfig = {
 
 type props = {
   /**
+   * id
+   */
+  id: string;
+  /**
    * 解析結果
    */
   data: DailyEstimateSleepRecord[];
@@ -67,10 +73,7 @@ type props = {
   onReset: () => void;
 };
 
-export const ResultsView = ({ data, models, onReset }: props) => {
-  // TODO: マウント時にFBを取得
-  console.log(models);
-
+export const ResultsView = ({ id, data, models, onReset }: props) => {
   const chartData = toChartData(data);
 
   // 平均睡眠時間の計算（これは単純な算術平均でOK）
@@ -268,21 +271,7 @@ export const ResultsView = ({ data, models, onReset }: props) => {
       <Separator />
 
       {/* AI Feedback */}
-      <Card>
-        <CardHeader className="pb-3">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-              <Bot className="h-4 w-4 text-primary" />
-            </div>
-            <CardTitle className="text-base">AI フィードバック</CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="text-sm leading-relaxed whitespace-pre-line text-foreground/80">
-            {/* TODO: フィードバックを表示 */}
-          </div>
-        </CardContent>
-      </Card>
+      <AIFeedback id={id} models={models} />
 
       {/* Reset */}
       <Button variant="outline" onClick={onReset} className="w-full">
