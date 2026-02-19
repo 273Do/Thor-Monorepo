@@ -29,7 +29,7 @@ import {
 import { useEstimateSleep } from "~/utils/use-estimate-sleep";
 import { useExtractSteps } from "~/utils/use-extract-steps";
 
-export default function Home() {
+const Home = () => {
   const [file, setFile] = useState<File | null>(null);
 
   const {
@@ -170,4 +170,6 @@ export default function Home() {
       </div>
     </main>
   );
-}
+};
+
+export default Home;

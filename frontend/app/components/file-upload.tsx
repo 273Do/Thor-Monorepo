@@ -17,7 +17,7 @@ type props = {
   onFileChange: (file: File | null) => void;
 };
 
-export function FileUpload({ file, onFileChange }: props) {
+export const FileUpload = ({ file, onFileChange }: props) => {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDrop = useCallback(
@@ -117,4 +117,4 @@ export function FileUpload({ file, onFileChange }: props) {
       )}
     </div>
   );
-}
+};

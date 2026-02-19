@@ -30,7 +30,7 @@ type props = {
   register: UseFormRegister<SurveyAnswers>;
 };
 
-export function SurveyForm({ control, register }: props) {
+export const SurveyForm = ({ control, register }: props) => {
   return (
     <div className="flex flex-col gap-8">
       {/* Question 1 */}
@@ -96,4 +96,4 @@ export function SurveyForm({ control, register }: props) {
       </fieldset>
     </div>
   );
-}
+};

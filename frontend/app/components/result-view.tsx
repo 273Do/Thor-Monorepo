@@ -1,6 +1,6 @@
 "use client";
 
-import { Moon, Clock, Brain } from "lucide-react";
+import { Moon, Clock, Bot } from "lucide-react";
 import {
   BarChart,
   Bar,
@@ -67,7 +67,7 @@ type props = {
   onReset: () => void;
 };
 
-export function ResultsView({ data, models, onReset }: props) {
+export const ResultsView = ({ data, models, onReset }: props) => {
   // TODO: マウント時にFBを取得
   console.log(models);
 
@@ -272,7 +272,7 @@ export function ResultsView({ data, models, onReset }: props) {
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-              <Brain className="h-4 w-4 text-primary" />
+              <Bot className="h-4 w-4 text-primary" />
             </div>
             <CardTitle className="text-base">AI フィードバック</CardTitle>
           </div>
@@ -290,4 +290,4 @@ export function ResultsView({ data, models, onReset }: props) {
       </Button>
     </div>
   );
-}
+};
