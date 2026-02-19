@@ -14,6 +14,6 @@ export const useEstimateSleep = () => {
   return {
     estimateSleepTrigger: trigger,
     isEstimateSleepMutating: isMutating,
-    data,
+    estimateSleepData: data,
   };
 };

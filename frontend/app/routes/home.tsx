@@ -45,12 +45,11 @@ const Home = () => {
   });
 
   // 歩数データ抽出処理
-  const { extractStepTrigger, isExtractStepMutating } = useExtractSteps(
-    DEFAULT_EXTRACT_STEP_QUERY
-  );
+  const { extractStepTrigger, isExtractStepMutating, extractSteData } =
+    useExtractSteps(DEFAULT_EXTRACT_STEP_QUERY);
 
   // 睡眠状態推定処理
-  const { estimateSleepTrigger, isEstimateSleepMutating, data } =
+  const { estimateSleepTrigger, isEstimateSleepMutating, estimateSleepData } =
     useEstimateSleep();
 
   const isLoading = isExtractStepMutating || isEstimateSleepMutating;
@@ -105,7 +104,7 @@ const Home = () => {
         <Header />
 
         {/* Input State */}
-        {!data && !isLoading && (
+        {!estimateSleepData && !isLoading && (
           <div className="flex flex-col gap-6">
             <Card>
               <CardHeader>
@@ -160,10 +159,11 @@ const Home = () => {
         )}
 
         {/* Results State */}
-        {data && !isLoading && (
+        {extractSteData && estimateSleepData && !isLoading && (
           <ResultsView
-            data={data.data}
-            models={data.models}
+            id={extractSteData.id}
+            data={estimateSleepData.data}
+            models={estimateSleepData.models}
             onReset={handleReset}
           />
         )}

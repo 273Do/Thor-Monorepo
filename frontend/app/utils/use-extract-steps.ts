@@ -43,6 +43,6 @@ export const useExtractSteps = (params: ExtractStepsParams) => {
   return {
     extractStepTrigger: trigger,
     isExtractStepMutating: isMutating,
-    data,
+    extractSteData: data,
   };
 };
