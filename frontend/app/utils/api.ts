@@ -3,6 +3,8 @@ import type {
   EstimateSleepResponse,
   ExtractedSteps,
   ExtractedStepsResponse,
+  LLMFeedbackRequest,
+  LLMFeedbackResponse,
 } from "./types";
 
 import { API_ENDPOINT } from "~/core/constants";
@@ -28,9 +30,9 @@ export const postExtractStepsRequest = async (
     throw new Error(`Request failed: ${response.status}`);
   }
 
-  const steps: ExtractedStepsResponse = await response.json();
+  const { data }: ExtractedStepsResponse = await response.json();
 
-  return steps.data;
+  return data;
 };
 
 /**
@@ -57,4 +59,30 @@ export const postEstimateSleepRequest = async (
   const { data, models }: EstimateSleepResponse = await response.json();
 
   return { data, models };
+};
+
+/**
+ * AIからフィードバックを取得する
+ * @param path path
+ * @param { arg } bodyリクエスト
+ */
+export const postAIFeedbackRequest = async (
+  path: string,
+  { arg }: { arg: LLMFeedbackRequest }
+) => {
+  const response = await fetch(`${API_ENDPOINT}${path}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(arg),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+
+  const { data }: LLMFeedbackResponse = await response.json();
+
+  return data;
 };

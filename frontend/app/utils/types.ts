@@ -47,3 +47,12 @@ export type EstimateSleepResponse = {
 };
 
 // フィードバック関連のスキーマ
+export type LLMFeedbackRequest = {
+  id: string;
+  llm: string;
+  lang: "ja" | "en";
+};
+
+export type LLMFeedbackResponse = {
+  data: string;
+};
