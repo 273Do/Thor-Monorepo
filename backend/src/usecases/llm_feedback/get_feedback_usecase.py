@@ -52,7 +52,21 @@ def get_feedback(
 
     feedback: str = completion.choices[0].message.content
 
-    return feedback
+    return _strip_code_fence(feedback)
+
+
+def _strip_code_fence(text: str) -> str:
+    """LLMの出力からマークダウンのコードフェンスを除去する
+
+    Args:
+        text (str): LLMの出力テキスト
+
+    Returns:
+        str: コードフェンスを除去したテキスト
+    """
+    import re
+
+    return re.sub(r"^```(?:markdown|md)?\n?", "", re.sub(r"\n?```\s*$", "", text))
 
 
 def _load_system_prompt(lang: Literal["ja", "en"]) -> str:

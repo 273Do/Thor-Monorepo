@@ -1,6 +1,8 @@
 import { useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 
 import { Bot } from "lucide-react";
+import remarkGfm from "remark-gfm";
 
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
@@ -45,8 +47,10 @@ export const AIFeedback = ({ id, models }: props) => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-sm leading-relaxed whitespace-pre-line text-foreground/80">
-              {feedbackData}
+            <div id="md">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {feedbackData}
+              </ReactMarkdown>
             </div>
           </CardContent>
         </Card>
