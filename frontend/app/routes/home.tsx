@@ -161,7 +161,11 @@ export default function Home() {
 
         {/* Results State */}
         {data && !isLoading && (
-          <ResultsView answers={getValues()} onReset={handleReset} />
+          <ResultsView
+            data={data.data}
+            models={data.models}
+            onReset={handleReset}
+          />
         )}
       </div>
     </main>

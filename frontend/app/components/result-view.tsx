@@ -27,133 +27,68 @@ import {
 } from "~/components/ui/chart";
 import { Separator } from "~/components/ui/separator";
 
-import type { SurveyAnswers } from "~/core/survey-schema";
-
-// Generate mock sleep data for 7 days
-function generateSleepData(answers: SurveyAnswers) {
-  const days = ["月", "火", "水", "木", "金", "土", "日"];
-
-  const qualityOffset =
-    answers.chargingBeforeBedAnswer === "good"
-      ? 0.5
-      : answers.chargingBeforeBedAnswer === "bad"
-        ? -0.8
-        : 0;
-  const caffeineOffset =
-    answers.carryingASmartphoneAnswer === "none"
-      ? 0.3
-      : answers.carryingASmartphoneAnswer === "5+"
-        ? -0.6
-        : answers.carryingASmartphoneAnswer === "3-4"
-          ? -0.3
-          : 0;
-  const screenOffset =
-    answers.bedtime === "none"
-      ? 0.2
-      : answers.bedtime === "2hour+"
-        ? -0.5
-        : answers.bedtime === "1hour"
-          ? -0.2
-          : 0;
-
-  return days.map((day) => {
-    const baseSleep = 6.5 + qualityOffset + caffeineOffset + screenOffset;
-    const variance = (Math.random() - 0.5) * 1.5;
-    const sleepHours = Math.max(4, Math.min(9, baseSleep + variance));
-
-    const baseBedtime = 23.5 - screenOffset * 0.5;
-    const bedtimeVariance = (Math.random() - 0.5) * 1.5;
-    const bedtime = Math.max(22, Math.min(26, baseBedtime + bedtimeVariance));
-
-    return {
-      day,
-      sleepHours: Math.round(sleepHours * 10) / 10,
-      bedtime: Math.round(bedtime * 10) / 10,
-      bedtimeLabel: formatBedtime(
-        Math.round((baseBedtime + bedtimeVariance) * 10) / 10
-      ),
-    };
-  });
-}
-
-function formatBedtime(hours: number): string {
-  const h = Math.floor(hours) % 24;
-  const m = Math.round((hours % 1) * 60);
-  return `${h}:${m.toString().padStart(2, "0")}`;
-}
-
-function generateFeedback(answers: SurveyAnswers): string {
-  const feedbacks: string[] = [];
-
-  if (answers.chargingBeforeBedAnswer === "bad") {
-    feedbacks.push(
-      "睡眠の質が低下している可能性があります。就寝・起床時刻を一定に保つことを心がけましょう。"
-    );
-  } else if (answers.chargingBeforeBedAnswer === "good") {
-    feedbacks.push(
-      "睡眠の質は良好な状態です。この調子を維持していきましょう。"
-    );
-  } else {
-    feedbacks.push(
-      "睡眠の質は平均的です。少しの改善で大きな変化が期待できます。"
-    );
-  }
-
-  if (
-    answers.carryingASmartphoneAnswer === "3-4" ||
-    answers.carryingASmartphoneAnswer === "5+"
-  ) {
-    feedbacks.push(
-      "カフェイン摂取量が多いため、午後3時以降のカフェインを控えることで、入眠がスムーズになる可能性があります。"
-    );
-  }
-
-  if (answers.bedtime === "1hour" || answers.bedtime === "2hour+") {
-    feedbacks.push(
-      "就寝前のスクリーンタイムが長い傾向にあります。ブルーライトは睡眠ホルモン（メラトニン）の分泌を抑制するため、就寝30分前にはデバイスを手放すことをおすすめします。"
-    );
-  }
-
-  feedbacks.push(
-    "ヘルスデータの分析から、週の後半にかけて睡眠時間が短くなる傾向が見られます。週末に睡眠負債を貯めないよう、平日から十分な睡眠時間を確保しましょう。"
-  );
-
-  return feedbacks.join("\n\n");
-}
+import {
+  calcAverageTime,
+  numberToTime,
+  toChartData,
+} from "~/lib/time-functions";
+import type { DailyEstimateSleepRecord } from "~/utils/types";
 
 const sleepChartConfig: ChartConfig = {
   sleepHours: {
     label: "睡眠時間",
-    color: "hsl(var(--chart-1))",
+    color: "var(--primary)",
   },
 };
 
-const bedtimeChartConfig: ChartConfig = {
+const bedtimeWaketimeChartConfig: ChartConfig = {
   bedtime: {
     label: "就寝時刻",
-    color: "hsl(var(--chart-2))",
+    color: "var(--primary)",
+  },
+  waketime: {
+    label: "起床時刻",
+    color: "var(--muted-foreground)",
   },
 };
 
 type ResultsViewProps = {
-  answers: SurveyAnswers;
+  data: DailyEstimateSleepRecord[];
+  models: string[];
   onReset: () => void;
 };
 
-export function ResultsView({ answers, onReset }: ResultsViewProps) {
-  const data = generateSleepData(answers);
-  const feedback = generateFeedback(answers);
-  const avgSleep =
-    Math.round(
-      (data.reduce((sum, d) => sum + d.sleepHours, 0) / data.length) * 10
-    ) / 10;
-  const avgBedtime = data.reduce((sum, d) => sum + d.bedtime, 0) / data.length;
+export function ResultsView({ data, models, onReset }: ResultsViewProps) {
+  // TODO: マウント時にFBを取得
+  console.log(models);
+
+  const chartData = toChartData(data);
+
+  // 平均睡眠時間の計算（これは単純な算術平均でOK）
+  const avgSleepHours =
+    chartData.length > 0
+      ? (
+          chartData.reduce((sum, d) => sum + d.sleepHours, 0) / chartData.length
+        ).toFixed(1)
+      : "–";
+
+  // 平均就寝時刻の計算（循環を考慮）
+  const avgBedtime =
+    chartData.length > 0
+      ? numberToTime(calcAverageTime(chartData.map((d) => d.bedtime)))
+      : "–";
+
+  // 平均起床時刻の計算（循環を考慮）
+  const avgWakeime =
+    chartData.length > 0
+      ? numberToTime(calcAverageTime(chartData.map((d) => d.waketime)))
+      : "–";
 
   return (
     <div className="flex flex-col gap-6">
       {/* Summary Stats */}
-      <div className="grid grid-cols-2 gap-4">
-        <Card>
+      <div className="grid grid-cols-5 gap-4">
+        <Card className="col-span-2 justify-center">
           <CardContent className="flex items-center gap-3 p-4">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
               <Moon className="h-5 w-5 text-primary" />
@@ -161,7 +96,7 @@ export function ResultsView({ answers, onReset }: ResultsViewProps) {
             <div>
               <p className="text-xs text-muted-foreground">平均睡眠時間</p>
               <p className="text-xl font-bold text-foreground">
-                {avgSleep}
+                {avgSleepHours}
                 <span className="text-sm font-normal text-muted-foreground">
                   {" "}
                   時間
@@ -170,25 +105,107 @@ export function ResultsView({ answers, onReset }: ResultsViewProps) {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="col-span-3 justify-center">
           <CardContent className="flex items-center gap-3 p-4">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10">
-              <Clock className="h-5 w-5 text-accent" />
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+              <Clock className="h-5 w-5 text-primary" />
             </div>
-            <div>
-              <p className="text-xs text-muted-foreground">平均就寝時刻</p>
-              <p className="text-xl font-bold text-foreground">
-                {formatBedtime(avgBedtime)}
-              </p>
+            <div className="flex gap-4">
+              <div>
+                <p className="text-xs text-muted-foreground">平均就寝</p>
+                <p className="text-xl font-bold text-foreground">
+                  {avgBedtime}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">平均起床</p>
+                <p className="text-xl font-bold text-foreground">
+                  {avgWakeime}
+                </p>
+              </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Sleep Duration Chart */}
+      {/* Bedtime & Waketime Line Chart */}
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-base">睡眠時間（過去7日間）</CardTitle>
+          <CardTitle className="text-base">就寝・起床時刻</CardTitle>
+          <CardDescription>就寝時刻と起床時刻の推移</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ChartContainer
+            config={bedtimeWaketimeChartConfig}
+            className="h-[200px] w-full"
+          >
+            <LineChart data={chartData} accessibilityLayer>
+              <CartesianGrid vertical={false} strokeDasharray="3 3" />
+              <XAxis
+                dataKey="date"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+              />
+              <YAxis
+                // データの最小値から -1時間、最大値から +1時間の範囲に自動設定
+                domain={([dataMin, dataMax]) => {
+                  const min = Math.floor(dataMin - 1);
+                  const max = Math.ceil(dataMax + 1);
+                  return [min, max];
+                }}
+                reversed
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                // 目盛り（Ticks）を動的に生成したい場合は以下のように設定
+                // interval="preserveStartEnd"
+                tickFormatter={(v: number) => numberToTime(v)}
+              />
+              <ChartTooltip
+                content={
+                  <ChartTooltipContent
+                    indicator="dot"
+                    formatter={(value, name, item) => (
+                      <>
+                        <div
+                          className="size-2.5 shrink-0 rounded-[2px]"
+                          style={{ backgroundColor: item.color }}
+                        />
+                        <span className="text-muted-foreground">
+                          {name === "bedtime" ? "就寝時刻" : "起床時刻"}
+                        </span>
+                        <span className="ml-auto font-mono font-medium text-foreground tabular-nums">
+                          {numberToTime(Number(value))}
+                        </span>
+                      </>
+                    )}
+                  />
+                }
+              />
+              <Line
+                type="monotone"
+                dataKey="bedtime"
+                stroke="var(--color-bedtime)"
+                strokeWidth={1}
+                dot={{ fill: "var(--color-bedtime)", r: 2.5 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="waketime"
+                stroke="var(--color-waketime)"
+                strokeWidth={1}
+                dot={{ fill: "var(--color-waketime)", r: 2.5 }}
+              />
+            </LineChart>
+          </ChartContainer>
+        </CardContent>
+      </Card>
+
+      {/* Sleep Duration Bar Chart */}
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base">睡眠時間</CardTitle>
           <CardDescription>1日あたりの睡眠時間の推移</CardDescription>
         </CardHeader>
         <CardContent>
@@ -196,25 +213,37 @@ export function ResultsView({ answers, onReset }: ResultsViewProps) {
             config={sleepChartConfig}
             className="h-[200px] w-full"
           >
-            <BarChart data={data} accessibilityLayer>
+            <BarChart data={chartData} accessibilityLayer>
               <CartesianGrid vertical={false} strokeDasharray="3 3" />
               <XAxis
-                dataKey="day"
+                dataKey="date"
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
               />
               <YAxis
-                domain={[0, 10]}
+                domain={[0, (dataMax: number) => Math.ceil(dataMax + 1)]}
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
-                tickFormatter={(v) => `${v}h`}
+                tickFormatter={(v: number) => `${v}h`}
               />
               <ChartTooltip
                 content={
                   <ChartTooltipContent
-                    formatter={(value) => [`${value} 時間`, "睡眠時間"]}
+                    indicator="dot"
+                    formatter={(value, _name, item) => (
+                      <>
+                        <div
+                          className="size-2.5 shrink-0 rounded-[2px]"
+                          style={{ backgroundColor: item.color }}
+                        />
+                        <span className="text-muted-foreground">睡眠</span>
+                        <span className="ml-auto font-mono font-medium text-foreground tabular-nums">
+                          {Number(value).toFixed(1)}時間
+                        </span>
+                      </>
+                    )}
                   />
                 }
               />
@@ -224,66 +253,6 @@ export function ResultsView({ answers, onReset }: ResultsViewProps) {
                 radius={[4, 4, 0, 0]}
               />
             </BarChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
-
-      {/* Bedtime Chart */}
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base">就寝時刻（過去7日間）</CardTitle>
-          <CardDescription>就寝時刻の推移</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer
-            config={bedtimeChartConfig}
-            className="h-[200px] w-full"
-          >
-            <LineChart data={data} accessibilityLayer>
-              <CartesianGrid vertical={false} strokeDasharray="3 3" />
-              <XAxis
-                dataKey="day"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-              />
-              <YAxis
-                domain={[22, 26]}
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                tickFormatter={(v) => {
-                  const h = Math.floor(v) % 24;
-                  return `${h}:00`;
-                }}
-                reversed
-              />
-              <ChartTooltip
-                content={
-                  <ChartTooltipContent
-                    formatter={(value) => {
-                      const v = Number(value);
-                      const h = Math.floor(v) % 24;
-                      const m = Math.round((v % 1) * 60);
-                      return [
-                        `${h}:${m.toString().padStart(2, "0")}`,
-                        "就寝時刻",
-                      ];
-                    }}
-                  />
-                }
-              />
-              <Line
-                type="monotone"
-                dataKey="bedtime"
-                stroke="var(--color-bedtime)"
-                strokeWidth={2}
-                dot={{
-                  fill: "var(--color-bedtime)",
-                  r: 4,
-                }}
-              />
-            </LineChart>
           </ChartContainer>
         </CardContent>
       </Card>
@@ -302,7 +271,7 @@ export function ResultsView({ answers, onReset }: ResultsViewProps) {
         </CardHeader>
         <CardContent>
           <div className="text-sm leading-relaxed whitespace-pre-line text-foreground/80">
-            {feedback}
+            {/* TODO: フィードバックを表示 */}
           </div>
         </CardContent>
       </Card>
