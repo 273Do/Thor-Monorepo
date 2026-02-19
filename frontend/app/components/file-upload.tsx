@@ -6,12 +6,18 @@ import { Upload, FileText, X } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
 
-type FileUploadProps = {
+type props = {
+  /**
+   * xml ファイル
+   */
   file: File | null;
+  /**
+   * ファイル変更時に発火する関数
+   */
   onFileChange: (file: File | null) => void;
 };
 
-export function FileUpload({ file, onFileChange }: FileUploadProps) {
+export function FileUpload({ file, onFileChange }: props) {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDrop = useCallback(

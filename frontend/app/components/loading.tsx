@@ -3,6 +3,9 @@ import { Loader2 } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
 
 type props = {
+  /**
+   * 処理のステータス状態
+   */
   status: "extract" | "estimate" | "feedback";
 };
 

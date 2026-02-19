@@ -52,13 +52,22 @@ const bedtimeWaketimeChartConfig: ChartConfig = {
   },
 };
 
-type ResultsViewProps = {
+type props = {
+  /**
+   * 解析結果
+   */
   data: DailyEstimateSleepRecord[];
+  /**
+   * フィードバックに使用できる LLM の種類
+   */
   models: string[];
+  /**
+   * リセット用の関数
+   */
   onReset: () => void;
 };
 
-export function ResultsView({ data, models, onReset }: ResultsViewProps) {
+export function ResultsView({ data, models, onReset }: props) {
   // TODO: マウント時にFBを取得
   console.log(models);
 
@@ -158,8 +167,7 @@ export function ResultsView({ data, models, onReset }: ResultsViewProps) {
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
-                // 目盛り（Ticks）を動的に生成したい場合は以下のように設定
-                // interval="preserveStartEnd"
+                interval="preserveStartEnd"
                 tickFormatter={(v: number) => numberToTime(v)}
               />
               <ChartTooltip

@@ -19,12 +19,18 @@ import {
 } from "~/core/constants";
 import type { SurveyAnswers } from "~/core/survey-schema";
 
-type SurveyFormProps = {
+type props = {
+  /**
+   * フォームコントロール
+   */
   control: Control<SurveyAnswers>;
+  /**
+   * フォームフィールドの登録関数
+   */
   register: UseFormRegister<SurveyAnswers>;
 };
 
-export function SurveyForm({ control, register }: SurveyFormProps) {
+export function SurveyForm({ control, register }: props) {
   return (
     <div className="flex flex-col gap-8">
       {/* Question 1 */}
