@@ -35,7 +35,6 @@ const Home = () => {
   const {
     control,
     register,
-    reset,
     getValues,
     formState: { isValid },
   } = useForm<SurveyAnswers>({
@@ -90,11 +89,6 @@ const Home = () => {
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const handleReset = () => {
-    setFile(null);
-    reset(defaultSurveyValues);
   };
 
   return (
@@ -164,7 +158,6 @@ const Home = () => {
             id={extractSteData.id}
             data={estimateSleepData.data}
             models={estimateSleepData.models}
-            onReset={handleReset}
           />
         )}
       </div>

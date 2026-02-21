@@ -11,7 +11,6 @@ import {
   CartesianGrid,
 } from "recharts";
 
-import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -67,13 +66,9 @@ type props = {
    * フィードバックに使用できる LLM の種類
    */
   models: string[];
-  /**
-   * リセット用の関数
-   */
-  onReset: () => void;
 };
 
-export const ResultsView = ({ id, data, models, onReset }: props) => {
+export const ResultsView = ({ id, data, models }: props) => {
   const chartData = toChartData(data);
 
   // 平均睡眠時間の計算（これは単純な算術平均でOK）
@@ -272,11 +267,6 @@ export const ResultsView = ({ id, data, models, onReset }: props) => {
 
       {/* AI Feedback */}
       <AIFeedback id={id} models={models} />
-
-      {/* Reset */}
-      <Button variant="outline" onClick={onReset} className="w-full">
-        もう一度分析する
-      </Button>
     </div>
   );
 };
