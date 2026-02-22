@@ -6,9 +6,32 @@ https://github.com/273Do/Thor
 https://github.com/273Do/Thor-Web-App-Frontend  
 https://github.com/273Do/Thor-Web-App-Backend
 
+## アプリ概要
+
+本 web アプリは、iPhone のヘルスケアデータから睡眠パターンを推定・分析するWebサービスです。
+
+### フロー
+
+1. アンケート回答 - 睡眠に関する3つの質問に答える
+   - スマホの充電タイミング
+   - 家の中でスマホを持ち歩くか
+   - 普段の就寝時刻
+
+2. データアップロード - Apple ヘルスケアからエクスポートした XML ファイルをアップロード
+3. 歩数抽出 - XML から歩数データ（＋睡眠データ）を抽出
+4. 睡眠推定 - 歩数データ＋アンケート回答をもとに、日ごとの就寝・起床時刻を推定
+5. 結果表示 - 推定結果をチャートで可視化
+   - 就寝・起床時刻の折れ線グラフ
+   - 睡眠時間の棒グラフ
+6. AIフィードバック - LLM（ Ollama 経由）が睡眠パターンについてマークダウン形式のアドバイスを生成
+
+### iPhone 端末以外の方について
+
+本サービスは Apple ヘルスケアの XML エクスポートを利用するため、iPhone ユーザーを対象としています。Android など他のデバイスをお使いの方は、ヘルスデータを指定の形式に変換したうえで API を直接呼び出すことでご利用いただけます。
+
 ## プロジェクト構成
 
-- **Frontend**: React Router v7 + TypeScript + Tailwind CSS
+- **Frontend**: React + TypeScript + Tailwind CSS
 - **Backend**: FastAPI (Python 3.12+)
 - **AI/LLM**: Ollama (ホストマシン)
 - **インフラ**: Docker Compose
@@ -42,7 +65,7 @@ chmod +x ollama/setup.sh
 ./ollama/setup.sh
 ```
 
-うまく読み込めると以下のように表示されるが、自作モデル（thor-\*）はベースモデルの重みを共有して参照しているだけなので、ディスク容量が2倍になるわけではありません。Modelfile
+うまく読み込めると以下のように表示されますが、自作モデル（thor-\*）はベースモデルの重みを共有して参照しているだけなので、ディスク容量が2倍になるわけではありません。Modelfile
 で設定したパラメータの差分だけが追加で保持されています。
 
 ```
@@ -68,10 +91,11 @@ task frontend -- pnpm i
 task backend -- uv sync
 ```
 
-4. 以下のコマンドで react router の型を作成します。
+4. 以下のコマンドでアプリを起動します。
 
 ```bash
-task frontend -- pnpm react-router typegen
+task frontend:dev
+task backend:dev
 ```
 
 ### 6. Claude Code
