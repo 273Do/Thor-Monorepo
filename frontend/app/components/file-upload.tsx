@@ -6,12 +6,20 @@ import { Upload, FileText, X } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
 
-type FileUploadProps = {
+import { NON_IPHONE_USERS_URL } from "~/core/constants";
+
+type props = {
+  /**
+   * xml ファイル
+   */
   file: File | null;
+  /**
+   * ファイル変更時に発火する関数
+   */
   onFileChange: (file: File | null) => void;
 };
 
-export function FileUpload({ file, onFileChange }: FileUploadProps) {
+export const FileUpload = ({ file, onFileChange }: props) => {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDrop = useCallback(
@@ -47,9 +55,14 @@ export function FileUpload({ file, onFileChange }: FileUploadProps) {
 
   return (
     <div className="flex flex-col gap-3">
-      <p className="cursor-pointer text-xs text-muted-foreground duration-100 hover:underline">
+      <a
+        className="w-fit cursor-pointer text-xs text-muted-foreground duration-100 hover:underline"
+        href={NON_IPHONE_USERS_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         iPhone 端末以外の方について
-      </p>
+      </a>
 
       {!file ? (
         <div
@@ -111,4 +124,4 @@ export function FileUpload({ file, onFileChange }: FileUploadProps) {
       )}
     </div>
   );
-}
+};

@@ -1,0 +1,116 @@
+import { useEffect, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
+
+import { ArrowLeft, Bot, RefreshCw } from "lucide-react";
+import remarkGfm from "remark-gfm";
+
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+
+import { Loading } from "./loading";
+import { Button } from "./ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { Separator } from "./ui/separator";
+
+import { useAIFeedback } from "~/utils/use-ai-feedback";
+
+type props = {
+  /**
+   * id
+   */
+  id: string;
+  /**
+   * models
+   */
+  models: string[];
+};
+
+export const AIFeedback = ({ id, models }: props) => {
+  const { feedbackTrigger, isFeedbackMutating, feedbackData } = useAIFeedback();
+
+  const [model, setModel] = useState<string>(models[0]);
+
+  const selectLLMRef = useRef<string>(models[0]);
+
+  const handleReGenFB = () => {
+    setModel(selectLLMRef.current);
+  };
+
+  const handleReset = () => {
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    feedbackTrigger({
+      id,
+      llm: model,
+      lang: "ja",
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [model]);
+
+  return (
+    <>
+      {feedbackData && !isFeedbackMutating ? (
+        <>
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+                  <Bot className="h-4 w-4 text-primary" />
+                </div>
+                <CardTitle className="text-base">AI フィードバック</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-4">
+              <div id="md">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {feedbackData}
+                </ReactMarkdown>
+              </div>
+
+              <Separator />
+
+              <div className="flex items-center gap-3">
+                <Select
+                  defaultValue={model}
+                  onValueChange={(v) => {
+                    selectLLMRef.current = v;
+                  }}
+                >
+                  <SelectTrigger className="w-full bg-card text-foreground">
+                    <SelectValue defaultValue={model} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {models.map((value, i) => (
+                      <SelectItem key={i} value={String(value)}>
+                        {value}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Button className="shrink-0 gap-2" onClick={handleReGenFB}>
+                  <RefreshCw className="size-4" />
+                  再生成する
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+          {/* Reset */}
+
+          <Button variant="outline" className="w-full" onClick={handleReset}>
+            <ArrowLeft className="size-4" />
+            フォームに戻る
+          </Button>
+        </>
+      ) : (
+        <Loading status="feedback" />
+      )}
+    </>
+  );
+};

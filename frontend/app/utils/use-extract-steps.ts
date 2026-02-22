@@ -1,63 +1,48 @@
 import useSWRMutation from "swr/mutation";
 
-import { apiEndpoint } from "~/core/constants";
+import { postExtractStepsRequest } from "./api";
 
-export type StepCountRecord = {
-  start_date: string;
-  end_date: string;
-  value: number;
+export type MonthsParams = {
+  includeRecordedSleep: boolean;
+  monthsOfExtract: number;
 };
 
-export type SleepAnalysisRecord = {
-  start_date: string;
-  end_date: string;
-  value: string;
+export type DateRangeParams = {
+  includeRecordedSleep: boolean;
+  startDateOfExtract: Date;
+  endDateOfExtract: Date;
 };
 
-export type ExtractedSteps = {
-  id: string;
-  step_data: StepCountRecord[];
-  sleep_data: SleepAnalysisRecord[] | null;
-};
-
-export type ExtractedStepsResponse = {
-  data: ExtractedSteps;
-};
+type ExtractStepsParams = MonthsParams | DateRangeParams;
 
 /**
- * 歩数抽出のリクエストを送信する
- * @param url url
- * @param { arg } xmlファイル
+ * クエリパラメータの作成
+ * @param params クエリパラメータ（月数指定 or 日付範囲指定）
  */
-export const postExtractStepsRequest = async (
-  url: string,
-  { arg }: { arg: File }
-): Promise<Response> => {
-  const response = await fetch(`${apiEndpoint}${url}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "text/xml",
-    },
-    body: arg,
-  });
-
-  if (!response.ok) {
-    throw new Error(`Request failed: ${response.status}`);
+const buildQuery = (params: ExtractStepsParams): string => {
+  if ("monthsOfExtract" in params) {
+    return `months_of_extract=${params.monthsOfExtract}&include_recorded_sleep=${params.includeRecordedSleep}`;
   }
-
-  return response;
+  return `start_date_of_extract=${params.startDateOfExtract.toISOString()}&end_date_of_extract=${params.endDateOfExtract.toISOString()}&include_recorded_sleep=${params.includeRecordedSleep}`;
 };
 
 /**
  * 抽出期間か範囲を指定してApple HealthcareのXMLデータから歩数を抽出するフック
- * @param q クエリパラメータ
+ * @param params クエリパラメータ（月数指定 or 日付範囲指定）
  */
-export const useExtractSteps = (q: string) => {
-  // TODO: 各パラメータを引数に取るようにして内部でクエリを組み立てる
+export const useExtractSteps = (params: ExtractStepsParams) => {
+  const q = buildQuery(params);
+
   const { trigger, isMutating, data } = useSWRMutation(
     `/extract-steps?${q}`,
     postExtractStepsRequest
   );
 
-  return { trigger, isMutating, data };
+  // TODO: id をlocalstorageに保存
+
+  return {
+    extractStepTrigger: trigger,
+    isExtractStepMutating: isMutating,
+    extractSteData: data,
+  };
 };

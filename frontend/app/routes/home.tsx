@@ -20,20 +20,21 @@ import { Header } from "~/components/header";
 import { Loading } from "~/components/loading";
 import { ResultsView } from "~/components/result-view";
 import { SurveyForm } from "~/components/survey-form";
+import { DEFAULT_EXTRACT_STEP_QUERY } from "~/core/constants";
 import {
   defaultSurveyValues,
   surveySchema,
   type SurveyAnswers,
 } from "~/core/survey-schema";
+import { useEstimateSleep } from "~/utils/use-estimate-sleep";
 import { useExtractSteps } from "~/utils/use-extract-steps";
 
-export default function Home() {
+const Home = () => {
   const [file, setFile] = useState<File | null>(null);
 
   const {
     control,
     register,
-    reset,
     getValues,
     formState: { isValid },
   } = useForm<SurveyAnswers>({
@@ -42,18 +43,52 @@ export default function Home() {
     mode: "onChange",
   });
 
-  const { trigger, isMutating, data } = useExtractSteps("");
+  // 歩数データ抽出処理
+  const { extractStepTrigger, isExtractStepMutating, extractSteData } =
+    useExtractSteps(DEFAULT_EXTRACT_STEP_QUERY);
 
+  // 睡眠状態推定処理
+  const { estimateSleepTrigger, isEstimateSleepMutating, estimateSleepData } =
+    useEstimateSleep();
+
+  const isLoading = isExtractStepMutating || isEstimateSleepMutating;
   const isFormComplete = isValid && file;
 
+  // 処理リクエスト
   const handleSubmit = async () => {
     if (!isFormComplete) return;
-    await trigger(file);
-  };
 
-  const handleReset = () => {
-    setFile(null);
-    reset(defaultSurveyValues);
+    try {
+      const extractStepResult = await extractStepTrigger(file);
+
+      const { id, step_data } = extractStepResult;
+
+      const surveyValues = getValues();
+
+      let bedtime_answer;
+
+      if (surveyValues.bedtime > "03:00" && surveyValues.bedtime < "20:45") {
+        bedtime_answer = 1;
+      } else bedtime_answer = 0;
+
+      const result = await estimateSleepTrigger({
+        id,
+        step_data,
+        answers: {
+          charging_before_bed_answer: Number(
+            surveyValues.chargingBeforeBedAnswer
+          ),
+          carrying_a_smartphone_answer: Number(
+            surveyValues.carryingASmartphoneAnswer
+          ),
+          bedtime_answer,
+        },
+      });
+
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -63,7 +98,7 @@ export default function Home() {
         <Header />
 
         {/* Input State */}
-        {!data && !isMutating && (
+        {!estimateSleepData && !isLoading && (
           <div className="flex flex-col gap-6">
             <Card>
               <CardHeader>
@@ -105,13 +140,29 @@ export default function Home() {
         )}
 
         {/* Loading State */}
-        {isMutating && <Loading />}
+        {isLoading && (
+          <Loading
+            status={
+              isExtractStepMutating
+                ? "extract"
+                : isEstimateSleepMutating
+                  ? "estimate"
+                  : "feedback"
+            }
+          />
+        )}
 
         {/* Results State */}
-        {data && !isMutating && (
-          <ResultsView answers={getValues()} onReset={handleReset} />
+        {extractSteData && estimateSleepData && !isLoading && (
+          <ResultsView
+            id={extractSteData.id}
+            data={estimateSleepData.data}
+            models={estimateSleepData.models}
+          />
         )}
       </div>
     </main>
   );
-}
+};
+
+export default Home;

@@ -4,7 +4,7 @@ from fastapi import APIRouter
 
 from src.core.constants import ESTIMATE_SLEEP_JSON_FILENAME, STEP_CLUSTER_JSON_FILENAME
 from src.schemas.estimate_sleep import DailyEstimateSleepRecord, StepClusterRecord
-from src.schemas.llm_feedback import LLMFeedbackRequest
+from src.schemas.llm_feedback import LLMFeedbackRequest, LLMFeedbackResponse
 from src.usecases.estimate_sleep.save_data_to_storage_usecase import (
     get_data_from_storage,
 )
@@ -26,7 +26,7 @@ router = APIRouter(prefix="/feedback", tags=["feedback"])
         },
     },
 )
-def llm_feedback(req: LLMFeedbackRequest) -> str:
+def llm_feedback(req: LLMFeedbackRequest) -> LLMFeedbackResponse:
     """LLM による睡眠フィードバックを取得する\n
     睡眠推定の結果は NAS に保存済みのため、このエンドポイントでは推定処理を再実行せず、
     保存されたデータを読み込んで LLM にフィードバックを依頼する。
@@ -52,4 +52,4 @@ def llm_feedback(req: LLMFeedbackRequest) -> str:
     # LLM からフィードバックを取得する
     feedback = get_feedback(estimate_sleep_json, clusters_json, llm, lang)
 
-    return feedback
+    return LLMFeedbackResponse(data=feedback)

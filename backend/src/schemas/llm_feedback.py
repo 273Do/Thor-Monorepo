@@ -18,3 +18,12 @@ class LLMFeedbackRequest(BaseModel):
         description="LLM のフィードバック言語", examples=["en"]
     )
     """LLM のフィードバック言語"""
+
+
+class LLMFeedbackResponse(BaseModel):
+    data: str = Field(
+        description="LLMからのフィードバック",
+        examples=["LLMのフィードバック。マークダウン形式。"],
+        min_length=1,
+    )
+    """LLMからのフィードバック"""

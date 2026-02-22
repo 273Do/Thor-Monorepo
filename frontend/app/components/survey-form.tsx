@@ -14,17 +14,23 @@ import {
 } from "~/components/ui/select";
 
 import {
-  carryingASmartphoneAnswer,
-  chargingBeforeBedAnswer,
+  CARRYING_A_SMARTPHONE_ANSWER,
+  CHARGING_BEFORE_BED_ANSWER,
 } from "~/core/constants";
 import type { SurveyAnswers } from "~/core/survey-schema";
 
-type SurveyFormProps = {
+type props = {
+  /**
+   * フォームコントロール
+   */
   control: Control<SurveyAnswers>;
+  /**
+   * フォームフィールドの登録関数
+   */
   register: UseFormRegister<SurveyAnswers>;
 };
 
-export function SurveyForm({ control, register }: SurveyFormProps) {
+export const SurveyForm = ({ control, register }: props) => {
   return (
     <div className="flex flex-col gap-8">
       {/* Question 1 */}
@@ -41,7 +47,7 @@ export function SurveyForm({ control, register }: SurveyFormProps) {
                 <SelectValue placeholder="選択してください" />
               </SelectTrigger>
               <SelectContent>
-                {chargingBeforeBedAnswer.map((value, i) => (
+                {CHARGING_BEFORE_BED_ANSWER.map((value, i) => (
                   <SelectItem key={i} value={String(i)}>
                     {value}
                   </SelectItem>
@@ -66,7 +72,7 @@ export function SurveyForm({ control, register }: SurveyFormProps) {
                 <SelectValue placeholder="選択してください" />
               </SelectTrigger>
               <SelectContent>
-                {carryingASmartphoneAnswer.map((value, i) => (
+                {CARRYING_A_SMARTPHONE_ANSWER.map((value, i) => (
                   <SelectItem key={i} value={String(i)}>
                     {value}
                   </SelectItem>
@@ -90,4 +96,4 @@ export function SurveyForm({ control, register }: SurveyFormProps) {
       </fieldset>
     </div>
   );
-}
+};

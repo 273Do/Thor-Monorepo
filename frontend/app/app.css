@@ -139,3 +139,110 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* feedback markdown */
+#md {
+  font-size: 16px;
+  line-height: 1.6;
+  border-radius: 8px;
+  overflow-wrap: break-word;
+}
+
+/* Headers */
+#md h1 {
+  font-size: 1.8em;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+#md h2 {
+  /* font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 4px; */
+}
+
+#md h3 {
+  font-size: 1.25em;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+/* Paragraphs and Text */
+#md p {
+  margin-bottom: 8px;
+}
+
+/* Links */
+#md a {
+  color: #3182ce;
+  text-decoration: none;
+}
+
+#md a:hover {
+  text-decoration: underline;
+}
+
+/* Code blocks */
+#md pre {
+  border: 1px solid hsl(var(--muted-foreground));
+  background: #09090b;
+  color: #fafafa;
+  border-radius: 0.5rem;
+  padding: 12px;
+  overflow-x: auto;
+  font-family: "Courier New", Courier, monospace;
+  margin-bottom: 8px;
+}
+
+#md code {
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.95em;
+}
+
+/* Lists */
+#md ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: 8px;
+}
+
+#md ol {
+  list-style-type: decimal;
+  padding-left: 20px;
+  margin-bottom: 8px;
+}
+
+#md li {
+  margin-bottom: 8px;
+}
+
+/* Blockquotes */
+#md blockquote {
+  border-left: 4px solid #3182ce;
+  padding-left: 12px;
+  margin-left: 0;
+  color: #4a5568;
+
+  font-style: italic;
+}
+
+/* Tables */
+#md table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 8px;
+}
+
+#md th,
+#md td {
+  border: 1px solid hsl(var(--primary));
+  padding: 8px;
+  text-align: left;
+}
+
+#md th {
+  border: 1px solid hsl(var(--primary));
+  font-weight: bold;
+}
