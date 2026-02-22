@@ -36,6 +36,9 @@ class Envs(BaseSettings):
     OLLAMA_ENDPOINT: str = Field(default="http://host.docker.internal:11434/v1/")
     """ollamaのエンドポイント"""
 
+    FRONTEND_ENDPOINT: str = Field(default="http://localhost:5173")
+    """フロントエンドのエンドポイント"""
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

@@ -14,14 +14,13 @@ if not envs.IS_DEBUG:
     sys.stdout = open(os.devnull, "w")
 
 
-# TODO: 環境変数に追加する
-origins = ["http://localhost:5173"]
+origins = [envs.FRONTEND_ENDPOINT]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["POST"],
     allow_headers=["*"],
 )
 
