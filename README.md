@@ -27,7 +27,7 @@ https://github.com/273Do/Thor-Web-App-Backend
 
 ### iPhone 端末以外の方について
 
-本サービスは Apple ヘルスケアの XML エクスポートを利用するため、iPhone ユーザーを対象としています。Android など他のデバイスをお使いの方は、ヘルスデータを指定の形式に変換したうえで API を直接呼び出すことでご利用いただけます。
+本サービスは Apple ヘルスケアの XML エクスポートを利用するため、iPhone ユーザーを対象としています。Android など他のデバイスをお使いの方は、ヘルスデータを[指定の形式](https://github.com/273Do/Thor-Monorepo/blob/1923da19e313a79f8afa3c7c4b4036ce1542586a/backend/src/schemas/estimate_sleep.py#L29-L46)に変換したうえで API を直接呼び出すことでご利用いただけます。
 
 ## プロジェクト構成
 
