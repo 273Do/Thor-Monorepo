@@ -18,6 +18,7 @@ import {
 import { FileUpload } from "~/components/file-upload";
 import { Header } from "~/components/header";
 import { Loading } from "~/components/loading";
+import { LocaleSwitcher } from "~/components/locale-switcher";
 import { ResultsView } from "~/components/result-view";
 import { SurveyForm } from "~/components/survey-form";
 import { DEFAULT_EXTRACT_STEP_QUERY } from "~/core/constants";
@@ -102,10 +103,15 @@ const Home = () => {
           <div className="flex flex-col gap-6">
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">アンケート</CardTitle>
-                <CardDescription>
-                  睡眠に関する3つの質問にお答えください
-                </CardDescription>
+                <div className="flex justify-between">
+                  <div>
+                    <CardTitle className="text-base">アンケート</CardTitle>
+                    <CardDescription>
+                      睡眠に関する3つの質問にお答えください
+                    </CardDescription>
+                  </div>
+                  <LocaleSwitcher />
+                </div>
               </CardHeader>
               <CardContent>
                 <SurveyForm control={control} register={register} />
