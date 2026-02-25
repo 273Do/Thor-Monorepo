@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Upload, FileText, X } from "lucide-react";
 
@@ -20,6 +21,7 @@ type props = {
 };
 
 export const FileUpload = ({ file, onFileChange }: props) => {
+  const { t } = useTranslation();
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDrop = useCallback(
@@ -61,7 +63,7 @@ export const FileUpload = ({ file, onFileChange }: props) => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        iPhone 端末以外の方について
+        {t("upload.nonIphoneLink")}
       </a>
 
       {!file ? (
@@ -80,7 +82,7 @@ export const FileUpload = ({ file, onFileChange }: props) => {
         >
           <Upload className="h-8 w-8 text-muted-foreground" />
           <div className="text-center">
-            <p className="text-sm text-foreground">ドラッグ&ドロップ、または</p>
+            <p className="text-sm text-foreground">{t("upload.dragDrop")}</p>
             <label
               htmlFor="file-input"
               className={`
@@ -88,10 +90,12 @@ export const FileUpload = ({ file, onFileChange }: props) => {
                 hover:text-primary/80
               `}
             >
-              ファイルを選択
+              {t("upload.selectFile")}
             </label>
           </div>
-          <p className="text-xs text-muted-foreground">XML ファイル</p>
+          <p className="text-xs text-muted-foreground">
+            {t("upload.fileType")}
+          </p>
           <input
             id="file-input"
             type="file"
@@ -116,7 +120,7 @@ export const FileUpload = ({ file, onFileChange }: props) => {
             size="icon"
             onClick={() => onFileChange(null)}
             className="h-8 w-8 shrink-0 text-muted-foreground hover:text-foreground"
-            aria-label="ファイルを削除"
+            aria-label={t("upload.deleteFile")}
           >
             <X className="h-4 w-4" />
           </Button>

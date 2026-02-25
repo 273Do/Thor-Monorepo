@@ -14,9 +14,7 @@ import {
 } from "./ui/dropdown-menu";
 
 export const LocaleSwitcher = () => {
-  const { i18n } = useTranslation();
-
-  console.log(i18n.language);
+  const { t, i18n } = useTranslation();
 
   return (
     <DropdownMenu>
@@ -27,13 +25,17 @@ export const LocaleSwitcher = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuGroup>
-          <DropdownMenuLabel>Language</DropdownMenuLabel>
+          <DropdownMenuLabel>{t("language.title")}</DropdownMenuLabel>
           <DropdownMenuRadioGroup
             value={i18n.language}
             onValueChange={(lang) => i18n.changeLanguage(lang)}
           >
-            <DropdownMenuRadioItem value="ja">日本語</DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value="en">English</DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="ja">
+              {t("language.ja")}
+            </DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="en">
+              {t("language.en")}
+            </DropdownMenuRadioItem>
           </DropdownMenuRadioGroup>
         </DropdownMenuGroup>
       </DropdownMenuContent>

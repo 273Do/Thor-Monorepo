@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
 
 import { ArrowLeft, Bot, RefreshCw } from "lucide-react";
@@ -31,6 +32,7 @@ type props = {
 };
 
 export const AIFeedback = ({ id, models }: props) => {
+  const { t, i18n } = useTranslation();
   const { feedbackTrigger, isFeedbackMutating, feedbackData } = useAIFeedback();
 
   const [model, setModel] = useState<string>(models[0]);
@@ -49,7 +51,7 @@ export const AIFeedback = ({ id, models }: props) => {
     feedbackTrigger({
       id,
       llm: model,
-      lang: "ja",
+      lang: i18n.language as "ja" | "en",
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [model]);
@@ -64,7 +66,9 @@ export const AIFeedback = ({ id, models }: props) => {
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
                   <Bot className="h-4 w-4 text-primary" />
                 </div>
-                <CardTitle className="text-base">AI フィードバック</CardTitle>
+                <CardTitle className="text-base">
+                  {t("aiFeedback.title")}
+                </CardTitle>
               </div>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
@@ -96,7 +100,7 @@ export const AIFeedback = ({ id, models }: props) => {
                 </Select>
                 <Button className="shrink-0 gap-2" onClick={handleReGenFB}>
                   <RefreshCw className="size-4" />
-                  再生成する
+                  {t("aiFeedback.regenerate")}
                 </Button>
               </div>
             </CardContent>
@@ -105,7 +109,7 @@ export const AIFeedback = ({ id, models }: props) => {
 
           <Button variant="outline" className="w-full" onClick={handleReset}>
             <ArrowLeft className="size-4" />
-            フォームに戻る
+            {t("aiFeedback.backToForm")}
           </Button>
         </>
       ) : (
