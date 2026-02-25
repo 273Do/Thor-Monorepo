@@ -1,6 +1,10 @@
+import { useTranslation } from "react-i18next";
+
 import { Moon } from "lucide-react";
 
 export const Header = () => {
+  const { t } = useTranslation();
+
   return (
     <header className="mb-8 flex flex-col items-center gap-3 text-center">
       <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground">
@@ -11,7 +15,7 @@ export const Header = () => {
           Sleep Insight
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          ヘルスデータから睡眠を分析
+          {t("header.subtitle")}
         </p>
       </div>
     </header>

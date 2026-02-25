@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
+
 import { Moon, Clock } from "lucide-react";
 import {
   BarChart,
@@ -35,24 +37,6 @@ import {
 } from "~/lib/time-functions";
 import type { DailyEstimateSleepRecord } from "~/utils/types";
 
-const sleepChartConfig: ChartConfig = {
-  sleepHours: {
-    label: "睡眠時間",
-    color: "var(--primary)",
-  },
-};
-
-const bedtimeWaketimeChartConfig: ChartConfig = {
-  bedtime: {
-    label: "就寝時刻",
-    color: "var(--primary)",
-  },
-  waketime: {
-    label: "起床時刻",
-    color: "var(--muted-foreground)",
-  },
-};
-
 type props = {
   /**
    * id
@@ -69,6 +53,26 @@ type props = {
 };
 
 export const ResultsView = ({ id, data, models }: props) => {
+  const { t } = useTranslation();
+
+  const sleepChartConfig: ChartConfig = {
+    sleepHours: {
+      label: t("results.sleepChart.title"),
+      color: "var(--primary)",
+    },
+  };
+
+  const bedtimeWaketimeChartConfig: ChartConfig = {
+    bedtime: {
+      label: t("results.bedtimeChart.bedtime"),
+      color: "var(--primary)",
+    },
+    waketime: {
+      label: t("results.bedtimeChart.waketime"),
+      color: "var(--muted-foreground)",
+    },
+  };
+
   const chartData = toChartData(data);
 
   // 平均睡眠時間の計算（これは単純な算術平均でOK）
@@ -101,12 +105,14 @@ export const ResultsView = ({ id, data, models }: props) => {
               <Moon className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground">平均睡眠時間</p>
+              <p className="text-xs text-muted-foreground">
+                {t("results.avgSleepHours")}
+              </p>
               <p className="text-xl font-bold text-foreground">
                 {avgSleepHours}
                 <span className="text-sm font-normal text-muted-foreground">
                   {" "}
-                  時間
+                  {t("results.hours")}
                 </span>
               </p>
             </div>
@@ -119,13 +125,17 @@ export const ResultsView = ({ id, data, models }: props) => {
             </div>
             <div className="flex gap-4">
               <div>
-                <p className="text-xs text-muted-foreground">平均就寝</p>
+                <p className="text-xs text-muted-foreground">
+                  {t("results.avgBedtime")}
+                </p>
                 <p className="text-xl font-bold text-foreground">
                   {avgBedtime}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">平均起床</p>
+                <p className="text-xs text-muted-foreground">
+                  {t("results.avgWaketime")}
+                </p>
                 <p className="text-xl font-bold text-foreground">
                   {avgWakeime}
                 </p>
@@ -138,8 +148,12 @@ export const ResultsView = ({ id, data, models }: props) => {
       {/* Bedtime & Waketime Line Chart */}
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-base">就寝・起床時刻</CardTitle>
-          <CardDescription>就寝時刻と起床時刻の推移</CardDescription>
+          <CardTitle className="text-base">
+            {t("results.bedtimeChart.title")}
+          </CardTitle>
+          <CardDescription>
+            {t("results.bedtimeChart.description")}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <ChartContainer
@@ -179,7 +193,9 @@ export const ResultsView = ({ id, data, models }: props) => {
                           style={{ backgroundColor: item.color }}
                         />
                         <span className="text-muted-foreground">
-                          {name === "bedtime" ? "就寝時刻" : "起床時刻"}
+                          {name === "bedtime"
+                            ? t("results.bedtimeChart.bedtime")
+                            : t("results.bedtimeChart.waketime")}
                         </span>
                         <span className="ml-auto font-mono font-medium text-foreground tabular-nums">
                           {numberToTime(Number(value))}
@@ -211,8 +227,12 @@ export const ResultsView = ({ id, data, models }: props) => {
       {/* Sleep Duration Bar Chart */}
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-base">睡眠時間</CardTitle>
-          <CardDescription>1日あたりの睡眠時間の推移</CardDescription>
+          <CardTitle className="text-base">
+            {t("results.sleepChart.title")}
+          </CardTitle>
+          <CardDescription>
+            {t("results.sleepChart.description")}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <ChartContainer
@@ -244,9 +264,12 @@ export const ResultsView = ({ id, data, models }: props) => {
                           className="size-2.5 shrink-0 rounded-[2px]"
                           style={{ backgroundColor: item.color }}
                         />
-                        <span className="text-muted-foreground">睡眠</span>
+                        <span className="text-muted-foreground">
+                          {t("results.sleepChart.sleep")}
+                        </span>
                         <span className="ml-auto font-mono font-medium text-foreground tabular-nums">
-                          {Number(value).toFixed(1)}時間
+                          {Number(value).toFixed(1)}
+                          {t("results.hours")}
                         </span>
                       </>
                     )}

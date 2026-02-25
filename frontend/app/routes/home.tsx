@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
@@ -18,6 +19,7 @@ import {
 import { FileUpload } from "~/components/file-upload";
 import { Header } from "~/components/header";
 import { Loading } from "~/components/loading";
+import { LocaleSwitcher } from "~/components/locale-switcher";
 import { ResultsView } from "~/components/result-view";
 import { SurveyForm } from "~/components/survey-form";
 import { DEFAULT_EXTRACT_STEP_QUERY } from "~/core/constants";
@@ -30,6 +32,7 @@ import { useEstimateSleep } from "~/utils/use-estimate-sleep";
 import { useExtractSteps } from "~/utils/use-extract-steps";
 
 const Home = () => {
+  const { t } = useTranslation();
   const [file, setFile] = useState<File | null>(null);
 
   const {
@@ -85,6 +88,16 @@ const Home = () => {
         },
       });
 
+      console.log({
+        charging_before_bed_answer: Number(
+          surveyValues.chargingBeforeBedAnswer
+        ),
+        carrying_a_smartphone_answer: Number(
+          surveyValues.carryingASmartphoneAnswer
+        ),
+        bedtime_answer,
+      });
+
       console.log(result);
     } catch (error) {
       console.error(error);
@@ -102,10 +115,15 @@ const Home = () => {
           <div className="flex flex-col gap-6">
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">アンケート</CardTitle>
-                <CardDescription>
-                  睡眠に関する3つの質問にお答えください
-                </CardDescription>
+                <div className="flex justify-between">
+                  <div>
+                    <CardTitle className="text-base">
+                      {t("survey.title")}
+                    </CardTitle>
+                    <CardDescription>{t("survey.description")}</CardDescription>
+                  </div>
+                  <LocaleSwitcher />
+                </div>
               </CardHeader>
               <CardContent>
                 <SurveyForm control={control} register={register} />
@@ -114,13 +132,8 @@ const Home = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">
-                  ヘルスデータアップロード
-                </CardTitle>
-                <CardDescription>
-                  iPhoneの「ヘルスケア」アプリからエクスポートした XML
-                  ファイルをアップロードしてください。
-                </CardDescription>
+                <CardTitle className="text-base">{t("upload.title")}</CardTitle>
+                <CardDescription>{t("upload.description")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <FileUpload file={file} onFileChange={setFile} />
@@ -133,7 +146,7 @@ const Home = () => {
               disabled={!isFormComplete}
               className="w-full gap-2"
             >
-              分析を開始する
+              {t("analyzeButton")}
               <ArrowRight className="h-4 w-4" />
             </Button>
           </div>
