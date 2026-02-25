@@ -1,0 +1,65 @@
+{
+  "header": {
+    "subtitle": "ヘルスデータから睡眠を分析"
+  },
+  "survey": {
+    "title": "アンケート",
+    "description": "睡眠に関する3つの質問にお答えください",
+    "placeholder": "選択してください",
+    "q1": "Q1. 就寝何時間前にスマートフォンの充電を始めますか？",
+    "q2": "Q2. 家の中でスマートフォンを持ち歩きますか？",
+    "q3": "Q3. 普段は何時ごろに就寝しますか？",
+    "q1Options": [
+      "就寝直前",
+      "15分前程度",
+      "30分前程度",
+      "1時間前程度",
+      "充電しない"
+    ],
+    "q2Options": ["よく持ち歩く", "持ち歩く", "あまり持ち歩かない"]
+  },
+  "upload": {
+    "title": "ヘルスデータアップロード",
+    "description": "iPhoneの「ヘルスケア」アプリからエクスポートした XML ファイルをアップロードしてください。",
+    "nonIphoneLink": "iPhone 端末以外の方について",
+    "dragDrop": "ドラッグ&ドロップ、または",
+    "selectFile": "ファイルを選択",
+    "fileType": "XML ファイル",
+    "deleteFile": "ファイルを削除"
+  },
+  "analyzeButton": "分析を開始する",
+  "loading": {
+    "extractStatus": "ヘルスデータを抽出中",
+    "estimateStatus": "睡眠状態を推定中",
+    "feedbackStatus": "フィードバックを生成中",
+    "healthDesc": "ヘルスデータとアンケート結果をもとに\n睡眠パターンを推定しています",
+    "feedbackDesc": "睡眠推定結果をもとに\nフィードバックを生成しています\n(少し時間がかかります)"
+  },
+  "results": {
+    "avgSleepHours": "平均睡眠時間",
+    "hours": "時間",
+    "avgBedtime": "平均就寝",
+    "avgWaketime": "平均起床",
+    "bedtimeChart": {
+      "title": "就寝・起床時刻",
+      "description": "就寝時刻と起床時刻の推移",
+      "bedtime": "就寝時刻",
+      "waketime": "起床時刻"
+    },
+    "sleepChart": {
+      "title": "睡眠時間",
+      "description": "1日あたりの睡眠時間の推移",
+      "sleep": "睡眠"
+    }
+  },
+  "aiFeedback": {
+    "title": "AI フィードバック",
+    "regenerate": "再生成する",
+    "backToForm": "フォームに戻る"
+  },
+  "language": {
+    "title": "言語",
+    "ja": "日本語",
+    "en": "英語"
+  }
+}
