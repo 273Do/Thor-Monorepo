@@ -85,7 +85,6 @@ VSCode で Dev Container でプロジェクトを開きます。
 1. `backend`ディレクトリに事前のデータを格納するディレクトリを作成します。
 2. 各環境変数を作成します。
 3. 以下のコマンドでパッケージをインストールします。
-4. アプリを公開する場合はドメインを取得しておきます。
 
 ```bash
 task frontend -- pnpm i
@@ -98,6 +97,8 @@ task backend -- uv sync
 task frontend:dev
 task backend:dev
 ```
+
+5. アプリを公開する場合はドメインを取得しておきます。
 
 ### 6. Claude Code
 
