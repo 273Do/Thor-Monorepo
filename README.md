@@ -83,8 +83,9 @@ VSCode で Dev Container でプロジェクトを開きます。
 ### 5. 初期設定
 
 1. `backend`ディレクトリに事前のデータを格納するディレクトリを作成します。
-2. 環境変数を作成します。
+2. 各環境変数を作成します。
 3. 以下のコマンドでパッケージをインストールします。
+4. アプリを公開する場合はドメインを取得しておきます。
 
 ```bash
 task frontend -- pnpm i
@@ -110,6 +111,23 @@ claude
 
 - 各種コマンドは`task -l`で確認できます。
 - [http://localhost:8000/docs](http://localhost:8000/docs) で Swagger を使用できます。
+- API 仕様書を作成する場合はこちらのツールを使用すると楽です。
+
+## 公開設定
+
+- cloudflare tunnel を使用してアプリを公開します。
+
+1. [Cloudflareダッシュボード](https://dash.cloudflare.com)から [Zero Trust] > [Networks] > [Overview] > [Manage Tunnels] > [Create new cloudflared Tunnel] を選択します。
+
+2. トンネル名を入力して作成します。
+
+3. [Configure] 画面にて [Install and run a connector] の項目で [Docker] を選択し、表示されているコマンド内のトークンを env ファイルに設定します。
+
+4. [Published application routes] 画面にてルーティング設定を行います。
+   | Subdomain | Domain | Service Type | URL (Docker内部名) |  
+    | --------- | ----------- | ------------ | ------------------------ |  
+    | (空欄) | example.com | HTTP | http://frontend:5173 |  
+    | api | example.com | HTTP | http://backend:8000 |
 
 # クレジット
 
