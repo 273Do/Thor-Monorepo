@@ -31,9 +31,10 @@ services:
     working_dir: /workspace/backend
     environment:
       - PYTHONUNBUFFERED=1
-      - OLLAMA_HOST=http://host.docker.internal:11434
+      - OLLAMA_ENDPOINT=${OLLAMA_ENDPOINT}
+      - FRONTEND_ENDPOINT=${FRONTEND_ENDPOINT}
     ports:
-      - "8000:8000"
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
     command: sleep infinity
     networks:
       - thor-network
@@ -51,8 +52,24 @@ services:
       - NODE_ENV=development
       - NODE_OPTIONS=--max-old-space-size=2048
     ports:
-      - "5173:5173"
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     command: sleep infinity
+    networks:
+      - thor-network
+
+      # tunnel:
+      #   image: cloudflare/cloudflared:latest
+      #   restart: always
+      #   command: tunnel --no-autoupdate run --url http://frontend:5173
+      #   networks:
+      # - thor-network
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    restart: always
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    command: tunnel run
     networks:
       - thor-network
 
