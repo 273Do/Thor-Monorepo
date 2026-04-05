@@ -235,10 +235,7 @@ export const ResultsView = ({ id, data, models }: props) => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ChartContainer
-            config={sleepChartConfig}
-            className="h-[200px] w-full"
-          >
+          <ChartContainer config={sleepChartConfig} className="h-50 w-full">
             <BarChart data={chartData} accessibilityLayer>
               <CartesianGrid vertical={false} strokeDasharray="3 3" />
               <XAxis

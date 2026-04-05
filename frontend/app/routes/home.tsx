@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Mail } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -15,6 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
+import { Input } from "~/components/ui/input";
 
 import { FileUpload } from "~/components/file-upload";
 import { Header } from "~/components/header";
@@ -34,6 +35,7 @@ import { useExtractSteps } from "~/utils/use-extract-steps";
 const Home = () => {
   const { t } = useTranslation();
   const [file, setFile] = useState<File | null>(null);
+  const [isEmailValid, setIsEmailValid] = useState(false);
 
   const {
     control,
@@ -61,46 +63,49 @@ const Home = () => {
   const handleSubmit = async () => {
     if (!isFormComplete) return;
 
-    try {
-      const extractStepResult = await extractStepTrigger(file);
+    const {
+      chargingBeforeBedAnswer,
+      carryingASmartphoneAnswer,
+      bedtime,
+      email,
+    } = getValues();
 
-      const { id, step_data } = extractStepResult;
+    setIsEmailValid(Boolean(email));
 
-      const surveyValues = getValues();
+    if (email) {
+      console.log("Email provided:", email);
+    } else {
+      try {
+        const extractStepResult = await extractStepTrigger(file);
 
-      let bedtime_answer;
+        const { id, step_data } = extractStepResult;
 
-      if (surveyValues.bedtime > "03:00" && surveyValues.bedtime < "20:45") {
-        bedtime_answer = 1;
-      } else bedtime_answer = 0;
+        let bedtime_answer;
 
-      const result = await estimateSleepTrigger({
-        id,
-        step_data,
-        answers: {
-          charging_before_bed_answer: Number(
-            surveyValues.chargingBeforeBedAnswer
-          ),
-          carrying_a_smartphone_answer: Number(
-            surveyValues.carryingASmartphoneAnswer
-          ),
+        if (bedtime > "03:00" && bedtime < "20:45") {
+          bedtime_answer = 1;
+        } else bedtime_answer = 0;
+
+        const result = await estimateSleepTrigger({
+          id,
+          step_data,
+          answers: {
+            charging_before_bed_answer: Number(chargingBeforeBedAnswer),
+            carrying_a_smartphone_answer: Number(carryingASmartphoneAnswer),
+            bedtime_answer,
+          },
+        });
+
+        console.log({
+          charging_before_bed_answer: Number(chargingBeforeBedAnswer),
+          carrying_a_smartphone_answer: Number(carryingASmartphoneAnswer),
           bedtime_answer,
-        },
-      });
+        });
 
-      console.log({
-        charging_before_bed_answer: Number(
-          surveyValues.chargingBeforeBedAnswer
-        ),
-        carrying_a_smartphone_answer: Number(
-          surveyValues.carryingASmartphoneAnswer
-        ),
-        bedtime_answer,
-      });
-
-      console.log(result);
-    } catch (error) {
-      console.error(error);
+        console.log(result);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -111,7 +116,7 @@ const Home = () => {
         <Header />
 
         {/* Input State */}
-        {!estimateSleepData && !isLoading && (
+        {!estimateSleepData && !isLoading && !isEmailValid && (
           <div className="flex flex-col gap-6">
             <Card>
               <CardHeader>
@@ -140,6 +145,27 @@ const Home = () => {
               </CardContent>
             </Card>
 
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">{t("email.title")}</CardTitle>
+                <CardDescription>{t("email.description")}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col gap-2">
+                  <div className="relative">
+                    <Mail className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder={t("email.placeholder")}
+                      className="bg-card pl-10"
+                      {...register("email")}
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             <Button
               size="lg"
               onClick={handleSubmit}
@@ -153,7 +179,7 @@ const Home = () => {
         )}
 
         {/* Loading State */}
-        {isLoading && (
+        {!isEmailValid && isLoading && (
           <Loading
             status={
               isExtractStepMutating
@@ -165,8 +191,10 @@ const Home = () => {
           />
         )}
 
+        {isEmailValid && <p>email</p>}
+
         {/* Results State */}
-        {extractSteData && estimateSleepData && !isLoading && (
+        {extractSteData && estimateSleepData && !isEmailValid && !isLoading && (
           <ResultsView
             id={extractSteData.id}
             data={estimateSleepData.data}
