@@ -17,6 +17,7 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 
+import { EmailView } from "~/components/email-view";
 import { FileUpload } from "~/components/file-upload";
 import { Header } from "~/components/header";
 import { Loading } from "~/components/loading";
@@ -35,7 +36,7 @@ import { useExtractSteps } from "~/utils/use-extract-steps";
 const Home = () => {
   const { t } = useTranslation();
   const [file, setFile] = useState<File | null>(null);
-  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [emailValue, setEmailValue] = useState<string>("");
 
   const {
     control,
@@ -70,7 +71,7 @@ const Home = () => {
       email,
     } = getValues();
 
-    setIsEmailValid(Boolean(email));
+    setEmailValue(email || "");
 
     if (email) {
       console.log("Email provided:", email);
@@ -116,7 +117,7 @@ const Home = () => {
         <Header />
 
         {/* Input State */}
-        {!estimateSleepData && !isLoading && !isEmailValid && (
+        {!estimateSleepData && !isLoading && !emailValue && (
           <div className="flex flex-col gap-6">
             <Card>
               <CardHeader>
@@ -179,7 +180,7 @@ const Home = () => {
         )}
 
         {/* Loading State */}
-        {!isEmailValid && isLoading && (
+        {!emailValue && isLoading && (
           <Loading
             status={
               isExtractStepMutating
@@ -191,10 +192,11 @@ const Home = () => {
           />
         )}
 
-        {isEmailValid && <p>email</p>}
+        {/* Email View */}
+        {emailValue && <EmailView email={emailValue} />}
 
         {/* Results State */}
-        {extractSteData && estimateSleepData && !isEmailValid && !isLoading && (
+        {extractSteData && estimateSleepData && !emailValue && !isLoading && (
           <ResultsView
             id={extractSteData.id}
             data={estimateSleepData.data}

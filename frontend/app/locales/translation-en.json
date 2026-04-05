@@ -30,7 +30,9 @@
   "email": {
     "title": "Receive Results",
     "description": "Feedback takes time to generate, so we'll send the results to your email. If you don't provide an email, you can view the results on the screen.",
-    "placeholder": "Enter your email address"
+    "placeholder": "Enter your email address",
+    "sentTitle": "Analysis received",
+    "sentDescription": "We'll send the results to {{email}} once the analysis is complete."
   },
   "analyzeButton": "Start Analysis",
   "loading": {
