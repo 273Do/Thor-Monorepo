@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <meta name="supported-color-schemes" content="light" />
+    <title>睡眠推定フィードバック</title>
+    <style>
+      {% include "style.css" %}
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <div class="header-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#fafafa"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="header-title">Sleep Insight</h1>
+          <p class="header-subtitle">
+            ヘルスデータから睡眠を分析した結果をお届けします
+          </p>
+        </div>
+      </header>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#1c1c1c"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M12 8V4H8" />
+              <rect width="16" height="12" x="4" y="8" rx="2" />
+              <path d="M2 14h2" />
+              <path d="M20 14h2" />
+              <path d="M15 13v2" />
+              <path d="M9 13v2" />
+            </svg>
+          </div>
+          <h2 class="card-title">AI フィードバック</h2>
+        </div>
+        <div class="card-content">
+          <div class="md">{{ feedback | safe }}</div>
+          <div class="separator"></div>
+          <p style="margin: 0; font-size: 13px; color: #737373">
+            このフィードバックは {{ llm }} によって生成されました。
+          </p>
+        </div>
+      </div>
+
+      <div class="footer">このメールは Thor によって自動送信されています。</div>
+    </div>
+  </body>
+</html>

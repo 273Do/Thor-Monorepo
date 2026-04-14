@@ -1,0 +1,217 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+  color: #141414;
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  color-scheme: light;
+  color: #141414;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrapper {
+  max-width: 560px;
+  margin: 48px auto;
+  padding: 0 16px;
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.header-icon {
+  width: 48px;
+  height: 48px;
+  background-color: #1c1c1c;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: #141414;
+}
+
+.header-subtitle {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #737373;
+}
+
+/* ── Card ── */
+.card {
+  background-color: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 20px 24px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-icon {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #141414;
+}
+
+.card-content {
+  padding: 0 24px 24px;
+}
+
+/* ── Markdown ── */
+.md {
+  font-size: 16px;
+  line-height: 1.6;
+  border-radius: 8px;
+  overflow-wrap: break-word;
+  color: #141414;
+}
+
+.md h1 {
+  font-size: 1.8em;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+.md h3 {
+  font-size: 1.25em;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+.md p {
+  margin-bottom: 8px;
+}
+.md a {
+  color: #3182ce;
+  text-decoration: none;
+}
+
+.md pre {
+  border: 1px solid #737373;
+  background: #09090b;
+  color: #fafafa;
+  border-radius: 8px;
+  padding: 12px;
+  overflow-x: auto;
+  font-family: "Courier New", Courier, monospace;
+  margin-bottom: 8px;
+}
+
+.md code {
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.95em;
+}
+
+.md ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: 8px;
+}
+.md ol {
+  list-style-type: decimal;
+  padding-left: 20px;
+  margin-bottom: 8px;
+}
+.md li {
+  margin-bottom: 8px;
+}
+
+.md blockquote {
+  border-left: 4px solid #3182ce;
+  padding-left: 12px;
+  margin-left: 0;
+  color: #4a5568;
+  font-style: italic;
+}
+
+.md table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 8px;
+}
+.md th,
+.md td {
+  border: 1px solid #1c1c1c;
+  padding: 8px;
+  text-align: left;
+}
+.md th {
+  font-weight: bold;
+}
+
+/* ── Separator ── */
+.separator {
+  height: 1px;
+  background-color: #e8e8e8;
+  margin: 16px 0;
+}
+
+/* ── Footer ── */
+.footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: #a3a3a3;
+}
+
+/* ── ダークモード強制上書き ── */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #ffffff !important;
+    color: #141414 !important;
+  }
+  .card {
+    background-color: #ffffff !important;
+    border-color: #e8e8e8 !important;
+  }
+  .header-title {
+    color: #141414 !important;
+  }
+  .header-subtitle {
+    color: #737373 !important;
+  }
+  .header-icon {
+    background-color: #1c1c1c !important;
+  }
+  .card-icon {
+    background-color: #f0f0f0 !important;
+  }
+  .card-title {
+    color: #141414 !important;
+  }
+  .md {
+    color: #141414 !important;
+  }
+  .separator {
+    background-color: #e8e8e8 !important;
+  }
+}

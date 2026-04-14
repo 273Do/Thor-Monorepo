@@ -25,6 +25,7 @@ def get_feedback(
     Args:
         data (List[StepCountRecord] | List[DailyEstimateSleepRecord]): 推定睡眠データ
         clusters (Tuple[StepClusterRecord, StepClusterRecord, StepClusterRecord]): 歩数クラスターデータ
+        llm (str): llm名
         lang (Literal[ja", "en"]): 言語
 
     Returns:
