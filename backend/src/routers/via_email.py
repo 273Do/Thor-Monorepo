@@ -70,16 +70,22 @@ async def via_email(
 
     models = get_llms()
 
+    model = models[0]
+
     estimate_sleep_json = [r.model_dump(mode="json") for r in estimated_data]
     clusters_json = [c.model_dump(mode="json") for c in clusters]
 
     feedback = get_feedback(
         estimate_sleep_json,  # type: ignore
         clusters_json,  # type: ignore
-        models[0],
+        model,
         via_email_req.lang,
     )
 
     print(feedback)
 
-    send_email(via_email_req.email_to, feedback)
+    await send_email(
+        via_email_req.email_to,
+        feedback,
+        model,
+    )
