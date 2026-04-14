@@ -52,6 +52,37 @@ class ExtractStepsQueryParams:
         )
 
 
+def validate_extract_params(
+    query_params: ExtractStepsQueryParams,
+) -> None:
+    """ExtractStepsQueryParams のバリデーションを行う"""
+
+    has_date_range = (
+        query_params.start_date_of_extract is not None
+        and query_params.end_date_of_extract is not None
+    )
+    has_months = query_params.months_of_extract is not None
+
+    if has_date_range and has_months:
+        raise ValueError(
+            "start_date_of_extract / end_date_of_extract と months_of_extract は同時に指定できません。どちらか一方を指定してください。"
+        )
+
+    if not has_date_range and not has_months:
+        raise ValueError(
+            "start_date_of_extract / end_date_of_extract の両方、または months_of_extract のいずれかを指定してください。"
+        )
+
+    if not has_months:
+        if (
+            query_params.start_date_of_extract is None
+            or query_params.end_date_of_extract is None
+        ):
+            raise ValueError(
+                "start_date_of_extract と end_date_of_extract は両方指定する必要があります。"
+            )
+
+
 class StepCountRecord(BaseModel):
     """睡眠推定に使用する歩数レコードのスキーマ"""
 

@@ -2,7 +2,7 @@
 
 from functools import lru_cache
 
-from pydantic import Field
+from pydantic import EmailStr, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -32,6 +32,24 @@ class Envs(BaseSettings):
 
     DATA_ID_SALT: str = Field()
     """識別id生成用のソルト"""
+
+    MAIL_ADDRESS: EmailStr = Field()
+    """メールアドレス"""
+
+    MAIL_USERNAME: EmailStr = Field()
+    """SMTPサーバーのユーザー名"""
+
+    MAIL_PASSWORD: str = Field()
+    """SMTPサーバーのパスワード"""
+
+    MAIL_FROM: EmailStr = Field()
+    """送信元メールアドレス"""
+
+    MAIL_PORT: int = Field(default=587)
+    """ポート"""
+
+    MAIL_SERVER: str = Field(default="smtp.gmail.com")
+    """SMTPサーバーのホスト名"""
 
     OLLAMA_ENDPOINT: str = Field(default="http://host.docker.internal:11434/v1/")
     """ollamaのエンドポイント"""

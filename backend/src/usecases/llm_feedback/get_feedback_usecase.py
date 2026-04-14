@@ -4,6 +4,7 @@ from typing import List, Literal, Tuple
 
 from openai import OpenAI
 
+from src.core.constants import FAILED_GENERATE_FEEDBACK
 from src.core.load_env import envs
 from src.schemas.estimate_sleep import DailyEstimateSleepRecord, StepClusterRecord
 
@@ -24,6 +25,7 @@ def get_feedback(
     Args:
         data (List[StepCountRecord] | List[DailyEstimateSleepRecord]): 推定睡眠データ
         clusters (Tuple[StepClusterRecord, StepClusterRecord, StepClusterRecord]): 歩数クラスターデータ
+        llm (str): llm名
         lang (Literal[ja", "en"]): 言語
 
     Returns:
@@ -50,7 +52,7 @@ def get_feedback(
         ],
     )
 
-    feedback: str = completion.choices[0].message.content
+    feedback: str = completion.choices[0].message.content or FAILED_GENERATE_FEEDBACK
 
     return _strip_code_fence(feedback)
 

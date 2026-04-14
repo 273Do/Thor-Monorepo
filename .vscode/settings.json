@@ -1,7 +1,6 @@
 {
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
-
   // Formatter
   "[python]": {
     "editor.defaultFormatter": "charliermarsh.ruff",
@@ -16,11 +15,11 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-
   // Python Settings
   "python.analysis.extraPaths": [
     "/workspace/backend/.venv/lib/python3.14/site-packages"
   ],
+  "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/bin/python3.14",
   "python.analysis.autoImportCompletions": true,
   "python.analysis.typeCheckingMode": "strict",
   "python.analysis.fixAll": [
@@ -36,7 +35,6 @@
   },
   "ruff.interpreter": ["${workspaceFolder}/backend/.venv/bin/python"],
   "ruff.path": ["${workspaceFolder}/backend/.venv/bin/ruff"],
-
   // Indent Rainbow
   "indentRainbow.indicatorStyle": "light",
   "indentRainbow.lightIndicatorStyleLineWidth": 1,
@@ -47,7 +45,6 @@
     "rgba(255,127,255, 0.2)",
     "rgba(79,236,236, 0.2)"
   ],
-
   // Error Lens
   "errorLens.gutterIconsEnabled": true,
   "errorLens.gutterIconSet": "emoji",
@@ -57,7 +54,6 @@
     "info": "📘",
     "hint": "🍏"
   },
-
   // Spell
   "cSpell.enabledSchemes": {
     "comment": true,
@@ -73,10 +69,8 @@
     "vsls": true,
     "overleaf-workshop": true
   },
-
   // Commnet Translate
   "commentTranslate.hover.nearShow": false,
-
   // TODO Tree
   "todo-tree.highlights.defaultHighlight": {
     "gutterIcon": true

@@ -83,22 +83,28 @@ VSCode で Dev Container でプロジェクトを開きます。
 ### 5. 初期設定
 
 1. `backend`ディレクトリに事前のデータを格納するディレクトリを作成します。
-2. 各環境変数を作成します。
-3. 以下のコマンドでパッケージをインストールします。
+2. 以下の手順に従って送信用のメールアドレスを設定します。
+   1. [myaccount.google.com/security](https://myaccount.google.com/security) を開きます。
+   2. 「2段階認証プロセス」を有効にします。
+   3. [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords) を開きます。
+   4. 「アプリ名」に任意の名前を入力して「作成」を押し、表示された16文字のパスワード（xxxx xxxx xxxx xxxx形式<環境変数に設定する際は空白は含まない>）を控える。
+
+3. 各環境変数を作成します。
+4. 以下のコマンドでパッケージをインストールします。
 
 ```bash
 task frontend -- pnpm i
 task backend -- uv sync
 ```
 
-4. 以下のコマンドでアプリを起動します。
+5. 以下のコマンドでアプリを起動します。
 
 ```bash
 task frontend:dev
 task backend:dev
 ```
 
-5. アプリを公開する場合はドメインを取得しておきます。
+6. アプリを公開する場合はドメインを取得しておきます。
 
 ### 6. Claude Code
 

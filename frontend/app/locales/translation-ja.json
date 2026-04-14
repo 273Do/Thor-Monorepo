@@ -27,6 +27,13 @@
     "fileType": "XML ファイル",
     "deleteFile": "ファイルを削除"
   },
+  "email": {
+    "title": "結果を受け取る",
+    "description": " フィードバックには時間がかかるため結果をメールでお届けします。未入力の場合はそのまま画面上で結果を確認できます。",
+    "placeholder": "メールアドレスを入力",
+    "sentTitle": "分析を受け付けました",
+    "sentDescription": "分析が完了次第、結果を {{email}} にお送りします。"
+  },
   "analyzeButton": "分析を開始する",
   "loading": {
     "extractStatus": "ヘルスデータを抽出中",
