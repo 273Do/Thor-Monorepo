@@ -46,11 +46,25 @@ export type EstimateSleepResponse = {
   models: string[];
 };
 
+export type LanguagesType = "ja" | "en";
+
+// email経由の解析関連のスキーマ
+export type ViaEmailRequest = {
+  answers: Answers;
+  lang: LanguagesType;
+  email_to: string;
+};
+
+export type ViaEmailArg = {
+  xmlFile: File;
+  req: ViaEmailRequest;
+};
+
 // フィードバック関連のスキーマ
 export type LLMFeedbackRequest = {
   id: string;
   llm: string;
-  lang: "ja" | "en";
+  lang: LanguagesType;
 };
 
 export type LLMFeedbackResponse = {

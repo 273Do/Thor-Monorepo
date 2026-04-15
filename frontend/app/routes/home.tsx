@@ -30,11 +30,13 @@ import {
   surveySchema,
   type SurveyAnswers,
 } from "~/core/survey-schema";
+import type { LanguagesType } from "~/utils/types";
 import { useEstimateSleep } from "~/utils/use-estimate-sleep";
 import { useExtractSteps } from "~/utils/use-extract-steps";
+import { useViaEmail } from "~/utils/use-via-email";
 
 const Home = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [file, setFile] = useState<File | null>(null);
   const [emailValue, setEmailValue] = useState<string>("");
 
@@ -57,6 +59,9 @@ const Home = () => {
   const { estimateSleepTrigger, isEstimateSleepMutating, estimateSleepData } =
     useEstimateSleep();
 
+  // email経由の解析処理
+  const { viaEmailTrigger } = useViaEmail(DEFAULT_EXTRACT_STEP_QUERY);
+
   const isLoading = isExtractStepMutating || isEstimateSleepMutating;
   const isFormComplete = isValid && file;
 
@@ -73,19 +78,33 @@ const Home = () => {
 
     setEmailValue(email || "");
 
+    let bedtime_answer;
+
+    if (bedtime > "03:00" && bedtime < "20:45") {
+      bedtime_answer = 1;
+    } else bedtime_answer = 0;
+
     if (email) {
       console.log("Email provided:", email);
+      //
+
+      await viaEmailTrigger({
+        xmlFile: file,
+        req: {
+          answers: {
+            charging_before_bed_answer: Number(chargingBeforeBedAnswer),
+            carrying_a_smartphone_answer: Number(carryingASmartphoneAnswer),
+            bedtime_answer,
+          },
+          lang: i18n.language as LanguagesType,
+          email_to: email,
+        },
+      });
     } else {
       try {
         const extractStepResult = await extractStepTrigger(file);
 
         const { id, step_data } = extractStepResult;
-
-        let bedtime_answer;
-
-        if (bedtime > "03:00" && bedtime < "20:45") {
-          bedtime_answer = 1;
-        } else bedtime_answer = 0;
 
         const result = await estimateSleepTrigger({
           id,
