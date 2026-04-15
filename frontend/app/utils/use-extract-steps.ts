@@ -13,13 +13,13 @@ export type DateRangeParams = {
   endDateOfExtract: Date;
 };
 
-type ExtractStepsParams = MonthsParams | DateRangeParams;
+export type ExtractStepsParams = MonthsParams | DateRangeParams;
 
 /**
  * クエリパラメータの作成
  * @param params クエリパラメータ（月数指定 or 日付範囲指定）
  */
-const buildQuery = (params: ExtractStepsParams): string => {
+export const buildQuery = (params: ExtractStepsParams): string => {
   if ("monthsOfExtract" in params) {
     return `months_of_extract=${params.monthsOfExtract}&include_recorded_sleep=${params.includeRecordedSleep}`;
   }

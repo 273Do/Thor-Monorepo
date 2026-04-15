@@ -5,6 +5,7 @@ import type {
   ExtractedStepsResponse,
   LLMFeedbackRequest,
   LLMFeedbackResponse,
+  ViaEmailArg,
 } from "./types";
 
 import { API_ENDPOINT } from "~/core/constants";
@@ -85,4 +86,27 @@ export const postAIFeedbackRequest = async (
   const { data }: LLMFeedbackResponse = await response.json();
 
   return data;
+};
+
+/**
+ * email経由で解析〜フィードバックまでを行う
+ * @param path path
+ * @param { arg } bodyリクエスト
+ */
+export const postViaEmail = async (
+  path: string,
+  { arg }: { arg: ViaEmailArg }
+): Promise<void> => {
+  const formData = new FormData();
+  formData.append("xml_file", arg.xmlFile);
+  formData.append("req", JSON.stringify(arg.req));
+
+  const response = await fetch(`${API_ENDPOINT}${path}`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
 };

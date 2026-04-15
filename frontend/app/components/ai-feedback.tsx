@@ -18,6 +18,7 @@ import {
 } from "./ui/select";
 import { Separator } from "./ui/separator";
 
+import type { LanguagesType } from "~/utils/types";
 import { useAIFeedback } from "~/utils/use-ai-feedback";
 
 type props = {
@@ -51,7 +52,7 @@ export const AIFeedback = ({ id, models }: props) => {
     feedbackTrigger({
       id,
       llm: model,
-      lang: i18n.language as "ja" | "en",
+      lang: i18n.language as LanguagesType,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [model]);
