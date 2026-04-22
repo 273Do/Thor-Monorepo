@@ -24,7 +24,7 @@ def get_feedback(
 
     Args:
         data (List[StepCountRecord] | List[DailyEstimateSleepRecord]): 推定睡眠データ
-        clusters (Tuple[StepClusterRecord, StepClusterRecord, StepClusterRecord]): 歩数クラスターデータ
+        clusters (Tuple[StepClusterRecord, StepClusterRecord, StepClusterRecord]): 歩数クラスターデータ(未使用だがいつでも使用できるように)
         llm (str): llm名
         lang (Literal[ja", "en"]): 言語
 
@@ -43,11 +43,7 @@ def get_feedback(
             },
             {
                 "role": "user",
-                "content": json.dumps(clusters, ensure_ascii=False),
-            },
-            {
-                "role": "user",
-                "content": json.dumps(estimate_sleep_json, ensure_ascii=False),
+                "content": _format_llm_input(estimate_sleep_json),
             },
         ],
     )
@@ -55,6 +51,20 @@ def get_feedback(
     feedback: str = completion.choices[0].message.content or FAILED_GENERATE_FEEDBACK
 
     return _strip_code_fence(feedback)
+
+
+def _format_llm_input(records: List[DailyEstimateSleepRecord]) -> str:
+    """睡眠推定データを LLM 向けに最小構成文字列へ変換する
+
+    Returns:
+        str: {"YYYY-MM-DD": ["bed_time", "wake_time"]} 形式の JSON 文字列
+    """
+    formatted = {
+        r["date"][:10]: [r["bed_time"], r["wake_time"]]  # type: ignore
+        for r in records
+    }
+
+    return json.dumps(formatted, ensure_ascii=False)
 
 
 def _strip_code_fence(text: str) -> str:
