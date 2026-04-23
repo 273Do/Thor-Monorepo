@@ -28,7 +28,7 @@ def get_feedback(
         clusters (Tuple[StepClusterRecord, StepClusterRecord, StepClusterRecord]): 歩数クラスターデータ(未使用だがいつでも使用できるように)
         llm (str): llm名
         lang (Literal[ja", "en"]): 言語
-        is_specialized: 専門的なフィードバックを返すかどうか(プロンプト選択)
+        is_specialized (bool): 専門的なフィードバックを返すかどうか(プロンプト選択)
 
     Returns:
         str: LLM から得たフィードバック
@@ -88,7 +88,7 @@ def _load_system_prompt(lang: Literal["ja", "en"], is_specialized: bool) -> str:
 
     Args:
         lang (Literal[ja", "en"]): 言語
-        is_specialized: 専門的なフィードバックを返すかどうか(プロンプト選択)
+        is_specialized (bool): 専門的なフィードバックを返すかどうか(プロンプト選択)
 
     Returns:
         str: prompt テキスト
