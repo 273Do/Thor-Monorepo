@@ -80,6 +80,7 @@ async def via_email(
         clusters_json,  # type: ignore
         model,
         via_email_req.lang,
+        via_email_req.is_specialized,
     )
 
     print(feedback)

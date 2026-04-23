@@ -25,6 +25,11 @@ class ViaEmailRequest(BaseModel):
     )
     """LLM のフィードバック言語"""
 
+    is_specialized: bool = Field(
+        description="専門的なフィードバックを返すかどうかのグラグ", examples=["true"]
+    )
+    """専門的なフィードバックを返すかどうかのグラグ"""
+
     email_to: EmailStr = Field(
         description="結果を送信するメールアドレス", examples=["user@example.com"]
     )

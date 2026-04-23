@@ -19,6 +19,11 @@ class LLMFeedbackRequest(BaseModel):
     )
     """LLM のフィードバック言語"""
 
+    is_specialized: bool = Field(
+        description="専門的なフィードバックを返すかどうかのグラグ", examples=["true"]
+    )
+    """専門的なフィードバックを返すかどうかのグラグ"""
+
 
 class LLMFeedbackResponse(BaseModel):
     data: str = Field(

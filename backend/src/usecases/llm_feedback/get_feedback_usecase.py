@@ -19,6 +19,7 @@ def get_feedback(
     clusters: Tuple[StepClusterRecord, StepClusterRecord, StepClusterRecord],
     llm: str,
     lang: Literal["ja", "en"],
+    is_specialized: bool,
 ) -> str:
     """推定睡眠データを使用して LLM からフィードバックを取得する
 
@@ -27,12 +28,13 @@ def get_feedback(
         clusters (Tuple[StepClusterRecord, StepClusterRecord, StepClusterRecord]): 歩数クラスターデータ(未使用だがいつでも使用できるように)
         llm (str): llm名
         lang (Literal[ja", "en"]): 言語
+        is_specialized: 専門的なフィードバックを返すかどうか(プロンプト選択)
 
     Returns:
         str: LLM から得たフィードバック
     """
 
-    system_prompt = _load_system_prompt(lang)
+    system_prompt = _load_system_prompt(lang, is_specialized)
 
     completion = client.chat.completions.create(
         model=llm,
@@ -81,15 +83,18 @@ def _strip_code_fence(text: str) -> str:
     return re.sub(r"^```(?:markdown|md)?\n?", "", re.sub(r"\n?```\s*$", "", text))
 
 
-def _load_system_prompt(lang: Literal["ja", "en"]) -> str:
+def _load_system_prompt(lang: Literal["ja", "en"], is_specialized: bool) -> str:
     """言語に応じたシステムプロンプトをファイルから読み込む
 
     Args:
         lang (Literal[ja", "en"]): 言語
+        is_specialized: 専門的なフィードバックを返すかどうか(プロンプト選択)
 
     Returns:
         str: prompt テキスト
     """
 
-    prompt_path = Path(envs.SAMPLE_DATA_DIR) / f"prompt-{lang}.md"
+    prompt_filename = f"{'specialized-' if is_specialized else ''}prompt-{lang}.md"
+    prompt_path = Path(envs.DATASTORE_DIR) / f"prompts/{prompt_filename}"
+
     return prompt_path.read_text(encoding="utf-8")
