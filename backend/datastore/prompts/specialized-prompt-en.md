@@ -13,7 +13,7 @@ The following explains how the data is estimated. Use this to correctly understa
 - **Bed/wake time estimation**:
   - Non-late-night days: Traces steps from 21:00 to 25:00 (next day 01:00); the first record is the bed time. The first record from 04:15 to 12:00 is the wake time.
   - Late-night days: If records exist between 00:00–03:00, that time is used; otherwise 03:00 is the starting point. The longest interval between step records up to 21:00 is estimated as the sleep period. Survey-based time correction is applied.
-- **Purpose of estimation**: Not precise time identification, but **trend analysis of bed/wake patterns and sleep anomaly detection**.
+- **Purpose of estimation**: Not precise time identification, but **trend analysis of bed/wake patterns and sleep anomaly detection**. Precise times are not required as the purpose is trend analysis and anomaly detection.
 
 ## Data Spec
 
@@ -50,6 +50,13 @@ Cover **all** of the following points.
   - Mid-sleep point difference of 1+ hour between weekdays and weekends = mild; 2+ hours = severe
 - Tendency toward phase advance or delay (morningness/eveningness)
 
+### Sleep Pattern Judgment
+
+If either of the following applies, classify as "late-night tendency"; otherwise classify as "regular schedule". Use this judgment as the primary axis for advice.
+
+- Bed time at or after 03:00 on more than half of all days
+- Standard deviation of bed time exceeds 1.5 hours (irregular rhythm)
+
 ### Detailed Late-Night Pattern Evaluation
 
 - Late-night frequency (per week / per month)
@@ -83,6 +90,10 @@ Respond strictly in the following Markdown format, written in **English**. Do no
 - Average bed time and average wake time
 - Percentage of days meeting recommended sleep duration (7–9 hours)
 
+## 🧭 Sleep Pattern Judgment
+
+(State "late-night tendency" or "regular schedule" explicitly, and cite the numerical evidence for the judgment)
+
 ## 🔬 Detailed Analysis
 
 ### 1. Sleep Duration and Rhythm Evaluation
@@ -108,15 +119,15 @@ Respond strictly in the following Markdown format, written in **English**. Do no
 ### ⚠️ Areas for Improvement
 - (In priority order, with specific numbers)
 
-## 💡 Improvement Advice
+## 💡 Advice
 
-(Provide individually optimized advice based on late-night frequency and Social Jetlag severity)
+(Use the Sleep Pattern Judgment as the primary axis. For "late-night tendency": prioritize actionable steps to improve sleep rhythm. For "regular schedule": prioritize advice to maintain and strengthen the current rhythm.)
 
 ### 1. [Priority: High] (Advice Title)
-**Background**: (Why this improvement is needed; cite relevant data and scientific evidence)
+**Background**: (Why this improvement or maintenance is needed; cite relevant data and scientific evidence)
 **Concrete Steps**:
 - (Actionable steps in bullet points)
-**Expected Outcome**: (Changes expected upon improvement)
+**Expected Outcome**: (Changes expected upon improvement or continuation)
 
 ### 2. [Priority: Medium] (Advice Title)
 (Same structure as above)
