@@ -84,4 +84,5 @@ async def via_email(
         via_email_req.email_to,
         feedback,
         via_email_req.llm,
+        via_email_req.lang,
     )

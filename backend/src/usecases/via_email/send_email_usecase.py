@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Literal
 
 import markdown
 from fastapi import HTTPException
@@ -20,17 +21,27 @@ conf = ConnectionConfig(
 )
 
 
-async def send_email(email_to: str, feedback: str, llm: str) -> None:
+async def send_email(
+    email_to: str,
+    feedback: str,
+    llm: str,
+    lang: Literal["ja", "en"],
+) -> None:
     """フィードバックメール送信
 
     Args:
         email_to (str): 送信先メールアドレス
         feedback (str): フィードバック
         llm (str): llm名
+        lang (Literal[ja", "en"]): 言語
     """
+
+    template_name: str = f"email-{lang}.html"
+    subject = "睡眠推定フィードバック" if lang == "ja" else "Sleep Estimation Feedback"
+
     try:
         message = MessageSchema(
-            subject="睡眠推定フィードバック",
+            subject=subject,
             recipients=[email_to],  # type: ignore
             template_body={
                 "feedback": markdown.markdown(feedback, extensions=["extra"]),
@@ -39,6 +50,6 @@ async def send_email(email_to: str, feedback: str, llm: str) -> None:
             subtype=MessageType.html,
         )
         fm = FastMail(conf)
-        await fm.send_message(message, template_name="email.html")
+        await fm.send_message(message, template_name)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
