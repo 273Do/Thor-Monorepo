@@ -58,7 +58,7 @@ git clone git@github.com:273Do/Thor-Monorepo.git
 
 ### 3. LLM の用意
 
-以下のコマンドを実行して`ollama/` 内に用意された LLM を読み込みます。
+以下のコマンドを実行して`ollama/` 内に用意された LLM を読み込みます。かなり時間がかかります。
 
 ```bash
 chmod +x ollama/setup.sh
@@ -70,11 +70,17 @@ chmod +x ollama/setup.sh
 
 ```
 NAME                  ID              SIZE      MODIFIED
-gemma3:12b            hogehogehoge    o GB    x seconds ago
-thor-gemma3:latest    fugafugafuga    o GB    x seconds ago
-thor-llama3:latest    piyopiyopiyo    o GB    x seconds ago
-llama3.1:8b           fofoofoofoof    o GB    x seconds ago
+thor-qwen3-5-122b:latest    aaaaaaaaaaaa    81 GB     x hours ago
+qwen3.5:122b                bbbbbbbbbbbb    81 GB     x hours ago
+qwen3:14b                   cccccccccccc    9.3 GB    x hours ago
+thor-qwen3-14b:latest       dddddddddddd    9.3 GB    x hours ago
+llama3.3:70b                eeeeeeeeeeee    42 GB     x hours ago
+thor-llama3-3-70b:latest    ffffffffffff    42 GB     x hours ago
+gemma3:12b                  gggggggggggg    8.1 GB    x hours ago
+thor-gemma3-12b:latest      hhhhhhhhhhhh    8.1 GB    x hours ago
 ```
+
+Modelfile の各パラメータ詳細は[公式ドキュメント](https://docs.ollama.com/modelfile#parameter)を参照。
 
 ### 4. 起動方法
 
