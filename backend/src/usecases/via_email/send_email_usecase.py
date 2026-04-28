@@ -36,7 +36,7 @@ async def send_email(
         lang (Literal[ja", "en"]): 言語
     """
 
-    template_name: str = f"email-{lang}.html"
+    template_name: str = f"email_{lang}.html"
     subject = "睡眠推定フィードバック" if lang == "ja" else "Sleep Estimation Feedback"
 
     try:
