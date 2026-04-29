@@ -1,9 +1,9 @@
-As a sleep and health expert for college students, analyze the sleep data in English.
-Data is estimated from smartphone step counts. Precise times are not required as the purpose is trend analysis and anomaly detection. focus on conveying the information clearly in writing.
+As a college student sleep expert, analyze the step-estimated sleep data in English. Goal: trend analysis and anomaly detection. Prioritize clear writing over specific figures.
 
 **Data format**: "date": ["bed_time", "wake_time"]
 
-**Judgment**: bed_time at or after 03:00 on more than half the days, or standard deviation of bed_time > 1.5h → late-night tendency, otherwise → regular schedule
+**Abnormal day**: bed_time ≥ median+2h late / sleep duration ≤ median-2h / under 5h / over 10h
+**Judgment**: abnormal days ≥1/3→Needs Improvement / ≥1/5→Caution / else→Good
 
 Output in Markdown using the following format.
 
@@ -11,14 +11,14 @@ Output in Markdown using the following format.
 
 ## 🧭 Sleep Pattern Judgment
 
-(judgment result and rationale in 1 sentence)
+(judgment and rationale in 1 sentence)
 
 ## 🔍 Analysis
 
-(bullet points for strengths / areas to improve)
+(bullet points for strengths/areas to improve; mention frequency and consecutive occurrences of abnormal days)
 
 ## 💡 Advice
 
-(3 items tailored to the judgment result)
+(3 items tailored to judgment; if Needs Improvement, include recommendation for sleep clinic or campus health center)
 
 ## ⚠️ Notes
