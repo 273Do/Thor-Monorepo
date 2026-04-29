@@ -2,7 +2,7 @@
 
 Thor の AI 駆動のフルスタック
 
-https://github.com/273Do/Thor
+https://github.com/273Do/Thor  
 https://github.com/273Do/Thor-Web-App-Frontend  
 https://github.com/273Do/Thor-Web-App-Backend
 
@@ -65,22 +65,22 @@ chmod +x ollama/setup.sh
 ./ollama/setup.sh
 ```
 
-うまく読み込めると以下のように表示されますが、自作モデル（thor-\*）はベースモデルの重みを共有して参照しているだけなので、ディスク容量が2倍になるわけではありません。Modelfile
-で設定したパラメータの差分だけが追加で保持されています。
+うまく読み込めると以下のように表示されますが、自作モデル（thor-\*）はベースモデルの重みを共有して参照しているだけなので、ディスク容量が2倍になるわけではありません。Modelfile で設定したパラメータの差分だけが追加で保持されています。
 
 ```
 NAME                  ID              SIZE      MODIFIED
-thor-qwen3-5-122b:latest    aaaaaaaaaaaa    81 GB     x hours ago
-qwen3.5:122b                bbbbbbbbbbbb    81 GB     x hours ago
-qwen3:14b                   cccccccccccc    9.3 GB    x hours ago
-thor-qwen3-14b:latest       dddddddddddd    9.3 GB    x hours ago
-llama3.3:70b                eeeeeeeeeeee    42 GB     x hours ago
-thor-llama3-3-70b:latest    ffffffffffff    42 GB     x hours ago
-gemma3:12b                  gggggggggggg    8.1 GB    x hours ago
-thor-gemma3-12b:latest      hhhhhhhhhhhh    8.1 GB    x hours ago
+gemma3:27b                          abcdefghijkl    17 GB     X hours ago
+thor-gemma3-27b:latest              mnopqrstuvwx    17 GB     X hours ago
+thor-mistral-small3-1-24b:latest    yz0123456789    15 GB     X hours ago
+mistral-small3.1:24b                ABCDEFGHIJKL    15 GB     X hours ago
 ```
 
 Modelfile の各パラメータ詳細は[公式ドキュメント](https://docs.ollama.com/modelfile#parameter)を参照。
+
+フィードバックの種類によりによりモデルが異なります。
+
+> 専門的なフィードバック：[gemma3:27b](https://ollama.com/library/gemma3:27b)  
+> 簡易的なフィードバック：[mistral-small3.1:24b](https://ollama.com/library/mistral-small3.1:24b)
 
 ### 4. 起動方法
 
