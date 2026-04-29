@@ -52,28 +52,42 @@ Cover **all** of the following points.
 
 ### Sleep Pattern Judgment
 
-If either of the following applies, classify as "late-night tendency"; otherwise classify as "regular schedule". Use this judgment as the primary axis for advice.
+Evaluate on a three-level scale — "Good," "Caution," or "Needs Improvement" — using the criteria below. Use this judgment as the primary axis for advice.
 
-- Bed time at or after 03:00 on more than half of all days
-- Standard deviation of bed time exceeds 1.5 hours (irregular rhythm)
+- Abnormal sleep days account for 1/5 or more of all days: "Caution"; 1/3 or more: "Needs Improvement"
+- Fewer than 50% of days meet recommended sleep duration (7–9 hours): "Caution"
+- Standard deviation of bed/wake times exceeds 1.5 hours (unstable rhythm): "Caution"
+- Two or more criteria apply, or abnormal days occur consecutively: "Needs Improvement"
 
-### Detailed Late-Night Pattern Evaluation
+### Abnormal Sleep Day Detection
 
-- Late-night frequency (per week / per month)
-- Consecutive late-night days and their effect on subsequent sleep
-- Changes in sleep duration and wake time the day after late nights
+A day is classified as an abnormal sleep day if it meets any of the following conditions:
+
+- Bed time is 2 or more hours later than usual (median)
+- Sleep duration is 2 or more hours shorter than usual (median)
+- Sleep duration is under 5 hours (extremely short sleep)
+- Sleep duration exceeds 10 hours (hypersomnia)
+
+For each detected abnormal day, evaluate the following:
+
+- Frequency (per week / per month) and proportion of total days
+- Consecutive occurrences (multiple consecutive abnormal days are considered especially serious)
+- Impact on surrounding sleep (changes in sleep duration and wake time the following day)
+- Concentration on specific days of the week or time periods
 
 ### Sleep Anomaly and Risk Pattern Detection
 
-- Frequency of extremely short sleep (<5 hours) and long sleep (>10 hours)
 - Sudden fluctuations in sleep duration (≥50% change compared to adjacent days)
+- Clustering of abnormal days (concentration in a specific period may suggest external stressors)
 - Suggestion of potential sleep disorder risks (insomnia, hypersomnia, circadian rhythm sleep disorder)
+- Severity assessment: determine whether the pattern warrants a recommendation to seek professional care
 
 ### Mental Health Impact Assessment
 
-- Effects of sleep deprivation and irregular rhythms on cognitive function and emotional regulation
-- Relationship between college-specific stressors (academics, social relationships, living environment) and sleep
+- Effects of abnormal sleep day frequency and consecutive occurrences on cognitive function and emotional regulation
+- Relationship between college-specific stressors (academics, social relationships, living environment, exam periods) and abnormal days
 - Association with burnout risk and depressive tendencies
+- Criteria for cases where professional support is beneficial (sleep clinic, campus health center, student counseling service)
 
 ## Output Format
 
@@ -92,7 +106,7 @@ Respond strictly in the following Markdown format, written in **English**. Do no
 
 ## 🧭 Sleep Pattern Judgment
 
-(State "late-night tendency" or "regular schedule" explicitly, and cite the numerical evidence for the judgment)
+(State "Good," "Caution," or "Needs Improvement" explicitly, and cite the numerical evidence for the judgment)
 
 ## 🔬 Detailed Analysis
 
@@ -102,14 +116,14 @@ Respond strictly in the following Markdown format, written in **English**. Do no
 ### 2. Circadian Rhythm and Social Jetlag
 (Evaluate presence/severity of Social Jetlag, weekday/weekend differences, and morningness/eveningness tendency)
 
-### 3. Late-Night Patterns
-(Evaluate frequency, consecutive occurrences, and impact on subsequent sleep)
+### 3. Abnormal Sleep Day Analysis
+(List detected abnormal days; evaluate frequency, consecutive occurrences, and impact on surrounding sleep. Emphasize cases where abnormal days are consecutive or concentrated in a specific period.)
 
 ### 4. Sleep Anomalies and Risk Patterns
-(Point out outliers, sudden changes, and potential sleep disorder risks)
+(Based on the pattern of abnormal days, point out potential sleep disorder risks and possible external stressors)
 
 ### 5. Mental Health Impact
-(Describe potential effects of the sleep pattern on physical and mental health based on expert knowledge)
+(Describe potential effects of the abnormal sleep pattern on physical and mental health based on expert knowledge. In serious cases, actively encourage consultation with a professional.)
 
 ## 📋 Overall Assessment
 
@@ -121,7 +135,7 @@ Respond strictly in the following Markdown format, written in **English**. Do no
 
 ## 💡 Advice
 
-(Use the Sleep Pattern Judgment as the primary axis. For "late-night tendency": prioritize actionable steps to improve sleep rhythm. For "regular schedule": prioritize advice to maintain and strengthen the current rhythm.)
+(Use the Sleep Pattern Judgment as the primary axis, taking into account the frequency and consecutive nature of abnormal days and the degree of Social Jetlag. For "Needs Improvement": actively encourage a visit to a sleep clinic or campus health center. For "Caution": suggest lifestyle improvements alongside professional consultation if needed.)
 
 ### 1. [Priority: High] (Advice Title)
 **Background**: (Why this improvement or maintenance is needed; cite relevant data and scientific evidence)
@@ -143,7 +157,8 @@ Respond strictly in the following Markdown format, written in **English**. Do no
 (Must include:)
 - This analysis is estimated from wearable step count data and does not constitute medical diagnosis
 - Analysis accuracy may be reduced due to missing data
-- If serious patterns are observed, recommend consulting a medical professional or student counseling service
+- If abnormal sleep days occur frequently or consecutively, or if persistent excessive sleepiness or low mood is present, strongly recommend consulting a **sleep clinic or the campus health center / student counseling service**
+- Sleep issues are closely linked to mental health; actively convey that the reader should not struggle alone and should seek professional support
 ```
 
 ## Notes on Analysis
@@ -153,5 +168,5 @@ Respond strictly in the following Markdown format, written in **English**. Do no
 - **Avoid definitive statements**: Analyze within the scope of what the data shows; limit conclusions to estimations and suggestions.
 - **College student context**: Provide practical advice that accounts for academics, part-time jobs, club activities, exam periods, etc.
 - **Explain technical terms**: Add a brief explanation at first use for terms such as Social Jetlag, sleep debt, and circadian rhythm.
-- **Serious cases**: If sleep under 5 hours occurs more than half the days in a week, or if Social Jetlag exceeding 2 hours continues, strongly encourage consultation with a medical professional.
+- **Serious cases**: If abnormal sleep days account for more than half the days in a week or occur consecutively for 3 or more days, or if a pattern of hypersomnia or strong fatigue is observed, strongly encourage a visit to a sleep clinic or campus health center. If mental health impact is suggested, also recommend the student counseling service.
 - **Level of detail**: Do not abbreviate or summarize any section. Write with sufficient evidence and specificity. Prioritize comprehensiveness over brevity.
