@@ -1,33 +1,26 @@
 # 専門的なフィードバックに使用するLLM
 
-FROM qwen3.5:122b
-
-# パラメータの詳細は公式はドキュメントを参照
-# https://docs.ollama.com/modelfile#parameter
+FROM gemma3:27b
 
 # 出力の多様性（低=安定・一貫、高=創造的）
 # 専門的な分析は一貫性重視。高いと医学・統計用語がブレる
-PARAMETER temperature 0.3
+PARAMETER temperature 0.8
 
 # 累積確率のサンプリング範囲
-# 上位85%のトークンから選択。専門語彙を外しにくくする
-PARAMETER top_p 0.85
+# 上位95%のトークンから選択。専門語彙を外しにくくする
+PARAMETER top_p 0.95
 
 # 選択肢のトークン数制限
 # 候補を絞り、脱線を防ぐ
-PARAMETER top_k 40
-
-# Qwen系に有効。低確率トークンをカットしてノイズを減らす
-PARAMETER min_p 0.05
+PARAMETER top_k 64
 
 # 同じ表現の繰り返し抑制
 # レポート形式では同じフレーズが繰り返されやすいので強めに設定
 PARAMETER repeat_penalty 1.15
 
 # コンテキストウィンドウ長
-# 長文プロンプト＋JSONデータに対応。122Bなら余裕で確保可能
+# 長文プロンプト＋JSONデータに対応。
 PARAMETER num_ctx 16384
 
 # 最大出力トークン数
-# 専門レポート（6セクション）の出力に十分な長さ
-PARAMETER num_predict 3000
+PARAMETER num_predict 5000

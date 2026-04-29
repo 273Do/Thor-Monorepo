@@ -1,0 +1,26 @@
+# 簡易的なフィードバックに使用するLLM
+
+FROM mistral-small3.1:24b
+
+# 簡易フィードバック用：速度と日英品質のバランス重視
+
+# 出力の多様性（低=安定・一貫、高=創造的）
+# Mistralはtemperatureへの感度がやや高め。0.5で自然な文体を保ちつつ一貫性を確保。
+PARAMETER temperature 0.5
+
+# 累積確率のサンプリング範囲
+# 上位90%からサンプリング。日英どちらも語彙の幅を保つ。
+PARAMETER top_p 0.9
+
+# 選択肢のトークン数制限
+PARAMETER top_k 50
+
+# 同じ表現の繰り返し抑制
+PARAMETER repeat_penalty 1.1
+
+# コンテキストウィンドウ長
+# 簡易用はプロンプトが短いのでこれで十分
+PARAMETER num_ctx 8192
+
+# 最大出力トークン数
+PARAMETER num_predict 3000
