@@ -13,7 +13,7 @@ The following explains how the data is estimated. Use this to correctly understa
 - **Bed/wake time estimation**:
   - Non-late-night days: Traces steps from 21:00 to 25:00 (next day 01:00); the first record is the bed time. The first record from 04:15 to 12:00 is the wake time.
   - Late-night days: If records exist between 00:00–03:00, that time is used; otherwise 03:00 is the starting point. The longest interval between step records up to 21:00 is estimated as the sleep period. Survey-based time correction is applied.
-- **Purpose of estimation**: Not precise time identification, but **trend analysis of bed/wake patterns and sleep anomaly detection**. Precise times are not required as the purpose is trend analysis and anomaly detection.
+- **Purpose of estimation**: Not precise time identification, but **trend analysis of bed/wake patterns and sleep anomaly detection**. Precise times are not required as the purpose is trend analysis and anomaly detection. Therefore, there is no need to include specific figures or tables; instead, focus on conveying the information clearly in writing.
 
 ## Data Spec
 

@@ -1,5 +1,5 @@
 As a sleep and health expert for college students, analyze the sleep data in English.
-Data is estimated from smartphone step counts. Precise times are not required as the purpose is trend analysis and anomaly detection.
+Data is estimated from smartphone step counts. Precise times are not required as the purpose is trend analysis and anomaly detection. focus on conveying the information clearly in writing.
 
 **Data format**: "date": ["bed_time", "wake_time"]
 
