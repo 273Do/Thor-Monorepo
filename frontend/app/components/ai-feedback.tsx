@@ -36,7 +36,8 @@ export const AIFeedback = ({ id, models }: props) => {
   const { t, i18n } = useTranslation();
   const { feedbackTrigger, isFeedbackMutating, feedbackData } = useAIFeedback();
 
-  const initialModel = models[1];
+  const initialModel = models[1]; // backend/datastore/models.jsonのllm順番を参考にする
+
   const selectLLMRef = useRef<string>(initialModel);
 
   const triggerFeedback = () => {
