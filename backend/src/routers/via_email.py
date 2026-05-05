@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from src.schemas.extract_steps import ExtractStepsQueryParams, validate_extract_params
 from src.schemas.via_email import ViaEmailRequest
 from src.usecases.estimate_sleep.run_estimate_sleep_usecase import run_estimate_sleep
+from src.usecases.estimate_sleep.save_data_to_storage_usecase import get_llms
 from src.usecases.extract_steps.extract_steps_usecase import (
     extract_steps_from_applehealthcare,
 )
@@ -70,10 +71,13 @@ async def via_email(
     estimate_sleep_json = [r.model_dump(mode="json") for r in estimated_data]
     clusters_json = [c.model_dump(mode="json") for c in clusters]
 
+    models = get_llms()
+    model = models[0]  # backend/datastore/models.jsonのllm順番を参考にする
+
     feedback = get_feedback(
         estimate_sleep_json,  # type: ignore
         clusters_json,  # type: ignore
-        via_email_req.llm,
+        model,
         via_email_req.lang,
         via_email_req.is_specialized,
     )
@@ -83,6 +87,6 @@ async def via_email(
     await send_email(
         via_email_req.email_to,
         feedback,
-        via_email_req.llm,
+        model,
         via_email_req.lang,
     )

@@ -6,9 +6,6 @@ from pydantic import BaseModel, Field
 class LLMFeedbackParams(BaseModel):
     """LLM による睡眠フィードバックを取得する基底スキーマ"""
 
-    llm: str = Field(description="使用するLLM", examples=["thor-gemma3:latest"])
-    """使用するLLM"""
-
     lang: Literal["ja", "en"] = Field(
         description="LLM のフィードバック言語", examples=["en"]
     )
@@ -29,6 +26,9 @@ class LLMFeedbackRequest(LLMFeedbackParams):
         min_length=1,
     )
     """データ識別用のID"""
+
+    llm: str = Field(description="使用するLLM", examples=["thor-gemma3:latest"])
+    """使用するLLM"""
 
 
 class LLMFeedbackResponse(BaseModel):
