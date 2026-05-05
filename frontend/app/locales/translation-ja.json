@@ -21,6 +21,7 @@
   "upload": {
     "title": "ヘルスデータアップロード",
     "description": "iPhoneの「ヘルスケア」アプリからエクスポートした XML ファイルをアップロードしてください。",
+    "privacy": "アップロードされたデータはサーバーに保存されません。",
     "nonIphoneLink": "iPhone 端末以外の方について",
     "dragDrop": "ドラッグ&ドロップ、または",
     "selectFile": "ファイルを選択",

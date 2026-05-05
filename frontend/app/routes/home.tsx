@@ -148,6 +148,7 @@ const Home = () => {
               <CardHeader>
                 <CardTitle className="text-base">{t("upload.title")}</CardTitle>
                 <CardDescription>{t("upload.description")}</CardDescription>
+                <CardDescription>{t("upload.privacy")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <FileUpload file={file} onFileChange={setFile} />

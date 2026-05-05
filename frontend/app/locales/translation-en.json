@@ -21,6 +21,7 @@
   "upload": {
     "title": "Health Data Upload",
     "description": "Please upload the XML file exported from the \"Health\" app on your iPhone.",
+    "privacy": "Your uploaded data will not be stored on the server.",
     "nonIphoneLink": "For non-iPhone users",
     "dragDrop": "Drag & drop, or",
     "selectFile": "Select a file",
