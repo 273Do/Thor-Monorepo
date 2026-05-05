@@ -94,6 +94,7 @@ const Home = () => {
             bedtime_answer,
           },
           lang: i18n.language as LanguagesType,
+          is_specialized: true, // メール経由の場合は専門的なfb
           email_to: email,
         },
       });
