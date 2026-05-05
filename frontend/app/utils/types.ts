@@ -65,6 +65,7 @@ export type LLMFeedbackRequest = {
   id: string;
   llm: string;
   lang: LanguagesType;
+  is_specialized: boolean;
 };
 
 export type LLMFeedbackResponse = {
