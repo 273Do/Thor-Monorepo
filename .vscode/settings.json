@@ -46,7 +46,7 @@
     "rgba(79,236,236, 0.2)"
   ],
   // Error Lens
-  "errorLens.gutterIconsEnabled": true,
+  "errorLens.gutterIconsEnabled": false,
   "errorLens.gutterIconSet": "emoji",
   "errorLens.gutterEmoji": {
     "error": "🔥",

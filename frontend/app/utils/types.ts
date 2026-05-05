@@ -49,11 +49,12 @@ export type EstimateSleepResponse = {
 export type LanguagesType = "ja" | "en";
 
 // email経由の解析関連のスキーマ
-export type ViaEmailRequest = {
-  answers: Answers;
-  lang: LanguagesType;
-  email_to: string;
-};
+export type ViaEmailRequest =
+  | {
+      answers: Answers;
+      email_to: string;
+    }
+  | LLMFeedbackBase;
 
 export type ViaEmailArg = {
   xmlFile: File;
@@ -61,10 +62,16 @@ export type ViaEmailArg = {
 };
 
 // フィードバック関連のスキーマ
-export type LLMFeedbackRequest = {
-  id: string;
-  llm: string;
+export type LLMFeedbackRequest =
+  | {
+      id: string;
+      llm: string;
+    }
+  | LLMFeedbackBase;
+
+export type LLMFeedbackBase = {
   lang: LanguagesType;
+  is_specialized: boolean;
 };
 
 export type LLMFeedbackResponse = {

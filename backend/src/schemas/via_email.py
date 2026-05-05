@@ -1,11 +1,10 @@
-from typing import Literal
-
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import EmailStr, Field
 
 from src.schemas.estimate_sleep import Answers
+from src.schemas.llm_feedback import LLMFeedbackParams
 
 
-class ViaEmailRequest(BaseModel):
+class ViaEmailRequest(LLMFeedbackParams):
     """Email経由で解析を実行するリクエストボディ"""
 
     answers: Answers = Field(
@@ -19,11 +18,6 @@ class ViaEmailRequest(BaseModel):
         ],
     )
     """睡眠状態を推定するためのアンケートの回答"""
-
-    lang: Literal["ja", "en"] = Field(
-        description="LLM のフィードバック言語", examples=["ja"]
-    )
-    """LLM のフィードバック言語"""
 
     email_to: EmailStr = Field(
         description="結果を送信するメールアドレス", examples=["user@example.com"]

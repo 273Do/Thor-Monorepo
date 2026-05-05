@@ -85,9 +85,6 @@ const Home = () => {
     } else bedtime_answer = 0;
 
     if (email) {
-      console.log("Email provided:", email);
-      //
-
       await viaEmailTrigger({
         xmlFile: file,
         req: {
@@ -97,6 +94,7 @@ const Home = () => {
             bedtime_answer,
           },
           lang: i18n.language as LanguagesType,
+          is_specialized: true, // メール経由の場合は専門的なfb
           email_to: email,
         },
       });
@@ -106,7 +104,7 @@ const Home = () => {
 
         const { id, step_data } = extractStepResult;
 
-        const result = await estimateSleepTrigger({
+        await estimateSleepTrigger({
           id,
           step_data,
           answers: {
@@ -115,14 +113,6 @@ const Home = () => {
             bedtime_answer,
           },
         });
-
-        console.log({
-          charging_before_bed_answer: Number(chargingBeforeBedAnswer),
-          carrying_a_smartphone_answer: Number(carryingASmartphoneAnswer),
-          bedtime_answer,
-        });
-
-        console.log(result);
       } catch (error) {
         console.error(error);
       }
@@ -159,6 +149,7 @@ const Home = () => {
               <CardHeader>
                 <CardTitle className="text-base">{t("upload.title")}</CardTitle>
                 <CardDescription>{t("upload.description")}</CardDescription>
+                <CardDescription>{t("upload.privacy")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <FileUpload file={file} onFileChange={setFile} />

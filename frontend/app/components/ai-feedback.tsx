@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
 
@@ -36,12 +36,17 @@ export const AIFeedback = ({ id, models }: props) => {
   const { t, i18n } = useTranslation();
   const { feedbackTrigger, isFeedbackMutating, feedbackData } = useAIFeedback();
 
-  const [model, setModel] = useState<string>(models[0]);
+  const initialModel = models[1]; // backend/datastore/models.jsonのllm順番を参考にする
 
-  const selectLLMRef = useRef<string>(models[0]);
+  const selectLLMRef = useRef<string>(initialModel);
 
-  const handleReGenFB = () => {
-    setModel(selectLLMRef.current);
+  const triggerFeedback = () => {
+    feedbackTrigger({
+      id,
+      llm: selectLLMRef.current,
+      lang: i18n.language as LanguagesType,
+      is_specialized: false,
+    });
   };
 
   const handleReset = () => {
@@ -49,13 +54,9 @@ export const AIFeedback = ({ id, models }: props) => {
   };
 
   useEffect(() => {
-    feedbackTrigger({
-      id,
-      llm: model,
-      lang: i18n.language as LanguagesType,
-    });
+    triggerFeedback();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [model]);
+  }, []);
 
   return (
     <>
@@ -83,13 +84,13 @@ export const AIFeedback = ({ id, models }: props) => {
 
               <div className="flex items-center gap-3">
                 <Select
-                  defaultValue={model}
+                  defaultValue={initialModel}
                   onValueChange={(v) => {
                     selectLLMRef.current = v;
                   }}
                 >
                   <SelectTrigger className="w-full bg-card text-foreground">
-                    <SelectValue defaultValue={model} />
+                    <SelectValue defaultValue={initialModel} />
                   </SelectTrigger>
                   <SelectContent>
                     {models.map((value, i) => (
@@ -99,7 +100,7 @@ export const AIFeedback = ({ id, models }: props) => {
                     ))}
                   </SelectContent>
                 </Select>
-                <Button className="shrink-0 gap-2" onClick={handleReGenFB}>
+                <Button className="shrink-0 gap-2" onClick={triggerFeedback}>
                   <RefreshCw className="size-4" />
                   {t("aiFeedback.regenerate")}
                 </Button>

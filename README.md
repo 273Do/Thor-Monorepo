@@ -3,12 +3,10 @@
 Thor の AI 駆動のフルスタック
 
 https://github.com/273Do/Thor
-https://github.com/273Do/Thor-Web-App-Frontend  
-https://github.com/273Do/Thor-Web-App-Backend
 
 ## アプリ概要
 
-本 web アプリは、iPhone のヘルスケアデータから睡眠パターンを推定・分析するWebサービスです。
+本 web アプリは、iPhone のヘルスケアデータから睡眠パターンを推定・分析し、LLM からフィードバックを取得するWebサービスです。
 
 ### フロー
 
@@ -28,6 +26,20 @@ https://github.com/273Do/Thor-Web-App-Backend
 ### iPhone 端末以外の方について
 
 本サービスは Apple ヘルスケアの XML エクスポートを利用するため、iPhone ユーザーを対象としています。Android など他のデバイスをお使いの方は、ヘルスデータを[指定の形式](https://github.com/273Do/Thor-Monorepo/blob/1923da19e313a79f8afa3c7c4b4036ce1542586a/backend/src/schemas/estimate_sleep.py#L29-L46)に変換したうえで API を直接呼び出すことでご利用いただけます。
+
+### LLM を用いたフィードバック
+
+独自のアルゴリズムによって推定された睡眠データを参考に、ローカル LLM を使用してフィードバックを行います。対応経路によって使用するモデルとプロンプトが異なります。
+
+- ブラウザ表示では解析結果がグラフで視覚的に確認できるため、LLM フィードバックは補助的な位置づけです。応答速度がユーザー体験に直結するため、軽量モデルを使用し、プロンプトも睡眠傾向の要約と手軽なアドバイスに絞っています。
+
+- メール送信では応答速度より質を優先できます。グラフを伴わないテキストのみの出力になります。睡眠パター
+  ンの詳細な分析・専門的見解・生活習慣への影響・具体的な改善アドバイスを含む包括的なフィードバックを返すプロンプトを使用しています。
+
+| 種別                   | モデル                                                                  | レスポンス内容                                                                 | レスポンス速度 | 対応経路             |
+| ---------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------ | -------------- | -------------------- |
+| 専門的なフィードバック | [gemma3:27b](https://ollama.com/library/gemma3:27b)                     | 解析結果をもとにした睡眠異常・専門的見解・生活への影響・具体的な改善アドバイス | 1分程度        | メール経由のみ       |
+| 簡易的なフィードバック | [mistral-small3.1:24b](https://ollama.com/library/mistral-small3.1:24b) | 睡眠傾向のサマリーと、すぐに実践できる簡単なアドバイス                         | 10秒程度       | ブラウザ・メール経由 |
 
 ## プロジェクト構成
 
@@ -58,23 +70,24 @@ git clone git@github.com:273Do/Thor-Monorepo.git
 
 ### 3. LLM の用意
 
-以下のコマンドを実行して`ollama/` 内に用意された LLM を読み込みます。
+以下のコマンドを実行して`ollama/` 内に用意された LLM を読み込みます。かなり時間がかかります。
 
 ```bash
 chmod +x ollama/setup.sh
 ./ollama/setup.sh
 ```
 
-うまく読み込めると以下のように表示されますが、自作モデル（thor-\*）はベースモデルの重みを共有して参照しているだけなので、ディスク容量が2倍になるわけではありません。Modelfile
-で設定したパラメータの差分だけが追加で保持されています。
+うまく読み込めると以下のように表示されますが、自作モデル（thor-\*）はベースモデルの重みを共有して参照しているだけなので、ディスク容量が2倍になるわけではありません。Modelfile で設定したパラメータの差分だけが追加で保持されています。
 
 ```
 NAME                  ID              SIZE      MODIFIED
-gemma3:12b            hogehogehoge    o GB    x seconds ago
-thor-gemma3:latest    fugafugafuga    o GB    x seconds ago
-thor-llama3:latest    piyopiyopiyo    o GB    x seconds ago
-llama3.1:8b           fofoofoofoof    o GB    x seconds ago
+gemma3:27b                          abcdefghijkl    17 GB     X hours ago
+thor-gemma3-27b:latest              mnopqrstuvwx    17 GB     X hours ago
+thor-mistral-small3-1-24b:latest    yz0123456789    15 GB     X hours ago
+mistral-small3.1:24b                ABCDEFGHIJKL    15 GB     X hours ago
 ```
+
+Modelfile の各パラメータ詳細は[公式ドキュメント](https://docs.ollama.com/modelfile#parameter)を参照。
 
 ### 4. 起動方法
 
@@ -122,7 +135,7 @@ claude
 
 ## 公開設定
 
-- cloudflare tunnel を使用してアプリを公開します。
+- cloudflare tunnel を使用してアプリを公開します。(未対応)
 
 1. [Cloudflareダッシュボード](https://dash.cloudflare.com)から [Zero Trust] > [Networks] > [Overview] > [Manage Tunnels] > [Create new cloudflared Tunnel] を選択します。
 

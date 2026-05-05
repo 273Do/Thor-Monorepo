@@ -58,7 +58,7 @@ export const FileUpload = ({ file, onFileChange }: props) => {
   return (
     <div className="flex flex-col gap-3">
       <a
-        className="w-fit cursor-pointer text-xs text-muted-foreground duration-100 hover:underline"
+        className="w-fit cursor-pointer text-xs text-muted-foreground underline"
         href={NON_IPHONE_USERS_URL}
         target="_blank"
         rel="noopener noreferrer"
