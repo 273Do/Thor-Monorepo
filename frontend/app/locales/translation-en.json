@@ -30,7 +30,7 @@
   },
   "email": {
     "title": "Receive Results",
-    "description": "Feedback takes time to generate, so we'll send the results to your email. If you don't provide an email, you can view the results on the screen.",
+    "description": "If you would like specialized feedback, we will deliver the results to your email. If left blank, you can view the results directly on screen.",
     "placeholder": "Enter your email address",
     "sentTitle": "Analysis received",
     "sentDescription": "We'll send the results to {{email}} once the analysis is complete."
