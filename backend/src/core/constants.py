@@ -1,5 +1,7 @@
 """定数"""
 
+from datetime import timedelta, timezone
+
 DEVICE_FILTER = "name:iPhone"
 """歩数を抽出する際のデバイスフィルタ"""
 
@@ -18,7 +20,7 @@ SLEEP_ANALYSIS_CSV_FILENAME = "sleep_analysis_data.csv"
 STEP_COUNT_JSON_FILENAME = "step_count_data.json"
 """保存する歩数データのJSONファイル名"""
 
-ESTIMATE_SLEEP_JSON_FILENAME = "estimate_sleep_data.json"
+ESTIMATE_SLEEP_JSON_FILENAME = "estimate_sleep_data_sample.json"
 """保存する推定睡眠データのJSONファイル名"""
 
 STEP_CLUSTER_JSON_FILENAME = "step_cluster.json"
@@ -38,3 +40,18 @@ HOLIDAY_TIME_RANGE = ["3:00", "4:45", "12:45", "20:45"]
 
 FAILED_GENERATE_FEEDBACK = "フィードバックの生成に失敗しました。"
 """フィードバックの生成に失敗した際のメッセージ"""
+
+JST = timezone(timedelta(hours=9))
+"""日本標準時のタイムゾーン"""
+
+MOBILE_SLEEP_RECORD_TYPE = "sleep"
+"""モバイルアプリのレコードのうち、睡眠記録を示す type"""
+
+MOBILE_DATA_SOURCE_PRIORITY = [
+    "sleepApp",
+    "intervalEstimation",
+    "hourlyEstimation",
+    "wearable",
+]
+"""モバイルアプリの睡眠記録の採用優先度（先頭ほど優先度が高い）\n
+同じ日に複数のデータソースの記録が存在する場合、この順で1件を採用する"""
