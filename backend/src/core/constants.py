@@ -20,7 +20,7 @@ SLEEP_ANALYSIS_CSV_FILENAME = "sleep_analysis_data.csv"
 STEP_COUNT_JSON_FILENAME = "step_count_data.json"
 """保存する歩数データのJSONファイル名"""
 
-ESTIMATE_SLEEP_JSON_FILENAME = "estimate_sleep_data_sample.json"
+ESTIMATE_SLEEP_JSON_FILENAME = "estimate_sleep_data.json"
 """保存する推定睡眠データのJSONファイル名"""
 
 STEP_CLUSTER_JSON_FILENAME = "step_cluster.json"
