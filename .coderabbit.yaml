@@ -1,0 +1,117 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: "ja"
+
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - "develop"
+
+  path_filters:
+    # 自動生成物・ロックファイル・データストアはレビュー対象外
+    - "!**/pnpm-lock.yaml"
+    - "!backend/uv.lock"
+    - "!frontend/.react-router/**"
+    - "!backend/datastore/vault/**"
+    - "!backend/datastore/sample_data/**"
+    - "!backend/datastore/models/**"
+    - "!backend/datastore/models.json"
+
+  path_instructions:
+    - path: "**/*.{ts,tsx}"
+      instructions: |
+        # コーディング規約
+        - 型定義は `interface` ではなく `type` を使う（`@typescript-eslint/consistent-type-definitions`）
+        - 型のみの import は `import type` を使う（`@typescript-eslint/consistent-type-imports`）
+        - コンポーネントは `const` + アロー関数で定義し、named export する（default export は routes など React Router が要求する箇所のみ）
+        - import順: 外部パッケージ（`react*` を先頭） → `~/components/ui/**` → `~/` の内部モジュール → 相対パス。グループ間は空行で区切り、グループ内はアルファベット昇順
+        - パスエイリアスは `@/` ではなく `~/`（例: `~/components/ui/button`）
+        - Props の型は `type props = { ... }` として定義し、各プロパティに JSDoc（`/** ... */`）を記載する
+
+        # React / Hooks
+        - React 19 + React Compiler は未導入のため、参照同一性が必要な箇所では `useMemo` / `useCallback` を適切に使う。ただし不要な箇所への濫用は指摘する
+        - API 呼び出しは `app/utils/use-*.ts` の SWR mutation フック経由で行い、コンポーネント内で直接 `fetch` しない
+
+        # TypeScript
+        - `any` を使わず、適切な型を定義する（`no-explicit-any` は warn だが原則禁止）
+        - 型アサーション（`as`）と非 null アサーション（`!`）は最小限にとどめ、型ガードで代替できる場合はそちらを使う
+        - 暗黙の型変換（`!!x`、`+x` など）を使わず、明示的に変換する（`no-implicit-coercion`）
+        - 未使用の変数・引数は削除する。意図的に残す場合は `_` prefix を付ける
+
+        # Tailwind CSS v4 / UI
+        - 色はハードコードせず、`app/app.css` で定義されたテーマトークン（`bg-card`, `text-foreground` など）を使う
+        - クラスの結合は `~/lib/utils` の `cn()` を使い、テンプレートリテラルでの手動結合をしない
+        - クラス名は重複・不要な空白を含めず、`better-tailwindcss` の順序ルールに従う
+        - `app.css` に未登録のクラス名を使わない
+
+        # i18n
+        - ユーザーに表示する文字列をハードコードせず、`useTranslation()` の `t()` を使う
+        - キーを追加した場合は `app/locales/translation-ja.json` と `translation-en.json` の両方を更新する（片方のみの更新は指摘する）
+
+    - path: "frontend/app/components/ui/**"
+      instructions: |
+        - shadcn/ui の生成物。追加は `task frontend -- pnpm dlx shadcn@latest add <component>` で行い、手書きで新規作成しない
+        - 意図的なカスタマイズ以外の手編集は指摘する（CLI での再生成時に失われるため）
+
+    - path: "frontend/app/utils/**"
+      instructions: |
+        - API 呼び出しは `api.ts` の fetch ラッパーに集約し、フック側にエンドポイントの URL やリクエスト組み立てを散らさない
+        - バックエンドのレスポンス型は `types.ts` に定義し、バックエンドの Pydantic スキーマと対応が取れているか確認する
+        - エンドポイントのベース URL は `app/core/constants.ts` 経由で参照する（`import.meta.env` を各所で直接読まない）
+
+    - path: "backend/**/*.py"
+      instructions: |
+        # コーディング規約
+        - Ruff の設定（line-length 88 / ダブルクォート / target py311）に従う
+        - 公開関数・クラスには Google スタイルの日本語 docstring（Args / Returns）を記載する
+        - 型ヒントを必ず付ける。戻り値型も明示する
+        - `print()` はデバッグ用途のみ。`IS_DEBUG=false` では stdout が破棄されるため、本番で必要なログを `print()` に依存しない
+
+        # 設定・定数
+        - 環境変数は `src/core/load_env.py` の `Envs` クラス経由で参照し、`os.environ` を直接読まない
+        - マジックナンバー・マジックストリングは `src/core/constants.py` に定義する
+        - 新しい定数を追加した変更では、それを参照するコードと同じ PR に含まれているか確認する（未コミットだと import エラーになる）
+
+    - path: "backend/src/routers/**"
+      instructions: |
+        - エンドポイント定義のみを置く薄い層。ビジネスロジックは `src/usecases/` に切り出す
+        - リクエスト / レスポンスの型は `src/schemas/` の Pydantic モデルを使い、ルーター内で定義しない
+        - エラーは `HTTPException` で適切なステータスコード（バリデーションエラーは 400）を返す
+        - 新規ルーターは `main.py` で `envs.API_V1_PREFIX` を付けて `include_router` されているか確認する
+        - `summary` / `description` / `responses` を記載し、OpenAPI ドキュメントとして成立させる
+
+    - path: "backend/src/schemas/**"
+      instructions: |
+        - Pydantic モデルには `Field` の `description` と `examples` を記載する
+        - 外部（モバイルアプリ等）由来の表記揺れは `field_validator(mode="before")` で吸収し、usecase 側に持ち込まない
+        - DataFrame のスキーマは pandera で定義する
+
+    - path: "backend/src/usecases/**"
+      instructions: |
+        - 1 ファイル 1 ユースケースとし、`*_usecase.py` の命名に従う
+        - ファイル入出力のパスは `Envs`（`VAULT_DIR`, `MODELS_DIR` など）から解決し、パスをハードコードしない
+        - レコードを暗黙に読み飛ばす分岐にはその理由をコメントで残す
+
+    - path: "backend/datastore/prompts/**"
+      instructions: |
+        - `prompt-{ja,en}.md` と `specialized-prompt-{ja,en}.md` は対応関係があるため、片方の言語だけを更新していないか確認する
+
+    - path: "backend/scripts/**"
+      instructions: |
+        - 実行方法を docstring に記載し、`Taskfile.yml` にタスクが登録されているか確認する
+        - 入力ファイルの不在などの失敗時は、スタックトレースではなくメッセージと非 0 の終了コードを返す
+
+    - path: "{Taskfile.yml,docker-compose.yml,lefthook.yml,.github/**}"
+      instructions: |
+        - ポートやエンドポイントは `.env` の変数を参照し、値を直接書かない
+        - 環境変数を追加した場合は `.env.example` と `CLAUDE.md` の記載も更新されているか確認する
+
+chat:
+  auto_reply: true
