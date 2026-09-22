@@ -5,7 +5,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.core.load_env import envs
-from src.routers import estimate_sleep, extract_steps, llm_feedback, via_email
+from src.routers import (
+    estimate_sleep,
+    extract_steps,
+    llm_feedback,
+    mobile_feedback,
+    via_email,
+)
 
 app = FastAPI()
 
@@ -29,3 +35,4 @@ app.include_router(extract_steps.router, prefix=envs.API_V1_PREFIX)
 app.include_router(estimate_sleep.router, prefix=envs.API_V1_PREFIX)
 app.include_router(llm_feedback.router, prefix=envs.API_V1_PREFIX)
 app.include_router(via_email.router, prefix=envs.API_V1_PREFIX)
+app.include_router(mobile_feedback.router, prefix=envs.API_V1_PREFIX)

@@ -27,6 +27,13 @@ tasks:
       # 本番では以下のコマンドでワーカーを増やしたいが、キューシステムを導入するならシングルワーカーで動作させたい
       # - task backend -- uv run uvicorn main:app --host 0.0.0.0 --workers 4
 
+  # run mobile dummy data split script
+  backend:split_synthetic_dump:
+    desc: Split synthetic dump into multiple files
+    dir: backend
+    cmds:
+      - task backend -- uv run scripts/split_synthetic_dump.py {{ .CLI_ARGS }}
+
   # Frontend tasks
   frontend:format:
     desc: Format frontend code
