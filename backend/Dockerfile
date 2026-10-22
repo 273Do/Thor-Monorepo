@@ -1,4 +1,4 @@
-FROM ghcr.io/astral-sh/uv:0.9.11-python3.14-bookworm-slim
+FROM ghcr.io/astral-sh/uv:0.13.5-python3.15-trixie-slim
 
 WORKDIR /workspace/backend
 
