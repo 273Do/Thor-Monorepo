@@ -3,3 +3,10 @@ build
 node_modules
 README.md
 .pnpm-store
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
